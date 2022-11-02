@@ -7265,6 +7265,11 @@
     "jscodeshift" "^0.13.1"
     "nullthrows" "^1.1.1"
 
+"react-native-countdown-circle-timer@^3.0.9":
+  "integrity" "sha512-7djFk+2QQS9FAhfIUhwQoc+P/7Vkn9EJApr6zUWK9B5QvHP07UlqIWfhIPqqeMa4kP6y5Y2S3YL+xeRsq2tNfg=="
+  "resolved" "https://registry.npmjs.org/react-native-countdown-circle-timer/-/react-native-countdown-circle-timer-3.0.9.tgz"
+  "version" "3.0.9"
+
 "react-native-gradle-plugin@^0.70.3":
   "integrity" "sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A=="
   "resolved" "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz"
@@ -7304,7 +7309,7 @@
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"
 
-"react-native-svg@*", "react-native-svg@^12.1.1":
+"react-native-svg@*", "react-native-svg@^12.1.1", "react-native-svg@>=6.2.1":
   "integrity" "sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz"
   "version" "12.1.1"
