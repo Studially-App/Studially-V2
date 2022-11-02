@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider, Box} from 'native-base';
-
-import {Text} from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -15,21 +14,41 @@ import SignIn from './src/screens/Register/SignIn';
 import SignUp from './src/screens/Register/SignUp';
 import ResetPassword from './src/screens/Register/ResetPassword';
 
+import Habitos from './src/screens/Modules/Habitos/Habitos';
+import Finanzas from './src/screens/Modules/Finanzas/Finanzas';
+import Enfoque from './src/screens/Modules/Enfoque/Enfoque';
+import Recursos from './src/screens/Modules/Recursos/Recursos';
+
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 
-const Tab1 = () => <Text>Tab1</Text>;
-const Tab2 = () => <Text>Tab2</Text>;
-const Tab3 = () => <Text>Tab3</Text>;
-const Tab4 = () => <Text>Tab4</Text>;
-
-const condition = 1;
-
 const App = () => {
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(loggedUser) {
+    setUser(loggedUser);
+    if (initializing) {
+      setInitializing(false);
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    //SplashScreen.hide();
+    return subscriber; // unsubscribe on unmount
+  });
+
+  if (initializing) {
+    return null;
+  }
+
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        {condition === 0 ? (
+        {user ? (
           <Tabs.Navigator
             screenOptions={{
               headerShown: false,
@@ -49,7 +68,7 @@ const App = () => {
             }}>
             <Tabs.Screen
               name="Hábitos"
-              component={Tab1}
+              component={Habitos}
               options={{
                 tarBarLabel: 'Hábitos',
                 tabBarLabelStyle: {
@@ -72,7 +91,7 @@ const App = () => {
             />
             <Tabs.Screen
               name="Enfoque"
-              component={Tab2}
+              component={Enfoque}
               options={{
                 tarBarLabel: 'Enfoque',
                 tabBarLabelStyle: {
@@ -86,7 +105,7 @@ const App = () => {
             />
             <Tabs.Screen
               name="Finanzas"
-              component={Tab3}
+              component={Finanzas}
               options={{
                 tarBarLabel: 'Finanzas',
                 tabBarLabelStyle: {
@@ -100,7 +119,7 @@ const App = () => {
             />
             <Tabs.Screen
               name="Recursos"
-              component={Tab4}
+              component={Recursos}
               options={{
                 tarBarLabel: 'Recursos',
                 tabBarLabelStyle: {
