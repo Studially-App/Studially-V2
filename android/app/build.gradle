@@ -218,6 +218,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('studially.keystore')
+            storePassword 'studially2022'
+            keyAlias 'studially'
+            keyPassword 'studially2022'
+        }
     }
     buildTypes {
         debug {

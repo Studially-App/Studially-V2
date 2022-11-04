@@ -53,7 +53,7 @@ const Enfoque = () => {
   // Timer seconds input
   const [inputSec, setInputSec] = React.useState(0);
   // Placeholder Timer
-  const [placeholder, setPlaceholder] = React.useState('00');
+  const placeholder = '00';
   // Stop Modal Visibility
   const [stopModalVisibility, setStopModalVisibility] = React.useState(false);
   // Break Time Modal Visibility

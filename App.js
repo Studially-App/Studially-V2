@@ -6,6 +6,7 @@ import {NativeBaseProvider, Box, Center} from 'native-base';
 import auth from '@react-native-firebase/auth';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import AppBar from './src/components/AppBar';
 
 import Onboarding from './src/screens/Onboarding/Onboarding';
@@ -72,10 +73,10 @@ const App = () => {
                 tabBarInactiveTintColor: 'rgba(39, 44, 70, 1)',
               }}>
               <Tabs.Screen
-                name="Hábitos"
-                component={Habitos}
+                name="Organización"
+                component={Enfoque}
                 options={{
-                  tarBarLabel: 'Hábitos',
+                  tarBarLabel: 'Organización',
                   tabBarLabelStyle: {
                     fontSize: 12,
                     marginBottom: 4,
@@ -85,26 +86,22 @@ const App = () => {
                       _pressed={{
                         backgroundColor: 'rgba(71, 91, 216, 1)',
                       }}>
-                      <Icon
-                        name="clipboard-check-outline"
-                        color={color}
-                        size={24}
-                      />
+                      <IonIcon name="timer-outline" color={color} size={24} />
                     </Box>
                   ),
                 }}
               />
               <Tabs.Screen
-                name="Enfoque"
-                component={Enfoque}
+                name="Hábitos"
+                component={Habitos}
                 options={{
-                  tarBarLabel: 'Enfoque',
+                  tarBarLabel: 'Hábitos',
                   tabBarLabelStyle: {
                     fontSize: 12,
                     marginBottom: 4,
                   },
                   tabBarIcon: ({color, size}) => (
-                    <Icon name="timer-sand-empty" color={color} size={24} />
+                    <Icon name="heart-outline" color={color} size={24} />
                   ),
                 }}
               />
@@ -118,7 +115,7 @@ const App = () => {
                     marginBottom: 4,
                   },
                   tabBarIcon: ({color, size}) => (
-                    <Icon name="wallet-outline" color={color} size={24} />
+                    <Icon name="piggy-bank-outline" color={color} size={24} />
                   ),
                 }}
               />
@@ -132,7 +129,7 @@ const App = () => {
                     marginBottom: 4,
                   },
                   tabBarIcon: ({color, size}) => (
-                    <Icon name="notebook-outline" color={color} size={24} />
+                    <Icon name="star-outline" color={color} size={24} />
                   ),
                 }}
               />
