@@ -69,7 +69,7 @@ const Enfoque = () => {
   // Break Out TimerOn
   const [breakOutOn, setBreakOutOn] = React.useState(false);
   // BreakOut Timer key
-  const [breakOutKey, setBreakOutKey] = React.useState(uuid.v4().slice(0, 13));
+  const breakOutKey = uuid.v4().slice(0, 13);
   // Input value
   const [minutsInput, setMinutsInput] = React.useState('0');
   // BreakOut time

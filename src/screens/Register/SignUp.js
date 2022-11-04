@@ -120,6 +120,7 @@ const SignUp = ({navigation}) => {
             institucion: values.institucion,
             habitos: [],
             metas: [],
+            finanzas: [],
             userId: userId,
           })
           .then(() => {
