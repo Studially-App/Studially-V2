@@ -196,8 +196,8 @@ const Habitos = () => {
         </Heading>
       </Modal>
       <VStack space={4} alignItems="center" mt={2}>
-        <HStack space={4} justifyContent="center">
-          {tab == 'Mis Habitos' ? (
+        <HStack space={4} justifyContent="center" maxW="90%">
+          {tab === 'Mis Habitos' ? (
             <>
               <Button
                 onPress={() => setTab('Mis Habitos')}
@@ -213,6 +213,35 @@ const Habitos = () => {
                 w={'40%'}>
                 <Text fontSize="lg" color="#475BD8">
                   Hábitos del día
+                </Text>
+              </Button>
+              <Button onPress={() => setTab('Tendencias')} bg="white" w={'40%'}>
+                <Text fontSize="lg" color="#475BD8">
+                  Tendencias
+                </Text>
+              </Button>
+            </>
+          ) : tab === 'Marcar Habitos' ? (
+            <>
+              <Button
+                onPress={() => setTab('Mis Habitos')}
+                bg="white"
+                w={'40%'}>
+                <Text fontSize="lg" color="#475BD8">
+                  Mis hábitos
+                </Text>
+              </Button>
+              <Button
+                onPress={() => setTab('Marcar Habitos')}
+                bg="#475BD8"
+                w={'40%'}>
+                <Text fontSize="lg" color="white">
+                  Hábitos del día
+                </Text>
+              </Button>
+              <Button onPress={() => setTab('Tendencias')} bg="white" w={'40%'}>
+                <Text fontSize="lg" color="#475BD8">
+                  Tendencias
                 </Text>
               </Button>
             </>
@@ -228,10 +257,18 @@ const Habitos = () => {
               </Button>
               <Button
                 onPress={() => setTab('Marcar Habitos')}
+                bg="white"
+                w={'40%'}>
+                <Text fontSize="lg" color="#475BD8">
+                  Hábitos del día
+                </Text>
+              </Button>
+              <Button
+                onPress={() => setTab('Tendencias')}
                 bg="#475BD8"
                 w={'40%'}>
                 <Text fontSize="lg" color="white">
-                  Hábitos del día
+                  Tendencias
                 </Text>
               </Button>
             </>
