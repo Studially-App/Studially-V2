@@ -192,6 +192,7 @@ const ModalCrearFinanzas = ({
                           placeholder="Monto final"
                           w="100%"
                           h="40px"
+                          keyboardType="numeric"
                           value={values.montoFinal}
                           onChangeText={handleChange('montoFinal')}
                         />
@@ -238,7 +239,11 @@ const ModalCrearFinanzas = ({
                       </HStack>
                       {values.montoFinal && values.semanas ? (
                         <>
-                          <Text key="TituloFecha" fontSize="15" mb="0">
+                          <Text
+                            key="TituloFecha"
+                            fontSize="15"
+                            mb="0"
+                            fontWeight="bold">
                             Para llegar a la meta debes ahorrar
                           </Text>
                           <HStack
@@ -246,9 +251,11 @@ const ModalCrearFinanzas = ({
                             justifyContent="space-around">
                             <Box
                               borderRadius={5}
-                              maxW="200px"
+                              w="200px"
                               h="60px"
-                              borderColor="#05188B"
+                              justifyContent="center"
+                              alignItems="center"
+                              borderColor="black"
                               borderStyle="solid"
                               borderWidth="1">
                               <HStack alignItems="center">
@@ -257,26 +264,26 @@ const ModalCrearFinanzas = ({
                                     fontSize="20"
                                     mb="0"
                                     key="montoSemanas"
-                                    color="#05188B"
+                                    color="black"
                                     textAlign="center">
                                     {(
                                       values.montoFinal / values.semanas
                                     ).toFixed(2)}{' '}
                                   </Text>
                                   <Text
-                                    color="#05188B"
+                                    color="black"
                                     fontSize="15"
                                     textAlign="center">
                                     MXN
                                   </Text>
                                 </VStack>
-                                <Text color="#05188B" fontSize="15">
+                                <Text color="black" fontSize="15">
                                   {'  '} hasta {'  '}
                                 </Text>
                                 <Text
                                   fontSize="20"
                                   textAlign="center"
-                                  color="#05188B">
+                                  color="black">
                                   {dayjs()
                                     .add(values.semanas, 'week')
                                     .format('DD/MM')
@@ -284,7 +291,7 @@ const ModalCrearFinanzas = ({
                                 </Text>
                               </HStack>
                             </Box>
-                            <Text fontSize="20">Por semana</Text>
+                            <Text fontSize="15">Por semana</Text>
                           </HStack>
                         </>
                       ) : null}
@@ -306,12 +313,16 @@ const ModalCrearFinanzas = ({
                             setModalVisibility(false);
                             setData({});
                           }}
-                          bg="#D26908"
+                          bg="white"
                           _text={{
                             fontSize: 20,
+                            color: '#475BD8',
                           }}
+                          borderColor="#475BD8"
+                          borderStyle="solid"
+                          borderWidth="1px"
                           w="96%"
-                          mt="-5">
+                          mt="0">
                           Cancelar
                         </Button>
                       </Center>
