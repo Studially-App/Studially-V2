@@ -422,7 +422,11 @@ const Habitos = () => {
                         </Text>
                         <Spacer />
                         <Text fontSize="lg" color="#061678" textAlign="center">
-                          {item.dias}/{item.veces}{' '}
+                          {item.dias === item.veces ? (
+                            <MCIcon size={35} color="orange" name="fire" />
+                          ) : (
+                            item.dias + ' / ' + item.veces
+                          )}
                         </Text>
                       </HStack>
                     </Box>
