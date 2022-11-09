@@ -53,7 +53,9 @@ const Finanzas = () => {
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
-    if (initializing) setInitializing(false);
+    if (initializing) {
+      setInitializing(false);
+    }
   }
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const Finanzas = () => {
 
   useEffect(() => {
     let isMounted = true;
-    if (user != undefined) {
+    if (user !== undefined) {
       getUserInfo(user, isMounted);
       return () => {
         isMounted = false;
@@ -106,7 +108,7 @@ const Finanzas = () => {
   // useEffect para iniciar con las metas agregadas
   useEffect(() => {
     let isMounted = true;
-    if (userInfo != undefined) {
+    if (userInfo !== undefined) {
       getFinance(userInfo, isMounted);
       return () => {
         isMounted = false;

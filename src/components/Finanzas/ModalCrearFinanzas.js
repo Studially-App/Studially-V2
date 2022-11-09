@@ -11,6 +11,8 @@ import {
   NativeBaseProvider,
   HStack,
   Input,
+  InputGroup,
+  InputLeftAddon,
 } from 'native-base';
 // Modal
 import Modal from 'react-native-modal';
@@ -18,6 +20,7 @@ import Modal from 'react-native-modal';
 import {useWindowDimensions} from 'react-native';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Formik} from 'formik';
 
@@ -70,7 +73,7 @@ const ModalCrearFinanzas = ({
           montoActual: 0,
           montoFinal: 0,
           nombre: '',
-          semanas: '',
+          semanas: 0,
         }}
         onSubmit={values => {
           console.log(values);
@@ -132,56 +135,106 @@ const ModalCrearFinanzas = ({
                       </Box>
                     </Center>
                     <VStack space="4" h="100%">
-                      <Text fontSize="20" fontWeight="bold" mb="0" mt="0">
+                      <Text fontSize="15" fontWeight="bold" mb="0" mt="0">
                         ¿Cuál es la meta?
                       </Text>
-                      <Input
-                        key="name"
-                        id="nombre"
-                        name="nombre"
-                        mx="3"
-                        placeholder="Nombre de meta"
-                        w="100%"
-                        maxWidth="300px"
-                        value={values.nombre}
-                        onChangeText={handleChange('nombre')}
-                      />
+                      <InputGroup
+                        w={{
+                          base: '70%',
+                          md: '285',
+                        }}>
+                        <InputLeftAddon
+                          children={
+                            <MatComIcon
+                              name="pencil-outline"
+                              size={18}
+                              color="#061678"
+                            />
+                          }
+                          h="40px"
+                        />
+                        <Input
+                          key="name"
+                          id="nombre"
+                          name="nombre"
+                          mx="3"
+                          placeholder="Nombre de meta"
+                          w="100%"
+                          h="40px"
+                          value={values.nombre}
+                          onChangeText={handleChange('nombre')}
+                        />
+                      </InputGroup>
 
-                      <Text fontSize="20" fontWeight="bold" mb="0">
+                      <Text fontSize="15" fontWeight="bold" mb="0">
                         ¿Cuánto quieres ahorrar?
                       </Text>
-                      <Input
-                        key="MF"
-                        mx="3"
-                        placeholder="Monto final"
-                        w="100%"
-                        maxWidth="300px"
-                        value={values.montoFinal}
-                        id="montoFinal"
-                        name="montoFinal"
-                        keyboardType="numeric"
-                        onChangeText={handleChange('montoFinal')}
-                      />
+                      <InputGroup
+                        w={{
+                          base: '70%',
+                          md: '285',
+                        }}>
+                        <InputLeftAddon
+                          children={
+                            <MaterialIcon
+                              name="attach-money"
+                              size={18}
+                              color="#061678"
+                            />
+                          }
+                          h="40px"
+                        />
+                        <Input
+                          key="MF"
+                          id="montoFinal"
+                          name="montoFinal"
+                          mx="3"
+                          placeholder="Monto final"
+                          w="100%"
+                          h="40px"
+                          value={values.montoFinal}
+                          onChangeText={handleChange('montoFinal')}
+                        />
+                      </InputGroup>
 
-                      <Text fontSize="20" fontWeight="bold" mb="0">
-                        ¿En cuanto tiempo quieres cumplirla?
+                      <Text fontSize="15" fontWeight="bold" mb="0">
+                        ¿En cuantas semanas quieres cumplirla?
                       </Text>
-                      <HStack>
+                      <HStack alignItems="center">
+                        <Box
+                          borderStyle="solid"
+                          borderColor="#061678"
+                          borderRadius="50"
+                          borderWidth="1"
+                          h="20px"
+                          w="20px"
+                          alignItems="center">
+                          <MatComIcon name="minus" size={18} color="#061678" />
+                        </Box>
+
                         <Input
                           key="Weeks"
                           mx="3"
                           placeholder="semanas"
-                          w="75%"
-                          maxWidth="300px"
+                          w="100px"
                           value={values.semanas}
                           id="semanas"
                           name="semanas"
                           keyboardType="numeric"
                           onChangeText={handleChange('semanas')}
+                          h="40px"
                         />
-                        <Text fontSize="15" mb="0">
-                          semanas
-                        </Text>
+
+                        <Box
+                          borderStyle="solid"
+                          borderColor="#061678"
+                          borderRadius="50"
+                          borderWidth="1"
+                          h="20px"
+                          w="20px"
+                          alignItems="center">
+                          <MatComIcon name="plus" size={18} color="#061678" />
+                        </Box>
                       </HStack>
                       {values.montoFinal && values.semanas ? (
                         <>
