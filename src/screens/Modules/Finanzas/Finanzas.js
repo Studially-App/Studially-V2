@@ -14,6 +14,8 @@ import {
   HStack,
   Fab,
   ScrollView,
+  Menu,
+  Pressable,
 } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -116,7 +118,9 @@ const Finanzas = () => {
     }
   }, [userInfo]);
 
-  if (initializing) return null;
+  if (initializing) {
+    return null;
+  }
 
   return (
     <NativeBaseProvider>
@@ -179,16 +183,35 @@ const Finanzas = () => {
                   alignItems="center"
                   justifyContent="center"
                   key={i}>
-                  <HStack justifyContent="space-around">
-                    <Text textAlign="center" color="#061678" fontSize="22px">
+                  <HStack
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    w="100%"
+                    h="45px"
+                    alignItems="flex-start">
+                    <Text textAlign="left" color="#061678" fontSize="20px">
                       {item.nombre}
                     </Text>
-                    <Icon
-                      size={25}
-                      color="red"
-                      name="trash-can-outline"
-                      onPress={() => deleteFinance(i)}
-                    />
+                    <Menu
+                      w="190"
+                      trigger={triggerProps => {
+                        return (
+                          <Pressable
+                            accessibilityLabel="More options menu"
+                            {...triggerProps}>
+                            <Icon
+                              size={20}
+                              color="#475BD8"
+                              name="dots-vertical"
+                            />
+                          </Pressable>
+                        );
+                      }}>
+                      <Menu.Item>Editar</Menu.Item>
+                      <Menu.Item onPress={() => deleteFinance(i)}>
+                        <Text color="red.400">Eliminar</Text>
+                      </Menu.Item>
+                    </Menu>
                   </HStack>
 
                   <HStack alignItems="center">
@@ -220,10 +243,11 @@ const Finanzas = () => {
                     bg="white"
                     borderWidth={1}
                     borderColor="#475BD8"
-                    alignContent={'center'}
-                    justifyContent={'center'}
+                    alignContent="center"
+                    justifyContent="center"
+                    alignItems="center"
                     w={'100%'}>
-                    <Text fontSize="xl" color="#475BD8">
+                    <Text fontSize="18" color="#475BD8">
                       <MaterialIcon
                         size={20}
                         color="#475BD8"
