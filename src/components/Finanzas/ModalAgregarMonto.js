@@ -10,6 +10,8 @@ import {
   Button,
   NativeBaseProvider,
   Input,
+  InputGroup,
+  InputLeftAddon,
 } from 'native-base';
 // Modal
 import Modal from 'react-native-modal';
@@ -58,6 +60,7 @@ const ModalAgregarMonto = ({
         .then(() => {
           console.log('User finantial goals updated!');
         });
+      setModalVisibility(false);
     } catch (error) {
       console.log(error);
     }
@@ -129,21 +132,37 @@ const ModalAgregarMonto = ({
                       </Box>
                     </Center>
                     <VStack space="4" h="100%">
-                      <Text fontSize="20" fontWeight="bold" mb="0">
+                      <Text fontSize="15" fontWeight="bold" mb="0">
                         Ingresar monto
                       </Text>
-                      <Input
-                        key="MF"
-                        mx="3"
-                        placeholder="Monto"
-                        w="100%"
-                        maxWidth="300px"
-                        value={values.montoFinal}
-                        id="montoFinal"
-                        name="montoFinal"
-                        keyboardType="numeric"
-                        onChangeText={handleChange('montoActual')}
-                      />
+                      <InputGroup
+                        w={{
+                          base: '70%',
+                          md: '285',
+                        }}>
+                        <InputLeftAddon
+                          children={
+                            <MaterialIcon
+                              name="attach-money"
+                              size={18}
+                              color="#061678"
+                            />
+                          }
+                          h="40px"
+                        />
+                        <Input
+                          key="MF"
+                          id="montoActual"
+                          name="montoActual"
+                          mx="3"
+                          placeholder="Monto"
+                          w="100%"
+                          h="40px"
+                          keyboardType="numeric"
+                          value={values.montoActual}
+                          onChangeText={handleChange('montoActual')}
+                        />
+                      </InputGroup>
                       <Text fontSize="12" fontWeight="bold" mb="0">
                         Puedes ingresar números negativos para representar
                         egresos
@@ -169,12 +188,16 @@ const ModalAgregarMonto = ({
                             setModalVisibility(false);
                             setData({});
                           }}
-                          bg="#D26908"
+                          bg="white"
                           _text={{
                             fontSize: 20,
+                            color: '#475BD8',
                           }}
+                          borderColor="#475BD8"
+                          borderStyle="solid"
+                          borderWidth="1px"
                           w="96%"
-                          mt="-5">
+                          mt="0">
                           Cancelar
                         </Button>
                       </Center>

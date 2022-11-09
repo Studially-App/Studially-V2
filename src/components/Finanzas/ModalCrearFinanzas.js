@@ -49,7 +49,7 @@ const ModalCrearFinanzas = ({
     }
   };
 
-  const updateFinantilGoals = values => {
+  const updateFinantialGoals = values => {
     data.push(values);
     try {
       firestore()
@@ -61,6 +61,7 @@ const ModalCrearFinanzas = ({
         .then(() => {
           console.log('User finantial goals updated!');
         });
+      setModalVisibility(false);
     } catch (error) {
       console.log(error);
     }
@@ -77,7 +78,7 @@ const ModalCrearFinanzas = ({
         }}
         onSubmit={values => {
           console.log(values);
-          updateFinantilGoals(values);
+          updateFinantialGoals(values);
         }}>
         {({
           handleChange,
