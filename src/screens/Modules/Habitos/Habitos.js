@@ -17,6 +17,7 @@ import {
   Modal,
   Spinner,
   Heading,
+  Divider,
 } from 'native-base';
 
 import {useNavigation} from '@react-navigation/native';
@@ -169,7 +170,7 @@ const Habitos = () => {
 
   useEffect(() => {
     let isMounted = true;
-    if (user != undefined) {
+    if (user !== undefined) {
       getUserInfo(user, isMounted);
       return () => {
         isMounted = false;
@@ -185,7 +186,55 @@ const Habitos = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
-  if (initializing) return null;
+  if (initializing) {
+    return null;
+  }
+
+  const amigosEnTendencia = [
+    {
+      nombre: 'nombre 1',
+      fuegos: 20,
+    },
+    {
+      nombre: 'nombre 2',
+      fuegos: 10,
+    },
+    {
+      nombre: 'nombre 3',
+      fuegos: 8,
+    },
+    {
+      nombre: 'nombre 4',
+      fuegos: 3,
+    },
+    {
+      nombre: 'nombre 5',
+      fuegos: 1,
+    },
+  ];
+
+  const habitosTendencia = [
+    {
+      nombre: 'Arte y creatividad',
+      personas: 600,
+    },
+    {
+      nombre: 'Conexión social',
+      personas: 450,
+    },
+    {
+      nombre: 'Aprendizaje continuo',
+      personas: 300,
+    },
+    {
+      nombre: 'Autocuidado',
+      personas: 230,
+    },
+    {
+      nombre: 'Alimentación Sana',
+      personas: 200,
+    },
+  ];
 
   return (
     <NativeBaseProvider>
@@ -196,27 +245,27 @@ const Habitos = () => {
         </Heading>
       </Modal>
       <VStack space={4} alignItems="center" mt={2}>
-        <HStack space={4} justifyContent="center" maxW="90%">
+        <HStack space={3} justifyContent="center" maxW="90%">
           {tab === 'Mis Habitos' ? (
             <>
               <Button
                 onPress={() => setTab('Mis Habitos')}
                 bg="#475BD8"
-                w={'40%'}>
-                <Text fontSize="lg" color="white">
+                w={'33%'}>
+                <Text fontSize="14" color="white">
                   Mis hábitos
                 </Text>
               </Button>
               <Button
                 onPress={() => setTab('Marcar Habitos')}
                 bg="white"
-                w={'40%'}>
-                <Text fontSize="lg" color="#475BD8">
+                w={'33%'}>
+                <Text fontSize="14" color="#475BD8">
                   Hábitos del día
                 </Text>
               </Button>
-              <Button onPress={() => setTab('Tendencias')} bg="white" w={'40%'}>
-                <Text fontSize="lg" color="#475BD8">
+              <Button onPress={() => setTab('Tendencias')} bg="white" w={'33%'}>
+                <Text fontSize="14" color="#475BD8">
                   Tendencias
                 </Text>
               </Button>
@@ -226,21 +275,21 @@ const Habitos = () => {
               <Button
                 onPress={() => setTab('Mis Habitos')}
                 bg="white"
-                w={'40%'}>
-                <Text fontSize="lg" color="#475BD8">
+                w={'33%'}>
+                <Text fontSize="14" color="#475BD8">
                   Mis hábitos
                 </Text>
               </Button>
               <Button
                 onPress={() => setTab('Marcar Habitos')}
                 bg="#475BD8"
-                w={'40%'}>
-                <Text fontSize="lg" color="white">
+                w={'33%'}>
+                <Text fontSize="14" color="white">
                   Hábitos del día
                 </Text>
               </Button>
-              <Button onPress={() => setTab('Tendencias')} bg="white" w={'40%'}>
-                <Text fontSize="lg" color="#475BD8">
+              <Button onPress={() => setTab('Tendencias')} bg="white" w={'33%'}>
+                <Text fontSize="14" color="#475BD8">
                   Tendencias
                 </Text>
               </Button>
@@ -250,24 +299,24 @@ const Habitos = () => {
               <Button
                 onPress={() => setTab('Mis Habitos')}
                 bg="white"
-                w={'40%'}>
-                <Text fontSize="lg" color="#475BD8">
+                w={'33%'}>
+                <Text fontSize="14" color="#475BD8">
                   Mis hábitos
                 </Text>
               </Button>
               <Button
                 onPress={() => setTab('Marcar Habitos')}
                 bg="white"
-                w={'40%'}>
-                <Text fontSize="lg" color="#475BD8">
+                w={'33%'}>
+                <Text fontSize="14" color="#475BD8">
                   Hábitos del día
                 </Text>
               </Button>
               <Button
                 onPress={() => setTab('Tendencias')}
                 bg="#475BD8"
-                w={'40%'}>
-                <Text fontSize="lg" color="white">
+                w={'33%'}>
+                <Text fontSize="14" color="white">
                   Tendencias
                 </Text>
               </Button>
@@ -275,7 +324,7 @@ const Habitos = () => {
           )}
         </HStack>
       </VStack>
-      {tab == 'Mis Habitos' ? (
+      {tab === 'Mis Habitos' ? (
         /* Aquí es cuando estás en la tab de mis hábitos*/
         Object.keys(data).length === 0 ? (
           <VStack space={4} alignItems="center">
@@ -383,7 +432,7 @@ const Habitos = () => {
             </ScrollView>
           </VStack>
         )
-      ) : allMarked() ? (
+      ) : tab === 'Marcar Habitos' && allMarked() ? (
         <VStack space={4} alignItems="center">
           <Box
             width="90%"
@@ -406,7 +455,7 @@ const Habitos = () => {
             ¡Genial! {'\n'} No tienes más hábitos por marcar hoy
           </Box>
         </VStack>
-      ) : (
+      ) : tab === 'Marcar Habitos' ? (
         /*Aquí es cuando está en la tab de hábitos del día */
         <VStack alignItems="center" mt={3} mb={20}>
           <ScrollView w="100%" h="200px">
@@ -503,6 +552,36 @@ const Habitos = () => {
               )}
             </VStack>
           </ScrollView>
+        </VStack>
+      ) : (
+        <VStack mt={3} mb={20} ml={3} mr={3}>
+          <Text fontSize={20} fontWeight="bold">
+            Amigos en tendencias
+          </Text>
+          {amigosEnTendencia.map(amigo => (
+            <HStack justifyContent="space-between">
+              <Text fontSize={15}>{amigo.nombre}</Text>
+              <Text fontSize={15}>{amigo.fuegos}</Text>
+            </HStack>
+          ))}
+          <Divider my={2} />
+          <Text fontSize={20} fontWeight="bold">
+            Hábitos en tendencia
+          </Text>
+          <HStack justifyContent="space-between">
+            <Text fontSize={15} fontWeight="bold">
+              Hábito
+            </Text>
+            <Text fontSize={15} fontWeight="bold">
+              Personas
+            </Text>
+          </HStack>
+          {habitosTendencia.map(habito => (
+            <HStack justifyContent="space-between">
+              <Text fontSize={15}>{habito.nombre}</Text>
+              <Text fontSize={15}>{habito.personas}</Text>
+            </HStack>
+          ))}
         </VStack>
       )}
     </NativeBaseProvider>
