@@ -72,9 +72,10 @@ const ModalAgregarMonto = ({
         initialValues={{
           montoActual: 0,
         }}
-        onSubmit={values => {
+        onSubmit={(values, actions) => {
           console.log(values);
           updateAmount(values);
+          actions.resetForm();
         }}>
         {({
           handleChange,

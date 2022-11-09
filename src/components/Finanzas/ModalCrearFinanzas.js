@@ -76,9 +76,10 @@ const ModalCrearFinanzas = ({
           nombre: '',
           semanas: 0,
         }}
-        onSubmit={values => {
+        onSubmit={(values, actions) => {
           console.log(values);
           updateFinantialGoals(values);
+          actions.resetForm();
         }}>
         {({
           handleChange,
