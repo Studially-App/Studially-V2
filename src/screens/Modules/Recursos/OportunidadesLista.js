@@ -1,11 +1,12 @@
 import * as React from 'react';
+
 // Native Base
 import {VStack, ScrollView, Pressable} from 'native-base';
 
 import CardBeneficio from '../../../components/Recursos/CardBeneficio';
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 
-const EventosLista = () => {
+const OportunidadesLista = () => {
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] =
     React.useState(false);
@@ -14,21 +15,21 @@ const EventosLista = () => {
 
   const data = [
     {
-      titulo: 'Evento 1',
+      titulo: 'Oportunidad 1',
       organizacion: 'Organización 1',
       texto:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
       fecha: '31/12/2021',
     },
     {
-      titulo: 'Evento 2',
+      titulo: 'Oportunidad 2',
       texto:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
       organizacion: 'Organización 2',
       fecha: '31/12/2021',
     },
     {
-      titulo: 'Evento 3',
+      titulo: 'Oportunidad 3',
       texto:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
       organizacion: 'Organización 3',
@@ -68,4 +69,4 @@ const EventosLista = () => {
   );
 };
 
-export default EventosLista;
+export default OportunidadesLista;

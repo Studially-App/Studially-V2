@@ -11,8 +11,8 @@ import {
   Spacer,
 } from 'native-base';
 // Icons
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import OctIcon from 'react-native-vector-icons/Octicons';
 import {useNavigation} from '@react-navigation/native';
 
 const Recursos = () => {
@@ -28,14 +28,14 @@ const Recursos = () => {
           alignContent="center"
           alignItems="center">
           <HStack justifyContent="center">
-            <Pressable onPress={() => navigation.navigate('Comercios')}>
+            <Pressable onPress={() => navigation.navigate('Oportunidades')}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
                   <VStack justifyContent="center" alignItems="center">
                     <Center h="100%">
-                      <Icon name="store" color="#475BD8" size={60} />
+                      <OctIcon name="verified" color="#475BD8" size={60} />
                       <Text fontSize="lg" bold>
-                        Comercios
+                        Oportunidades
                       </Text>
                     </Center>
                   </VStack>
@@ -43,18 +43,18 @@ const Recursos = () => {
               </Box>
             </Pressable>
             <Spacer />
-            <Pressable onPress={() => navigation.navigate('Cursos')}>
+            <Pressable onPress={() => navigation.navigate('Salud Mental')}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
                   <VStack justifyContent="center" alignItems="center">
                     <Center h="100%">
                       <IconMCI
-                        name="book-play-outline"
+                        name="hand-heart-outline"
                         color="#475BD8"
                         size={60}
                       />
                       <Text fontSize="lg" bold>
-                        Cursos
+                        Salud Mental
                       </Text>
                     </Center>
                   </VStack>
@@ -64,14 +64,14 @@ const Recursos = () => {
           </HStack>
           <Spacer />
           <HStack justifyContent="center">
-            <Pressable onPress={() => navigation.navigate('Eventos')}>
+            <Pressable onPress={() => navigation.navigate('Aprendizaje')}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
                   <VStack justifyContent="center" alignItems="center">
                     <Center h="100%">
-                      <IconMCI name="calendar-edit" color="#475BD8" size={60} />
+                      <OctIcon name="book" color="#475BD8" size={60} />
                       <Text fontSize="lg" bold>
-                        Eventos
+                        Aprendizaje
                       </Text>
                     </Center>
                   </VStack>
@@ -79,14 +79,14 @@ const Recursos = () => {
               </Box>
             </Pressable>
             <Spacer />
-            <Pressable onPress={() => navigation.navigate('Otros')}>
+            <Pressable onPress={() => navigation.navigate('Comunidad')}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
                   <VStack justifyContent="center" alignItems="center">
                     <Center h="100%">
-                      <Icon name="pending" color="#475BD8" size={60} />
+                      <OctIcon name="people" color="#475BD8" size={60} />
                       <Text fontSize="lg" bold>
-                        Otros
+                        Comunidad
                       </Text>
                     </Center>
                   </VStack>

@@ -25,10 +25,10 @@ import MarcarHabitos from './src/screens/Modules/Habitos/MarcarHabitos';
 import AgregarHabitos from './src/screens/Modules/Habitos/AgregarHabitos';
 import Estadisticas from './src/screens/Modules/Habitos/Estadisticas';
 
-import ComerciosLista from './src/screens/Modules/Recursos/ComerciosLista';
-import CursosLista from './src/screens/Modules/Recursos/CursosLista';
-import EventosLista from './src/screens/Modules/Recursos/EventosLista';
-import OtrosLista from './src/screens/Modules/Recursos/OtrosLista';
+import OportunidadesLista from './src/screens/Modules/Recursos/OportunidadesLista';
+import SaludMentalLista from './src/screens/Modules/Recursos/SaludMentalLista';
+import AprendizajeLista from './src/screens/Modules/Recursos/AprendizajeLista';
+import ComunidadLista from './src/screens/Modules/Recursos/ComunidadLista';
 
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -78,29 +78,29 @@ const RecursosStackScreen = () => (
       }}
     />
     <RecursosStack.Screen
-      name="Comercios"
-      component={ComerciosLista}
+      name="Oportunidades"
+      component={OportunidadesLista}
       options={{
         headerShown: false,
       }}
     />
     <RecursosStack.Screen
-      name="Cursos"
-      component={CursosLista}
+      name="Salud Mental"
+      component={SaludMentalLista}
       options={{
         headerShown: false,
       }}
     />
     <RecursosStack.Screen
-      name="Eventos"
-      component={EventosLista}
+      name="Aprendizaje"
+      component={AprendizajeLista}
       options={{
         headerShown: false,
       }}
     />
     <RecursosStack.Screen
-      name="Otros"
-      component={OtrosLista}
+      name="Comunidad"
+      component={ComunidadLista}
       options={{
         headerShown: false,
       }}

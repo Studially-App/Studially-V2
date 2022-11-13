@@ -5,7 +5,7 @@ import {VStack, ScrollView, Pressable} from 'native-base';
 import CardBeneficio from '../../../components/Recursos/CardBeneficio';
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 
-const CursosLista = () => {
+const SaludMentalLista = () => {
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] =
     React.useState(false);
@@ -14,21 +14,21 @@ const CursosLista = () => {
 
   const data = [
     {
-      titulo: 'Curso 1',
+      titulo: 'Salud Mental 1',
       organizacion: 'Organización 1',
       texto:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
       fecha: '31/12/2021',
     },
     {
-      titulo: 'Curso 2',
+      titulo: 'Salud Mental 2',
       texto:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
       organizacion: 'Organización 2',
       fecha: '31/12/2021',
     },
     {
-      titulo: 'Curso 3',
+      titulo: 'Salud Mental 3',
       texto:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
       organizacion: 'Organización 3',
@@ -68,4 +68,4 @@ const CursosLista = () => {
   );
 };
 
-export default CursosLista;
+export default SaludMentalLista;
