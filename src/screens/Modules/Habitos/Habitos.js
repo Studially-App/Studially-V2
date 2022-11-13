@@ -40,6 +40,8 @@ const Habitos = () => {
 
   const [selectedData, setSelectedData] = React.useState([]);
 
+  const [habitosTendencia, setHabitosTendencia] = React.useState([]);
+
   const [spinnerModal, setSpinnerModal] = useState(false);
 
   // Set an initializing state whilst Firebase connects
@@ -125,6 +127,14 @@ const Habitos = () => {
     }
   };
 
+  const getHabitosTendencias = async () => {
+    const habitsStats = await firestore()
+      .collection('habitos')
+      .doc('Personas')
+      .get();
+    setHabitosTendencia(habitsStats._data.habitos);
+  };
+
   const getHabits = (userInfo, mounted) => {
     if (mounted) {
       if (userInfo) {
@@ -172,6 +182,7 @@ const Habitos = () => {
     let isMounted = true;
     if (user !== undefined) {
       getUserInfo(user, isMounted);
+      getHabitosTendencias();
       return () => {
         isMounted = false;
       };
@@ -210,29 +221,6 @@ const Habitos = () => {
     {
       nombre: 'nombre 5',
       fuegos: 1,
-    },
-  ];
-
-  const habitosTendencia = [
-    {
-      nombre: 'Arte y creatividad',
-      personas: 600,
-    },
-    {
-      nombre: 'Conexión social',
-      personas: 450,
-    },
-    {
-      nombre: 'Aprendizaje continuo',
-      personas: 300,
-    },
-    {
-      nombre: 'Autocuidado',
-      personas: 230,
-    },
-    {
-      nombre: 'Alimentación Sana',
-      personas: 200,
     },
   ];
 
@@ -563,8 +551,8 @@ const Habitos = () => {
           <Text fontSize={20} fontWeight="bold">
             Amigos en tendencias
           </Text>
-          {amigosEnTendencia.map(amigo => (
-            <HStack justifyContent="space-between">
+          {amigosEnTendencia.map((amigo, i) => (
+            <HStack justifyContent="space-between" key={i}>
               <Text fontSize={15}>{amigo.nombre}</Text>
               <Text fontSize={15}>{amigo.fuegos}</Text>
             </HStack>
@@ -581,10 +569,10 @@ const Habitos = () => {
               Personas
             </Text>
           </HStack>
-          {habitosTendencia.map(habito => (
-            <HStack justifyContent="space-between">
-              <Text fontSize={15}>{habito.nombre}</Text>
-              <Text fontSize={15}>{habito.personas}</Text>
+          {habitosTendencia.map((habito, i) => (
+            <HStack justifyContent="space-between" key={i}>
+              <Text fontSize={15}>{habito.name}</Text>
+              <Text fontSize={15}>{habito.persons}</Text>
             </HStack>
           ))}
         </VStack>
