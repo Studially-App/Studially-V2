@@ -30,10 +30,15 @@ import SaludMentalLista from './src/screens/Modules/Recursos/SaludMentalLista';
 import AprendizajeLista from './src/screens/Modules/Recursos/AprendizajeLista';
 import ComunidadLista from './src/screens/Modules/Recursos/ComunidadLista';
 
+import Mas from './src/screens/Modules/Perfil/Mas';
+import Profile from './src/screens/Modules/Perfil/Profile';
+import StudiallyPRO from './src/screens/Modules/Perfil/StudiallyPro';
+
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 const HabitosStack = createNativeStackNavigator();
 const RecursosStack = createNativeStackNavigator();
+const PerfilStack = createNativeStackNavigator();
 
 const HabitosStackScreen = () => (
   <HabitosStack.Navigator>
@@ -106,6 +111,32 @@ const RecursosStackScreen = () => (
       }}
     />
   </RecursosStack.Navigator>
+);
+
+const PerfilStackScreen = () => (
+  <PerfilStack.Navigator>
+    <PerfilStack.Screen
+      name="MasHome"
+      component={Mas}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <PerfilStack.Screen
+      name="Perfil"
+      component={Profile}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <PerfilStack.Screen
+      name="Studially Pro"
+      component={StudiallyPRO}
+      options={{
+        headerShown: false,
+      }}
+    />
+  </PerfilStack.Navigator>
 );
 
 const App = () => {
