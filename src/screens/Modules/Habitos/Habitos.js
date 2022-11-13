@@ -29,6 +29,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 
+import ModalAgregarAmigo from '../../../components/Habitos/ModalAgregarAmigo';
+
 const Habitos = () => {
   const navigation = useNavigation();
 
@@ -43,6 +45,9 @@ const Habitos = () => {
   const [habitosTendencia, setHabitosTendencia] = React.useState([]);
 
   const [spinnerModal, setSpinnerModal] = useState(false);
+
+  // Estado modal amigo
+  const [amigoModalVisibility, setAmigoModalVisibility] = React.useState(false);
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -548,9 +553,17 @@ const Habitos = () => {
         </VStack>
       ) : (
         <VStack mt={3} mb={20} ml={3} mr={3}>
-          <Text fontSize={20} fontWeight="bold">
-            Amigos en tendencias
-          </Text>
+          <HStack justifyContent="space-between">
+            <Text fontSize={20} fontWeight="bold">
+              Amigos en tendencias
+            </Text>
+            <Text
+              fontSize={20}
+              fontWeight="bold"
+              onPress={() => setAmigoModalVisibility(true)}>
+              Agregar
+            </Text>
+          </HStack>
           {amigosEnTendencia.map((amigo, i) => (
             <HStack justifyContent="space-between" key={i}>
               <Text fontSize={15}>{amigo.nombre}</Text>
@@ -577,6 +590,12 @@ const Habitos = () => {
           ))}
         </VStack>
       )}
+      <ModalAgregarAmigo
+        modalVisibility={amigoModalVisibility}
+        setModalVisibility={setAmigoModalVisibility}
+        userId={userInfo?.userId}
+        userInfo={userInfo}
+      />
     </NativeBaseProvider>
   );
 };
