@@ -34,6 +34,9 @@ const AgregarHabitos = () => {
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
 
+  // Estadísticas de hábitos
+  const [habitsStatsState, setHabitsStatsState] = React.useState([]);
+
   const [data, setData] = React.useState([
     {
       name: 'Actividad Física',
@@ -186,6 +189,28 @@ const AgregarHabitos = () => {
     }
   };
 
+  const getHabitsStats = async () => {
+    const habitsStats = await firestore()
+      .collection('habitos')
+      .doc('Personas')
+      .get();
+    setHabitsStatsState(habitsStats._data.habitos);
+  };
+
+  const updateHabitsStats = async () => {
+    const habitsStats = {...habitsStatsState};
+    data.map(habit => {
+      if (habit.selected) {
+        habitsStats.map(habitStat => {
+          if (habit.name === habitStat.name) {
+            habitStat.persons++;
+          }
+        });
+      }
+    });
+    console.log('nuevo habits stats', habitsStats);
+  };
+
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
@@ -197,7 +222,7 @@ const AgregarHabitos = () => {
   const getHabits = (userInfo, mounted) => {
     if (mounted) {
       if (userInfo) {
-        if (Object.keys(userInfo.habitos).length != 0) {
+        if (Object.keys(userInfo.habitos).length !== 0) {
           var userHabits = userInfo.habitos;
           setData(userHabits);
         }
@@ -213,7 +238,6 @@ const AgregarHabitos = () => {
   useEffect(() => {
     let isMounted = true;
     if (user !== undefined) {
-      console.log('entra a get habits');
       getUserInfo(user, isMounted);
       return () => {
         isMounted = false;
@@ -248,6 +272,8 @@ const AgregarHabitos = () => {
           navigation.goBack();
           route.params.onGoBack();
         });
+      getHabitsStats();
+      updateHabitsStats();
     } catch (error) {
       console.log(error);
     }
