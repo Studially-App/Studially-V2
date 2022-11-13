@@ -25,9 +25,15 @@ import MarcarHabitos from './src/screens/Modules/Habitos/MarcarHabitos';
 import AgregarHabitos from './src/screens/Modules/Habitos/AgregarHabitos';
 import Estadisticas from './src/screens/Modules/Habitos/Estadisticas';
 
+import ComerciosLista from './src/screens/Modules/Recursos/ComerciosLista';
+import CursosLista from './src/screens/Modules/Recursos/CursosLista';
+import EventosLista from './src/screens/Modules/Recursos/EventosLista';
+import OtrosLista from './src/screens/Modules/Recursos/OtrosLista';
+
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 const HabitosStack = createNativeStackNavigator();
+const RecursosStack = createNativeStackNavigator();
 
 const HabitosStackScreen = () => (
   <HabitosStack.Navigator>
@@ -45,7 +51,6 @@ const HabitosStackScreen = () => (
         headerShown: false,
       }}
     />
-
     <HabitosStack.Screen
       name="Marcar Habitos"
       component={MarcarHabitos}
@@ -61,6 +66,46 @@ const HabitosStackScreen = () => (
       }}
     />
   </HabitosStack.Navigator>
+);
+
+const RecursosStackScreen = () => (
+  <RecursosStack.Navigator>
+    <RecursosStack.Screen
+      name="RecursosHome"
+      component={Recursos}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <RecursosStack.Screen
+      name="Comercios"
+      component={ComerciosLista}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <RecursosStack.Screen
+      name="Cursos"
+      component={CursosLista}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <RecursosStack.Screen
+      name="Eventos"
+      component={EventosLista}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <RecursosStack.Screen
+      name="Otros"
+      component={OtrosLista}
+      options={{
+        headerShown: false,
+      }}
+    />
+  </RecursosStack.Navigator>
 );
 
 const App = () => {
@@ -160,7 +205,7 @@ const App = () => {
               />
               <Tabs.Screen
                 name="Recursos"
-                component={Recursos}
+                component={RecursosStackScreen}
                 options={{
                   tarBarLabel: 'Recursos',
                   tabBarLabelStyle: {
