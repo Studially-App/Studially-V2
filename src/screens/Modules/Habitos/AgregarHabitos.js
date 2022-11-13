@@ -34,9 +34,6 @@ const AgregarHabitos = () => {
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
 
-  // Estadísticas de hábitos
-  const [habitsStatsState, setHabitsStatsState] = React.useState([]);
-
   const [data, setData] = React.useState([
     {
       name: 'Actividad Física',
@@ -194,21 +191,27 @@ const AgregarHabitos = () => {
       .collection('habitos')
       .doc('Personas')
       .get();
-    setHabitsStatsState(habitsStats._data.habitos);
+    return habitsStats._data.habitos;
   };
 
   const updateHabitsStats = async () => {
-    const habitsStats = {...habitsStatsState};
+    let habitsStats = await getHabitsStats();
     data.map(habit => {
       if (habit.selected) {
-        habitsStats.map(habitStat => {
-          if (habit.name === habitStat.name) {
-            habitStat.persons++;
+        for (let habito of habitsStats) {
+          if (habito.name === habit.name) {
+            habito.persons = habito.persons + 1;
           }
-        });
+        }
       }
     });
-    console.log('nuevo habits stats', habitsStats);
+    try {
+      await firestore().collection('habitos').doc('Personas').update({
+        habitos: habitsStats,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Handle user state changes
@@ -261,6 +264,7 @@ const AgregarHabitos = () => {
 
   const updateHabits = () => {
     try {
+      updateHabitsStats();
       firestore()
         .collection('usuarios')
         .doc(userInfo.userId)
@@ -272,8 +276,6 @@ const AgregarHabitos = () => {
           navigation.goBack();
           route.params.onGoBack();
         });
-      getHabitsStats();
-      updateHabitsStats();
     } catch (error) {
       console.log(error);
     }
