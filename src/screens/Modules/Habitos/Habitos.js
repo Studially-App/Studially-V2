@@ -326,13 +326,14 @@ const Habitos = () => {
       </VStack>
       {tab === 'Mis Habitos' ? (
         /* Aquí es cuando estás en la tab de mis hábitos*/
-        Object.keys(data).length === 0 ? (
+        Object.keys(selectedData).length === 0 ? (
           <VStack space={4} alignItems="center">
             <Box
               width="90%"
               height="80%"
               bg="transparent"
               p="4"
+              mt={3}
               borderWidth={2}
               borderRadius={9}
               borderColor="#061678"

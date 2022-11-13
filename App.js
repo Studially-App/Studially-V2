@@ -21,8 +21,47 @@ import Finanzas from './src/screens/Modules/Finanzas/Finanzas';
 import Enfoque from './src/screens/Modules/Enfoque/Enfoque';
 import Recursos from './src/screens/Modules/Recursos/Recursos';
 
+import MarcarHabitos from './src/screens/Modules/Habitos/MarcarHabitos';
+import AgregarHabitos from './src/screens/Modules/Habitos/AgregarHabitos';
+import Estadisticas from './src/screens/Modules/Habitos/Estadisticas';
+
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
+const HabitosStack = createNativeStackNavigator();
+
+const HabitosStackScreen = () => (
+  <HabitosStack.Navigator>
+    <HabitosStack.Screen
+      name="Mis Habitos"
+      component={Habitos}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <HabitosStack.Screen
+      name="Agregar Habitos"
+      component={AgregarHabitos}
+      options={{
+        headerShown: false,
+      }}
+    />
+
+    <HabitosStack.Screen
+      name="Marcar Habitos"
+      component={MarcarHabitos}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <HabitosStack.Screen
+      name="Estadísticas"
+      component={Estadisticas}
+      options={{
+        headerShown: false,
+      }}
+    />
+  </HabitosStack.Navigator>
+);
 
 const App = () => {
   // Set an initializing state whilst Firebase connects
@@ -93,7 +132,7 @@ const App = () => {
               />
               <Tabs.Screen
                 name="Hábitos"
-                component={Habitos}
+                component={HabitosStackScreen}
                 options={{
                   tarBarLabel: 'Hábitos',
                   tabBarLabelStyle: {
