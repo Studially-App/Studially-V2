@@ -157,15 +157,18 @@ const Finanzas = () => {
         </VStack>
       ) : (
         <>
-          <Fab
-            position="absolute"
-            size="sm"
-            icon={<AntIcon color="white" name="plus" size={20} />}
-            right={30}
-            bottom={90}
-            bg="#061678"
-            onPress={() => setCrearModalVisibility(true)}
-          />
+          {finantialGoals.length < 3 ? (
+            <Fab
+              position="absolute"
+              size="sm"
+              icon={<AntIcon color="white" name="plus" size={20} />}
+              right={30}
+              bottom={90}
+              bg="#061678"
+              onPress={() => setCrearModalVisibility(true)}
+            />
+          ) : null}
+
           <ScrollView h="78%">
             <VStack space={4} alignItems="center">
               <Text textAlign="center" color="#061678" fontSize="30px">
