@@ -31,7 +31,7 @@ const ModalDetalleHabito = ({
   const scrollViewReff = React.createRef();
 
   // Screen Dimentions
-  const {width, height} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   const handleOnScroll = event => {
     setScrollOffset(event.nativeEvent.contentOffset.y);
@@ -47,7 +47,7 @@ const ModalDetalleHabito = ({
 
   const getFrecuencia = () => {
     for (let i = 0; i <= data.frecuencia.length; i++) {
-      if (data.frecuencia[i] == 0) {
+      if (data.frecuencia[i] === 0) {
         frecuenciaBG.push('white');
         frecuenciaLetter.push('#475BD8');
       } else {
@@ -59,7 +59,7 @@ const ModalDetalleHabito = ({
 
   const changeFrecuencia = index => {
     let changeData = {...data};
-    if (changeData.frecuencia[index] == 0) {
+    if (changeData.frecuencia[index] === 0) {
       changeData.frecuencia[index] = 1;
     } else {
       changeData.frecuencia[index] = 0;

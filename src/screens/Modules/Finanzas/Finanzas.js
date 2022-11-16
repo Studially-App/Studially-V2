@@ -24,6 +24,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 
 import ModalCrearFinanzas from '../../../components/Finanzas/ModalCrearFinanzas';
 import ModalAgregarMonto from '../../../components/Finanzas/ModalAgregarMonto';
+import ModalDetalleFinanzas from '../../../components/Finanzas/ModalDetalleFinanzas';
 
 const Finanzas = () => {
   // get user data
@@ -36,6 +37,10 @@ const Finanzas = () => {
 
   // Estado modal monto
   const [montoModalVisibility, setMontoModalVisibility] = React.useState(false);
+
+  // Estado modal detalle
+  const [detalleModalVisibility, setDetalleModalVisibility] =
+    React.useState(false);
 
   // Estado de cual se modifica
   const [metaSelected, setMetaSelected] = React.useState(0);
@@ -210,7 +215,13 @@ const Finanzas = () => {
                           </Pressable>
                         );
                       }}>
-                      <Menu.Item>Editar</Menu.Item>
+                      <Menu.Item
+                        onPress={() => {
+                          setDetalleModalVisibility(true);
+                          setDataDetalle(item);
+                        }}>
+                        Editar
+                      </Menu.Item>
                       <Menu.Item onPress={() => deleteFinance(i)}>
                         <Text color="red.400">Eliminar</Text>
                       </Menu.Item>
@@ -282,6 +293,14 @@ const Finanzas = () => {
         userId={userInfo?.userId}
         data={finantialGoals}
         userInfo={userInfo}
+      />
+      <ModalDetalleFinanzas
+        modalVisibility={detalleModalVisibility}
+        setModalVisibility={setDetalleModalVisibility}
+        setData={setDataDetalle}
+        dataDetalle={dataDetalle}
+        userId={userInfo?.userId}
+        data={finantialGoals}
       />
     </NativeBaseProvider>
   );
