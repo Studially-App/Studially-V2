@@ -47,6 +47,9 @@ const Finanzas = () => {
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
 
+  // index
+  const [index, setIndex] = React.useState(0);
+
   const getUserInfo = async (user, mounted) => {
     if (mounted) {
       const userInfoFB = await firestore()
@@ -219,6 +222,7 @@ const Finanzas = () => {
                         onPress={() => {
                           setDetalleModalVisibility(true);
                           setDataDetalle(item);
+                          setIndex(i);
                         }}>
                         Editar
                       </Menu.Item>
@@ -301,6 +305,7 @@ const Finanzas = () => {
         dataDetalle={dataDetalle}
         userId={userInfo?.userId}
         data={finantialGoals}
+        index={index}
       />
     </NativeBaseProvider>
   );

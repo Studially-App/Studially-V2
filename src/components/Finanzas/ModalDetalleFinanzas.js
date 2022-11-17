@@ -34,6 +34,7 @@ const ModalDetalleFinanzas = ({
   setData,
   dataDetalle,
   userId,
+  index,
 }) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
@@ -51,13 +52,15 @@ const ModalDetalleFinanzas = ({
   };
 
   const updateFinantialGoals = values => {
-    data.push(values);
+    let edit = {...data};
+    edit[index] = values;
+    edit[index].montoActual = dataDetalle.montoActual;
     try {
       firestore()
         .collection('usuarios')
         .doc(userId)
         .update({
-          finanzas: data,
+          finanzas: edit,
         })
         .then(() => {
           console.log('User finantial goals updated!');
@@ -196,7 +199,7 @@ const ModalDetalleFinanzas = ({
                           w="100%"
                           h="40px"
                           keyboardType="numeric"
-                          value={values.montoFinal}
+                          value={dataDetalle.montoFinal}
                           onChangeText={handleChange('montoFinal')}
                         />
                       </InputGroup>
@@ -221,7 +224,7 @@ const ModalDetalleFinanzas = ({
                           mx="3"
                           placeholder="semanas"
                           w="100px"
-                          value={values.semanas}
+                          value={dataDetalle.semanas}
                           id="semanas"
                           name="semanas"
                           keyboardType="numeric"
