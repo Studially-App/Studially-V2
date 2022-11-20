@@ -52,7 +52,7 @@ const ModalDetalleFinanzas = ({
   };
 
   const updateFinantialGoals = values => {
-    let edit = {...data};
+    let edit = [...data];
     edit[index] = values;
     edit[index].montoActual = dataDetalle.montoActual;
     try {
@@ -65,6 +65,7 @@ const ModalDetalleFinanzas = ({
         .then(() => {
           console.log('User finantial goals updated!');
         });
+      setData(edit);
       setModalVisibility(false);
     } catch (error) {
       console.log(error);
@@ -74,6 +75,7 @@ const ModalDetalleFinanzas = ({
   return (
     <NativeBaseProvider>
       <Formik
+        enableReinitialize={true}
         initialValues={{
           montoActual: dataDetalle.montoActual,
           montoFinal: dataDetalle.montoFinal,
@@ -167,7 +169,8 @@ const ModalDetalleFinanzas = ({
                           placeholder="Nombre de meta"
                           w="100%"
                           h="40px"
-                          value={dataDetalle.nombre}
+                          initialValues={dataDetalle.nombre}
+                          value={values.nombre}
                           onChangeText={handleChange('nombre')}
                         />
                       </InputGroup>
@@ -199,7 +202,8 @@ const ModalDetalleFinanzas = ({
                           w="100%"
                           h="40px"
                           keyboardType="numeric"
-                          value={dataDetalle.montoFinal}
+                          initialValues={dataDetalle.montoFinal}
+                          value={values.montoFinal}
                           onChangeText={handleChange('montoFinal')}
                         />
                       </InputGroup>
@@ -224,7 +228,8 @@ const ModalDetalleFinanzas = ({
                           mx="3"
                           placeholder="semanas"
                           w="100px"
-                          value={dataDetalle.semanas}
+                          initialValues={dataDetalle.semanas}
+                          value={values.semanas}
                           id="semanas"
                           name="semanas"
                           keyboardType="numeric"

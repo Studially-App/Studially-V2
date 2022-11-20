@@ -301,7 +301,7 @@ const Finanzas = () => {
       <ModalDetalleFinanzas
         modalVisibility={detalleModalVisibility}
         setModalVisibility={setDetalleModalVisibility}
-        setData={setDataDetalle}
+        setData={setFinantialGoals}
         dataDetalle={dataDetalle}
         userId={userInfo?.userId}
         data={finantialGoals}
