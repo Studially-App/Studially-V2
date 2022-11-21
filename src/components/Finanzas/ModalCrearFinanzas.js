@@ -212,7 +212,15 @@ const ModalCrearFinanzas = ({
                           h="20px"
                           w="20px"
                           alignItems="center">
-                          <MatComIcon name="minus" size={18} color="#061678" />
+                          <MatComIcon
+                            name="minus"
+                            size={18}
+                            color="#061678"
+                            onPress={() => {
+                              console.log('menos');
+                              values.semanas = values.semanas - 1;
+                            }}
+                          />
                         </Box>
 
                         <Input
@@ -236,7 +244,15 @@ const ModalCrearFinanzas = ({
                           h="20px"
                           w="20px"
                           alignItems="center">
-                          <MatComIcon name="plus" size={18} color="#061678" />
+                          <MatComIcon
+                            name="plus"
+                            size={18}
+                            color="#061678"
+                            onPress={() => {
+                              console.log('mas');
+                              values.semanas = values.semanas + 1;
+                            }}
+                          />
                         </Box>
                       </HStack>
                       {values.montoFinal && values.semanas ? (
