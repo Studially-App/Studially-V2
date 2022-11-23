@@ -225,8 +225,9 @@ const ModalDetalleFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              console.log('menos');
-                              values.semanas = values.semanas - 1;
+                              let semanas = values.semanas - 1;
+                              console.log('menos', values.semanas);
+                              setFieldValue('semanas', semanas);
                             }}
                           />
                         </Box>
@@ -258,8 +259,9 @@ const ModalDetalleFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              console.log('mas');
                               values.semanas = values.semanas + 1;
+                              console.log('mas', values.semanas);
+                              setFieldValue('semanas', values.semanas);
                             }}
                           />
                         </Box>
