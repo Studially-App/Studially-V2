@@ -95,13 +95,11 @@ const ModalCrearFinanzas = ({
               isVisible={modalVisibility}
               onBackButtonPress={() => {
                 setModalVisibility(false);
-                setData({});
               }}
               backgroundColor="white"
               backdropOpacity={0.72}
               onBackdropPress={() => {
                 setModalVisibility(false);
-                setData({});
               }}
               scrollTo={handleScrollTo}
               scrollOffset={scrollOffset}
@@ -109,7 +107,6 @@ const ModalCrearFinanzas = ({
               swipeDirection={['down']}
               onSwipeComplete={() => {
                 setModalVisibility(false);
-                setData({});
               }}
               style={{
                 marginBottom: 0,
@@ -217,8 +214,8 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              console.log('menos');
                               values.semanas = values.semanas - 1;
+                              setFieldValue('semanas', values.semanas);
                             }}
                           />
                         </Box>
@@ -228,7 +225,7 @@ const ModalCrearFinanzas = ({
                           mx="3"
                           placeholder="semanas"
                           w="100px"
-                          value={values.semanas}
+                          value={values.semanas.toString()}
                           id="semanas"
                           name="semanas"
                           keyboardType="numeric"
@@ -249,8 +246,8 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              console.log('mas');
                               values.semanas = values.semanas + 1;
+                              setFieldValue('semanas', values.semanas);
                             }}
                           />
                         </Box>

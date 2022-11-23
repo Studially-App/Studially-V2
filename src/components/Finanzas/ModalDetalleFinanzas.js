@@ -80,7 +80,7 @@ const ModalDetalleFinanzas = ({
           montoActual: dataDetalle.montoActual,
           montoFinal: dataDetalle.montoFinal,
           nombre: dataDetalle.nombre,
-          semanas: dataDetalle.semanas,
+          semanas: parseInt(dataDetalle.semanas),
         }}
         onSubmit={(values, actions) => {
           console.log(values);
@@ -101,13 +101,11 @@ const ModalDetalleFinanzas = ({
               isVisible={modalVisibility}
               onBackButtonPress={() => {
                 setModalVisibility(false);
-                setData({});
               }}
               backgroundColor="white"
               backdropOpacity={0.72}
               onBackdropPress={() => {
                 setModalVisibility(false);
-                setData({});
               }}
               scrollTo={handleScrollTo}
               scrollOffset={scrollOffset}
@@ -115,7 +113,6 @@ const ModalDetalleFinanzas = ({
               swipeDirection={['down']}
               onSwipeComplete={() => {
                 setModalVisibility(false);
-                setData({});
               }}
               style={{
                 marginBottom: 0,
@@ -225,9 +222,8 @@ const ModalDetalleFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              let semanas = values.semanas - 1;
-                              console.log('menos', values.semanas);
-                              setFieldValue('semanas', semanas);
+                              values.semanas = values.semanas - 1;
+                              setFieldValue('semanas', values.semanas);
                             }}
                           />
                         </Box>
@@ -238,7 +234,7 @@ const ModalDetalleFinanzas = ({
                           placeholder="semanas"
                           w="100px"
                           initialValues={dataDetalle.semanas}
-                          value={values.semanas}
+                          value={values.semanas.toString()}
                           id="semanas"
                           name="semanas"
                           keyboardType="numeric"
@@ -260,7 +256,6 @@ const ModalDetalleFinanzas = ({
                             color="#061678"
                             onPress={() => {
                               values.semanas = values.semanas + 1;
-                              console.log('mas', values.semanas);
                               setFieldValue('semanas', values.semanas);
                             }}
                           />
