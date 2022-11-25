@@ -53,12 +53,6 @@ const ModalAgregarAmigo = ({
         .collection('usuarios')
         .where('email', '==', values.correoAmigo)
         .get();
-      console.log({
-        nombres: userInfoFB._docs[0]._data.nombres,
-        apellidos: userInfoFB._docs[0]._data.apellidos,
-        fuegos: userInfoFB._docs[0]._data.fuegos,
-        email: userInfoFB._docs[0]._data.email,
-      });
       return {
         nombres: userInfoFB._docs[0]._data.nombres,
         apellidos: userInfoFB._docs[0]._data.apellidos,

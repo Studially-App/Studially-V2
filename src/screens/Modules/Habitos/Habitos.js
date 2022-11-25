@@ -171,7 +171,10 @@ const Habitos = () => {
         });
         getTodayHabits(selectedHabits);
         setSelectedData(selectedHabits);
-        setAmigos(userInfo.listaAmigos);
+        const listaOrdenadaAmigos = userInfo.listaAmigos.reverse(
+          (a, b) => a.fuegos - b.fuegos,
+        );
+        setAmigos(listaOrdenadaAmigos);
         setFuegos(userInfo.fuegos);
       }
     }
