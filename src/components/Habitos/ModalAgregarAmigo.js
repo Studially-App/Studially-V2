@@ -22,15 +22,14 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {Formik} from 'formik';
 
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 const ModalAgregarAmigo = ({
   modalVisibility,
   setModalVisibility,
-  selected,
-  data,
-  setData,
-  userId,
+  amigos,
+  setAmigos,
 }) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
@@ -47,24 +46,31 @@ const ModalAgregarAmigo = ({
     }
   };
 
-  // const updateAmount = values => {
-  //   data[selected].montoActual =
-  //     data[selected].montoActual * 1 + values.montoActual * 1;
-  //   try {
-  //     firestore()
-  //       .collection('usuarios')
-  //       .doc(userId)
-  //       .update({
-  //         finanzas: data,
-  //       })
-  //       .then(() => {
-  //         console.log('User finantial goals updated!');
-  //       });
-  //     setModalVisibility(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const findFriend = async values => {
+    console.log('FindFriend', values);
+    const userInfoFB = await firestore()
+      .collection('usuarios')
+      .where('email', '==', values.correoAmigo)
+      .get();
+    console.log({
+      nombres: userInfoFB._docs[0]._data.nombres,
+      apellidos: userInfoFB._docs[0]._data.apellidos,
+      fuegos: userInfoFB._docs[0]._data.fuegos,
+    });
+    return {
+      nombres: userInfoFB._docs[0]._data.nombres,
+      apellidos: userInfoFB._docs[0]._data.apellidos,
+      fuegos: userInfoFB._docs[0]._data.fuegos,
+    };
+  };
+
+  const updateAmigos = async values => {
+    const newFriend = await findFriend(values);
+    const friends = [...amigos];
+    friends.push(newFriend);
+    console.log(friends);
+    setAmigos(friends);
+  };
 
   return (
     <NativeBaseProvider>
@@ -73,8 +79,7 @@ const ModalAgregarAmigo = ({
           correoAmigo: '',
         }}
         onSubmit={(values, actions) => {
-          console.log(values);
-          // updateAmount(values);
+          updateAmigos(values);
           actions.resetForm();
         }}>
         {({

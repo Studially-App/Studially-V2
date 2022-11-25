@@ -46,6 +46,8 @@ const Habitos = () => {
 
   const [spinnerModal, setSpinnerModal] = useState(false);
 
+  const [amigos, setAmigos] = useState([]);
+
   // Estado modal amigo
   const [amigoModalVisibility, setAmigoModalVisibility] = React.useState(false);
 
@@ -564,9 +566,11 @@ const Habitos = () => {
               Agregar
             </Text>
           </HStack>
-          {amigosEnTendencia.map((amigo, i) => (
+          {amigos.map((amigo, i) => (
             <HStack justifyContent="space-between" key={i}>
-              <Text fontSize={15}>{amigo.nombre}</Text>
+              <Text fontSize={15}>
+                {amigo.nombres} {amigo.apellidos}
+              </Text>
               <Text fontSize={15}>{amigo.fuegos}</Text>
             </HStack>
           ))}
@@ -593,8 +597,8 @@ const Habitos = () => {
       <ModalAgregarAmigo
         modalVisibility={amigoModalVisibility}
         setModalVisibility={setAmigoModalVisibility}
-        userId={userInfo?.userId}
-        userInfo={userInfo}
+        amigos={amigos}
+        setAmigos={setAmigos}
       />
     </NativeBaseProvider>
   );
