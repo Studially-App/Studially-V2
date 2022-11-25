@@ -27,6 +27,8 @@ import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import FoundationIcon from 'react-native-vector-icons/Foundation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 
 import ModalAgregarAmigo from '../../../components/Habitos/ModalAgregarAmigo';
@@ -46,6 +48,7 @@ const Habitos = () => {
 
   const [spinnerModal, setSpinnerModal] = useState(false);
 
+  const [fuegos, setFuegos] = useState(0);
   const [amigos, setAmigos] = useState([]);
 
   // Estado modal amigo
@@ -168,6 +171,8 @@ const Habitos = () => {
         });
         getTodayHabits(selectedHabits);
         setSelectedData(selectedHabits);
+        setAmigos(userInfo.listaAmigos);
+        setFuegos(userInfo.fuegos);
       }
     }
   };
@@ -207,29 +212,6 @@ const Habitos = () => {
   if (initializing) {
     return null;
   }
-
-  const amigosEnTendencia = [
-    {
-      nombre: 'nombre 1',
-      fuegos: 20,
-    },
-    {
-      nombre: 'nombre 2',
-      fuegos: 10,
-    },
-    {
-      nombre: 'nombre 3',
-      fuegos: 8,
-    },
-    {
-      nombre: 'nombre 4',
-      fuegos: 3,
-    },
-    {
-      nombre: 'nombre 5',
-      fuegos: 1,
-    },
-  ];
 
   return (
     <NativeBaseProvider>
@@ -557,13 +539,14 @@ const Habitos = () => {
         <VStack mt={3} mb={20} ml={3} mr={3}>
           <HStack justifyContent="space-between">
             <Text fontSize={20} fontWeight="bold">
-              Amigos en tendencias
+              Amigos en tendencias{' '}
+              <FontIcon name="refresh" size={20} color="#061678" />
             </Text>
             <Text
               fontSize={20}
               fontWeight="bold"
               onPress={() => setAmigoModalVisibility(true)}>
-              Agregar
+              <IonIcon size={30} color="#061678" name="people-circle-sharp" />
             </Text>
           </HStack>
           {amigos.map((amigo, i) => (
@@ -599,6 +582,7 @@ const Habitos = () => {
         setModalVisibility={setAmigoModalVisibility}
         amigos={amigos}
         setAmigos={setAmigos}
+        userId={userInfo?.userId}
       />
     </NativeBaseProvider>
   );

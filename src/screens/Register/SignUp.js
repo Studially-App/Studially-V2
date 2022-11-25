@@ -119,7 +119,8 @@ const SignUp = ({navigation}) => {
             fechaNacimiento: values.fechaNacimiento,
             institucion: values.institucion,
             habitos: [],
-            metas: [],
+            fuegos: 0,
+            listaAmigos: [],
             finanzas: [],
             userId: userId,
           })

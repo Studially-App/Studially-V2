@@ -22,7 +22,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {Formik} from 'formik';
 
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 const ModalAgregarAmigo = ({
@@ -30,6 +29,7 @@ const ModalAgregarAmigo = ({
   setModalVisibility,
   amigos,
   setAmigos,
+  userId,
 }) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
@@ -48,28 +48,47 @@ const ModalAgregarAmigo = ({
 
   const findFriend = async values => {
     console.log('FindFriend', values);
-    const userInfoFB = await firestore()
-      .collection('usuarios')
-      .where('email', '==', values.correoAmigo)
-      .get();
-    console.log({
-      nombres: userInfoFB._docs[0]._data.nombres,
-      apellidos: userInfoFB._docs[0]._data.apellidos,
-      fuegos: userInfoFB._docs[0]._data.fuegos,
-    });
-    return {
-      nombres: userInfoFB._docs[0]._data.nombres,
-      apellidos: userInfoFB._docs[0]._data.apellidos,
-      fuegos: userInfoFB._docs[0]._data.fuegos,
-    };
+    try {
+      const userInfoFB = await firestore()
+        .collection('usuarios')
+        .where('email', '==', values.correoAmigo)
+        .get();
+      console.log({
+        nombres: userInfoFB._docs[0]._data.nombres,
+        apellidos: userInfoFB._docs[0]._data.apellidos,
+        fuegos: userInfoFB._docs[0]._data.fuegos,
+        email: userInfoFB._docs[0]._data.email,
+      });
+      return {
+        nombres: userInfoFB._docs[0]._data.nombres,
+        apellidos: userInfoFB._docs[0]._data.apellidos,
+        fuegos: userInfoFB._docs[0]._data.fuegos,
+        email: userInfoFB._docs[0]._data.email,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const updateAmigos = async values => {
     const newFriend = await findFriend(values);
     const friends = [...amigos];
     friends.push(newFriend);
-    console.log(friends);
-    setAmigos(friends);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(userId)
+        .update({
+          listaAmigos: friends,
+        })
+        .then(() => {
+          console.log('User friends updated!');
+          setAmigos(friends);
+        });
+      setModalVisibility(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
