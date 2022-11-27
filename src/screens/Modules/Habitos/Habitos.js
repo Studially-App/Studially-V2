@@ -48,7 +48,7 @@ const Habitos = () => {
 
   const [spinnerModal, setSpinnerModal] = useState(false);
 
-  const [fuegos, setFuegos] = useState(0);
+  const [fuegos, setFuegos] = useState({});
   const [amigos, setAmigos] = useState([]);
 
   // Estado modal amigo
@@ -142,7 +142,12 @@ const Habitos = () => {
       .collection('habitos')
       .doc('Personas')
       .get();
-    setHabitosTendencia(habitsStats._data.habitos);
+
+    const statsOrdered = habitsStats._data.habitos
+      .sort((a, b) => b.persons - a.persons)
+      .slice(0, 5);
+
+    setHabitosTendencia(statsOrdered);
   };
 
   const getHabits = (userInfo, mounted) => {
@@ -175,7 +180,11 @@ const Habitos = () => {
           (a, b) => a.fuegos - b.fuegos,
         );
         setAmigos(listaOrdenadaAmigos);
-        setFuegos(userInfo.fuegos);
+        setFuegos({
+          nombres: userInfo.nombres,
+          apellidos: userInfo.apellidos,
+          fuegos: userInfo.fuegos,
+        });
       }
     }
   };
@@ -540,6 +549,18 @@ const Habitos = () => {
         </VStack>
       ) : (
         <VStack mt={3} mb={20} ml={3} mr={3}>
+          <HStack justifyContent="space-between">
+            <Text fontSize={20} fontWeight="bold">
+              Mi racha <FontIcon name="refresh" size={20} color="#061678" />
+            </Text>
+          </HStack>
+          <HStack justifyContent="space-between">
+            <Text fontSize={15}>
+              {fuegos.nombres} {fuegos.apellidos}
+            </Text>
+            <Text fontSize={15}>{fuegos.fuegos}</Text>
+          </HStack>
+          <Divider my={2} />
           <HStack justifyContent="space-between">
             <Text fontSize={20} fontWeight="bold">
               Amigos en tendencias{' '}
