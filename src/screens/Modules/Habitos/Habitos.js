@@ -62,7 +62,11 @@ const Habitos = () => {
   const marcarHabito = (i, accion, name) => {
     let marcado = [...todayData];
     let markedData = [...data];
+    let storedHabits = [...selectedData];
     let index = data.findIndex(object => {
+      return object.name === name;
+    });
+    let selectedIndex = storedHabits.findIndex(object => {
       return object.name === name;
     });
     if (accion === 'Completado') {
@@ -70,6 +74,8 @@ const Habitos = () => {
       marcado[i].marked = true;
       markedData[index].marcadoSemana.push(1);
       markedData[index].marcadoMes.push(1);
+      storedHabits[selectedIndex].dias++;
+      setSelectedData(storedHabits);
       setData(markedData);
     } else {
       marcado[i].marked = true;
@@ -494,9 +500,9 @@ const Habitos = () => {
                             <Icon size={20} color="white" name="undo" />{' '}
                             <CountdownCircleTimer
                               isPlaying
-                              duration={5}
+                              duration={2}
                               colors={['#004777', '#F7B801', '#A30000']}
-                              colorsTime={[5, 2, 0]}
+                              colorsTime={[2, 1, 0]}
                               size={20}
                               strokeWidth={4}
                               onComplete={() => saveMarkedHabits(i)}
@@ -551,20 +557,22 @@ const Habitos = () => {
         <VStack mt={3} mb={20} ml={3} mr={3}>
           <HStack justifyContent="space-between">
             <Text fontSize={20} fontWeight="bold">
-              Mi racha <FontIcon name="refresh" size={20} color="#061678" />
+              Mi racha del mes (mes){' '}
+              <FontIcon name="refresh" size={20} color="#061678" />
             </Text>
           </HStack>
           <HStack justifyContent="space-between">
             <Text fontSize={15}>
               {fuegos.nombres} {fuegos.apellidos}
             </Text>
-            <Text fontSize={15}>{fuegos.fuegos}</Text>
+            <Text fontSize={15}>
+              {fuegos.fuegos} <MCIcon size={20} color="orange" name="fire" />
+            </Text>
           </HStack>
           <Divider my={2} />
           <HStack justifyContent="space-between">
             <Text fontSize={20} fontWeight="bold">
-              Amigos en tendencias{' '}
-              <FontIcon name="refresh" size={20} color="#061678" />
+              Amigos <FontIcon name="refresh" size={20} color="#061678" />
             </Text>
             <Text
               fontSize={20}
@@ -576,9 +584,11 @@ const Habitos = () => {
           {amigos.map((amigo, i) => (
             <HStack justifyContent="space-between" key={i}>
               <Text fontSize={15}>
-                {amigo.nombres} {amigo.apellidos}
+                {i + 1} {amigo.nombres} {amigo.apellidos}
               </Text>
-              <Text fontSize={15}>{amigo.fuegos}</Text>
+              <Text fontSize={15}>
+                {amigo.fuegos} <MCIcon size={20} color="orange" name="fire" />
+              </Text>
             </HStack>
           ))}
           <Divider my={2} />
