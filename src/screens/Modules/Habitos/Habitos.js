@@ -658,7 +658,13 @@ const Habitos = () => {
           ))}
           <Divider my={2} />
           <Text fontSize={20} fontWeight="bold">
-            Hábitos en tendencia
+            Hábitos en tendencia{' '}
+            <FontIcon
+              name="refresh"
+              size={20}
+              color="#061678"
+              onPress={() => getHabitosTendencias()}
+            />
           </Text>
           <HStack justifyContent="space-between">
             <Text fontSize={15} fontWeight="bold">
