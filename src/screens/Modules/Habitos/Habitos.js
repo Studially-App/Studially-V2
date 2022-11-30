@@ -156,6 +156,61 @@ const Habitos = () => {
     setHabitosTendencia(statsOrdered);
   };
 
+  const updateFire = async () => {
+    const fires = {...fuegos};
+    fires.fuegos = fires.fuegos + 1;
+    setFuegos(fires);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(userInfo.userId)
+        .update({
+          fuegos: fires.fuegos,
+        })
+        .then(() => {
+          console.log('Fires updated!');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const refreshFriends = async () => {
+    const amigosRefresh = await Promise.all(
+      amigos.map(async amigo => {
+        try {
+          const userInfoFB = await firestore()
+            .collection('usuarios')
+            .where('email', '==', amigo.email)
+            .get();
+          return {
+            nombres: userInfoFB._docs[0]._data.nombres,
+            apellidos: userInfoFB._docs[0]._data.apellidos,
+            fuegos: userInfoFB._docs[0]._data.fuegos,
+            email: userInfoFB._docs[0]._data.email,
+          };
+        } catch (error) {
+          console.log(error);
+        }
+      }),
+    );
+    const orderedRefresh = amigosRefresh.sort((a, b) => b.fuegos - a.fuegos);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(userInfo.userId)
+        .update({
+          listaAmigos: orderedRefresh,
+        })
+        .then(() => {
+          console.log('User friends updated!');
+          setAmigos(orderedRefresh);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getHabits = (userInfo, mounted) => {
     if (mounted) {
       if (userInfo) {
@@ -419,7 +474,12 @@ const Habitos = () => {
                         <Spacer />
                         <Text fontSize="lg" color="#061678" textAlign="center">
                           {item.dias === item.veces ? (
-                            <MCIcon size={35} color="orange" name="fire" />
+                            <MCIcon
+                              size={35}
+                              color="orange"
+                              name="fire"
+                              onPress={() => updateFire()}
+                            />
                           ) : (
                             item.dias + ' / ' + item.veces
                           )}
@@ -557,8 +617,7 @@ const Habitos = () => {
         <VStack mt={3} mb={20} ml={3} mr={3}>
           <HStack justifyContent="space-between">
             <Text fontSize={20} fontWeight="bold">
-              Mi racha del mes (mes){' '}
-              <FontIcon name="refresh" size={20} color="#061678" />
+              Mi racha del mes (mes)
             </Text>
           </HStack>
           <HStack justifyContent="space-between">
@@ -572,7 +631,13 @@ const Habitos = () => {
           <Divider my={2} />
           <HStack justifyContent="space-between">
             <Text fontSize={20} fontWeight="bold">
-              Amigos <FontIcon name="refresh" size={20} color="#061678" />
+              Amigos{' '}
+              <FontIcon
+                name="refresh"
+                size={20}
+                color="#061678"
+                onPress={() => refreshFriends()}
+              />
             </Text>
             <Text
               fontSize={20}
