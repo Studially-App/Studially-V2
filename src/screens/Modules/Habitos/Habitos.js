@@ -149,9 +149,9 @@ const Habitos = () => {
       .doc('Personas')
       .get();
 
-    const statsOrdered = habitsStats._data.habitos
-      .sort((a, b) => b.persons - a.persons)
-      .slice(0, 5);
+    const statsOrdered = habitsStats._data.habitos.sort(
+      (a, b) => b.persons - a.persons,
+    );
 
     setHabitosTendencia(statsOrdered);
   };
@@ -614,73 +614,75 @@ const Habitos = () => {
           </ScrollView>
         </VStack>
       ) : (
-        <VStack mt={3} mb={20} ml={3} mr={3}>
-          <HStack justifyContent="space-between">
+        <ScrollView w="100%" h="200px">
+          <VStack mt={3} mb={20} ml={3} mr={3}>
+            <HStack justifyContent="space-between">
+              <Text fontSize={20} fontWeight="bold">
+                Mi racha del mes (mes)
+              </Text>
+            </HStack>
+            <HStack justifyContent="space-between">
+              <Text fontSize={15}>
+                {fuegos.nombres} {fuegos.apellidos}
+              </Text>
+              <Text fontSize={15}>
+                {fuegos.fuegos} <MCIcon size={20} color="orange" name="fire" />
+              </Text>
+            </HStack>
+            <Divider my={2} />
+            <HStack justifyContent="space-between">
+              <Text fontSize={20} fontWeight="bold">
+                Amigos{' '}
+                <FontIcon
+                  name="refresh"
+                  size={20}
+                  color="#061678"
+                  onPress={() => refreshFriends()}
+                />
+              </Text>
+              <Text
+                fontSize={20}
+                fontWeight="bold"
+                onPress={() => setAmigoModalVisibility(true)}>
+                <IonIcon size={30} color="#061678" name="people-circle-sharp" />
+              </Text>
+            </HStack>
+            {amigos.map((amigo, i) => (
+              <HStack justifyContent="space-between" key={i}>
+                <Text fontSize={15}>
+                  {i + 1} {amigo.nombres} {amigo.apellidos}
+                </Text>
+                <Text fontSize={15}>
+                  {amigo.fuegos} <MCIcon size={20} color="orange" name="fire" />
+                </Text>
+              </HStack>
+            ))}
+            <Divider my={2} />
             <Text fontSize={20} fontWeight="bold">
-              Mi racha del mes (mes)
-            </Text>
-          </HStack>
-          <HStack justifyContent="space-between">
-            <Text fontSize={15}>
-              {fuegos.nombres} {fuegos.apellidos}
-            </Text>
-            <Text fontSize={15}>
-              {fuegos.fuegos} <MCIcon size={20} color="orange" name="fire" />
-            </Text>
-          </HStack>
-          <Divider my={2} />
-          <HStack justifyContent="space-between">
-            <Text fontSize={20} fontWeight="bold">
-              Amigos{' '}
+              Hábitos en tendencia{' '}
               <FontIcon
                 name="refresh"
                 size={20}
                 color="#061678"
-                onPress={() => refreshFriends()}
+                onPress={() => getHabitosTendencias()}
               />
             </Text>
-            <Text
-              fontSize={20}
-              fontWeight="bold"
-              onPress={() => setAmigoModalVisibility(true)}>
-              <IonIcon size={30} color="#061678" name="people-circle-sharp" />
-            </Text>
-          </HStack>
-          {amigos.map((amigo, i) => (
-            <HStack justifyContent="space-between" key={i}>
-              <Text fontSize={15}>
-                {i + 1} {amigo.nombres} {amigo.apellidos}
+            <HStack justifyContent="space-between">
+              <Text fontSize={15} fontWeight="bold">
+                Hábito
               </Text>
-              <Text fontSize={15}>
-                {amigo.fuegos} <MCIcon size={20} color="orange" name="fire" />
+              <Text fontSize={15} fontWeight="bold">
+                Personas
               </Text>
             </HStack>
-          ))}
-          <Divider my={2} />
-          <Text fontSize={20} fontWeight="bold">
-            Hábitos en tendencia{' '}
-            <FontIcon
-              name="refresh"
-              size={20}
-              color="#061678"
-              onPress={() => getHabitosTendencias()}
-            />
-          </Text>
-          <HStack justifyContent="space-between">
-            <Text fontSize={15} fontWeight="bold">
-              Hábito
-            </Text>
-            <Text fontSize={15} fontWeight="bold">
-              Personas
-            </Text>
-          </HStack>
-          {habitosTendencia.map((habito, i) => (
-            <HStack justifyContent="space-between" key={i}>
-              <Text fontSize={15}>{habito.name}</Text>
-              <Text fontSize={15}>{habito.persons}</Text>
-            </HStack>
-          ))}
-        </VStack>
+            {habitosTendencia.map((habito, i) => (
+              <HStack justifyContent="space-between" key={i}>
+                <Text fontSize={15}>{habito.name}</Text>
+                <Text fontSize={15}>{habito.persons}</Text>
+              </HStack>
+            ))}
+          </VStack>
+        </ScrollView>
       )}
       <ModalAgregarAmigo
         modalVisibility={amigoModalVisibility}
