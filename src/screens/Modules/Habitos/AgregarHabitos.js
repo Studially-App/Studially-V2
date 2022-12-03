@@ -321,6 +321,10 @@ const AgregarHabitos = () => {
 
   const changeSelected = index => {
     let changeData = [...data];
+    if (changeData[index].selected) {
+      changeData[index].frecuencia = [0, 0, 0, 0, 0, 0, 0];
+      changeData[index].marcadoSemana = [];
+    }
     changeData[index].selected = !changeData[index].selected;
     setData(changeData);
   };

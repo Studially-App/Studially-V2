@@ -99,7 +99,6 @@ const Finanzas = () => {
   const deleteFinance = id => {
     const deleted = [...finantialGoals];
     deleted.splice(id, 1);
-    setFinantialGoals(deleted);
     try {
       firestore()
         .collection('usuarios')
@@ -109,6 +108,7 @@ const Finanzas = () => {
         })
         .then(() => {
           console.log('User finantial goals updated!');
+          setFinantialGoals(deleted);
         });
     } catch (error) {
       console.log(error);

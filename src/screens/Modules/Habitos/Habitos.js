@@ -18,6 +18,7 @@ import {
   Spinner,
   Heading,
   Divider,
+  Menu,
 } from 'native-base';
 
 import {useNavigation} from '@react-navigation/native';
@@ -50,6 +51,21 @@ const Habitos = () => {
 
   const [fuegos, setFuegos] = useState({});
   const [amigos, setAmigos] = useState([]);
+
+  const meses = [
+    'Ene',
+    'Feb',
+    'Mar',
+    'Abr',
+    'May',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dic',
+  ];
 
   // Estado modal amigo
   const [amigoModalVisibility, setAmigoModalVisibility] = React.useState(false);
@@ -285,6 +301,25 @@ const Habitos = () => {
   if (initializing) {
     return null;
   }
+
+  const deleteFriend = id => {
+    const deleted = [...amigos];
+    deleted.splice(id, 1);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(userInfo.userId)
+        .update({
+          listaAmigos: deleted,
+        })
+        .then(() => {
+          console.log('User friends updated!');
+          setAmigos(deleted);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <NativeBaseProvider>
@@ -618,7 +653,7 @@ const Habitos = () => {
           <VStack mt={3} mb={20} ml={3} mr={3}>
             <HStack justifyContent="space-between">
               <Text fontSize={20} fontWeight="bold">
-                Mi racha del mes (mes)
+                Mi racha del mes ({meses[dayjs().month()]})
               </Text>
             </HStack>
             <HStack justifyContent="space-between">
@@ -648,13 +683,49 @@ const Habitos = () => {
               </Text>
             </HStack>
             {amigos.map((amigo, i) => (
-              <HStack justifyContent="space-between" key={i}>
+              <HStack
+                justifyContent="space-between"
+                alignItems="center"
+                key={i}>
                 <Text fontSize={15}>
-                  {i + 1} {amigo.nombres} {amigo.apellidos}
+                  <Box
+                    borderStyle="solid"
+                    borderColor="#061678"
+                    borderRadius="100"
+                    borderWidth="2"
+                    justifyContent="center"
+                    alignItems="center">
+                    <Text w="18px" h="18px" textAlign="center" color="black">
+                      {i + 1}
+                    </Text>
+                  </Box>{' '}
+                  {amigo.nombres} {amigo.apellidos}
                 </Text>
-                <Text fontSize={15}>
-                  {amigo.fuegos} <MCIcon size={20} color="orange" name="fire" />
-                </Text>
+                <HStack>
+                  <Text fontSize={15}>
+                    {amigo.fuegos}{' '}
+                    <MCIcon size={20} color="orange" name="fire" />
+                  </Text>
+                  <Menu
+                    w="190"
+                    trigger={triggerProps => {
+                      return (
+                        <Pressable
+                          accessibilityLabel="More options menu"
+                          {...triggerProps}>
+                          <MCIcon
+                            size={20}
+                            color="#475BD8"
+                            name="dots-vertical"
+                          />
+                        </Pressable>
+                      );
+                    }}>
+                    <Menu.Item onPress={() => deleteFriend(i)}>
+                      <Text color="red.400">Eliminar</Text>
+                    </Menu.Item>
+                  </Menu>
+                </HStack>
               </HStack>
             ))}
             <Divider my={2} />
