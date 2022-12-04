@@ -87,15 +87,14 @@ const Habitos = () => {
     });
     if (accion === 'Completado') {
       marcado[i].completed = true;
-      marcado[i].marked = true;
       markedData[index].marcadoSemana.push(1);
       markedData[index].marcadoMes.push(1);
       storedHabits[selectedIndex].dias++;
       setSelectedData(storedHabits);
       setData(markedData);
-    } else {
-      marcado[i].marked = true;
     }
+    marcado[i].marked = true;
+    marcado[i].dayMarked = dayjs().day();
     setTodayData(marcado);
   };
 
@@ -143,7 +142,10 @@ const Habitos = () => {
     let today = dayjs().day() - 1;
     today === -1 ? (today = 6) : null;
     selectedHabits.map(item => {
-      dayjs().hour() === 0 ? (item.finalMarked = false) : null;
+      if (dayjs().day() !== item.dayMarked) {
+        item.finalMarked = false;
+        item.marked = false;
+      }
       item.frecuencia[today] === 1 ? todayHabits.push(item) : null;
     });
     setTodayData(todayHabits);
