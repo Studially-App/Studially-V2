@@ -52,6 +52,8 @@ const Habitos = () => {
   const [fuegos, setFuegos] = useState({});
   const [amigos, setAmigos] = useState([]);
 
+  const [fireList, setFireList] = useState([]);
+
   const meses = [
     'Ene',
     'Feb',
@@ -90,6 +92,12 @@ const Habitos = () => {
       markedData[index].marcadoSemana.push(1);
       markedData[index].marcadoMes.push(1);
       storedHabits[selectedIndex].dias++;
+      if (
+        storedHabits[selectedIndex].dias === storedHabits[selectedIndex].veces
+      ) {
+        updateFireList(storedHabits[selectedIndex].name);
+        updateFire();
+      }
       setSelectedData(storedHabits);
       setData(markedData);
     }
@@ -120,7 +128,6 @@ const Habitos = () => {
   const saveMarkedHabits = i => {
     let popHabits = [...todayData];
     popHabits[i].finalMarked = true;
-    setTodayData(popHabits);
     try {
       firestore()
         .collection('usuarios')
@@ -130,6 +137,7 @@ const Habitos = () => {
         })
         .then(() => {
           console.log('User habits marked updated!');
+          setTodayData(popHabits);
           getHabits(userInfo, true);
         });
     } catch (error) {
@@ -187,6 +195,25 @@ const Habitos = () => {
         })
         .then(() => {
           console.log('Fires updated!');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateFireList = async habitName => {
+    const fireHabits = [...fireList];
+    fireHabits.push(habitName);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(userInfo.userId)
+        .update({
+          fireHabits: fireHabits,
+        })
+        .then(() => {
+          console.log('Fire list updated!');
+          setFireList(fireHabits);
         });
     } catch (error) {
       console.log(error);
@@ -264,6 +291,7 @@ const Habitos = () => {
           apellidos: userInfo.apellidos,
           fuegos: userInfo.fuegos,
         });
+        setFireList(userInfo.fireHabits);
       }
     }
   };
@@ -511,12 +539,7 @@ const Habitos = () => {
                         <Spacer />
                         <Text fontSize="lg" color="#061678" textAlign="center">
                           {item.dias === item.veces ? (
-                            <MCIcon
-                              size={35}
-                              color="orange"
-                              name="fire"
-                              onPress={() => updateFire()}
-                            />
+                            <MCIcon size={35} color="orange" name="fire" />
                           ) : (
                             item.dias + ' / ' + item.veces
                           )}

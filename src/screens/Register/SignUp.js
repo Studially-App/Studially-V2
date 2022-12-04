@@ -88,15 +88,18 @@ const SignUp = ({navigation}) => {
   //     .collection('usuarios')
   //     .doc(userId)
   //     .set({
-  //       nombres: user.displayName,
-  //       apellidos: '',
-  //       email: user.email,
-  //       fechaNacimiento: '',
-  //       institucion: '',
-  //       habitos: [],
-  //       metas: [],
-  //       userId: userId,
-  //     })
+  //   nombres: values.nombres,
+  //   apellidos: values.apellidos,
+  //   email: values.email,
+  //   fechaNacimiento: values.fechaNacimiento,
+  //   institucion: values.institucion,
+  //   habitos: [],
+  //   fuegos: 0,
+  //   listaAmigos: [],
+  //   firehabits: [],
+  //   finanzas: [],
+  //   userId: userId,
+  // })
   //     .then(() => {
   //       console.log('Google User added!');
   //     });
@@ -121,6 +124,7 @@ const SignUp = ({navigation}) => {
             habitos: [],
             fuegos: 0,
             listaAmigos: [],
+            firehabits: [],
             finanzas: [],
             userId: userId,
           })
