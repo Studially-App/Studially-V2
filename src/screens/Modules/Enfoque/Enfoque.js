@@ -374,9 +374,9 @@ const Enfoque = () => {
               <Heading>Categoría</Heading>
               <Select
                 placeholder="Categoría"
-                w="32%"
                 rounded="4"
                 size="lg"
+                w={200}
                 onValueChange={itemValue => setCategory(itemValue)}
                 selectedValue={category}>
                 <Select.Item value="Académico" label="Académico" />

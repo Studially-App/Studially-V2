@@ -55,18 +55,18 @@ const Habitos = () => {
   const [fireList, setFireList] = useState([]);
 
   const meses = [
-    'Ene',
-    'Feb',
-    'Mar',
-    'Abr',
-    'May',
-    'Jun',
-    'Jul',
-    'Ago',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dic',
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
   ];
 
   // Estado modal amigo
@@ -239,7 +239,12 @@ const Habitos = () => {
         }
       }),
     );
-    const orderedRefresh = amigosRefresh.sort((a, b) => b.fuegos - a.fuegos);
+    var amigosCleanUndefined = amigosRefresh.filter(x => {
+      return x !== undefined;
+    });
+    const orderedRefresh = amigosCleanUndefined.sort(
+      (a, b) => b.fuegos - a.fuegos,
+    );
     try {
       firestore()
         .collection('usuarios')
@@ -379,7 +384,13 @@ const Habitos = () => {
                   Hábitos del día
                 </Text>
               </Button>
-              <Button onPress={() => setTab('Tendencias')} bg="white" w={'33%'}>
+              <Button
+                onPress={() => {
+                  setTab('Tendencias');
+                  refreshFriends();
+                }}
+                bg="white"
+                w={'33%'}>
                 <Text fontSize="14" color="#475BD8">
                   Tendencias
                 </Text>
@@ -403,7 +414,13 @@ const Habitos = () => {
                   Hábitos del día
                 </Text>
               </Button>
-              <Button onPress={() => setTab('Tendencias')} bg="white" w={'33%'}>
+              <Button
+                onPress={() => {
+                  setTab('Tendencias');
+                  refreshFriends();
+                }}
+                bg="white"
+                w={'33%'}>
                 <Text fontSize="14" color="#475BD8">
                   Tendencias
                 </Text>
@@ -428,7 +445,10 @@ const Habitos = () => {
                 </Text>
               </Button>
               <Button
-                onPress={() => setTab('Tendencias')}
+                onPress={() => {
+                  setTab('Tendencias');
+                  refreshFriends();
+                }}
                 bg="#475BD8"
                 w={'33%'}>
                 <Text fontSize="14" color="white">
@@ -711,6 +731,7 @@ const Habitos = () => {
               <HStack
                 justifyContent="space-between"
                 alignItems="center"
+                mb={1}
                 key={i}>
                 <Text fontSize={15}>
                   <Box

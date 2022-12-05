@@ -12,6 +12,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  useToast,
 } from 'native-base';
 // Modal
 import Modal from 'react-native-modal';
@@ -33,6 +34,8 @@ const ModalAgregarAmigo = ({
 }) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
+
+  const toast = useToast();
 
   // Screen Dimentions
   const {width} = useWindowDimensions();
@@ -67,7 +70,16 @@ const ModalAgregarAmigo = ({
   const updateAmigos = async values => {
     const newFriend = await findFriend(values);
     const friends = [...amigos];
-    friends.push(newFriend);
+    if (newFriend) {
+      friends.push(newFriend);
+    } else {
+      setModalVisibility(false);
+      return toast.show({
+        description: 'No se encontró el usuario',
+        duration: 1500,
+        placement: 'top',
+      });
+    }
     try {
       firestore()
         .collection('usuarios')
@@ -80,6 +92,11 @@ const ModalAgregarAmigo = ({
           setAmigos(friends);
         });
       setModalVisibility(false);
+      return toast.show({
+        description: 'Amigo agregado correctamente',
+        duration: 1500,
+        placement: 'top',
+      });
     } catch (error) {
       console.log(error);
     }
