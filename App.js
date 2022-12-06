@@ -30,6 +30,8 @@ import SaludMentalLista from './src/screens/Modules/Recursos/SaludMentalLista';
 import AprendizajeLista from './src/screens/Modules/Recursos/AprendizajeLista';
 import ComunidadLista from './src/screens/Modules/Recursos/ComunidadLista';
 
+import StudiallyRewards from './src/screens/Modules/Enfoque/StudiallyRewards';
+
 import Mas from './src/screens/Modules/Perfil/Mas';
 import Profile from './src/screens/Modules/Perfil/Profile';
 import StudiallyPRO from './src/screens/Modules/Perfil/StudiallyPro';
@@ -39,6 +41,7 @@ const AuthStack = createNativeStackNavigator();
 const HabitosStack = createNativeStackNavigator();
 const RecursosStack = createNativeStackNavigator();
 const PerfilStack = createNativeStackNavigator();
+const EnfoqueStack = createNativeStackNavigator();
 
 const HabitosStackScreen = () => (
   <HabitosStack.Navigator>
@@ -111,6 +114,25 @@ const RecursosStackScreen = () => (
       }}
     />
   </RecursosStack.Navigator>
+);
+
+const EnfoqueStackScreen = () => (
+  <EnfoqueStack.Navigator>
+    <EnfoqueStack.Screen
+      name="Enfoque"
+      component={Enfoque}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <EnfoqueStack.Screen
+      name="Rewards"
+      component={StudiallyRewards}
+      options={{
+        headerShown: false,
+      }}
+    />
+  </EnfoqueStack.Navigator>
 );
 
 const PerfilStackScreen = () => (
@@ -190,7 +212,7 @@ const App = () => {
               }}>
               <Tabs.Screen
                 name="Organización"
-                component={Enfoque}
+                component={EnfoqueStackScreen}
                 options={{
                   tarBarLabel: 'Organización',
                   tabBarLabelStyle: {

@@ -53,7 +53,7 @@ const BreakTimeModal = ({
                       <Circle bg="rgba(71, 91, 216, 1)" size="40px">
                         <Pressable
                           onPress={() => {
-                            let temp = parseInt(minutsInput, 10) + 1;
+                            let temp = parseInt(minutsInput, 10) - 1;
                             setBreakOutTime(temp);
                             setMinutsInput(temp.toString());
                           }}>

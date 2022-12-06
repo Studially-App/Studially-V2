@@ -134,6 +134,20 @@ const Enfoque = () => {
               }>
               Estadísticas
             </Button>
+            <Button
+              onPress={() => {
+                navigation.navigate('Rewards');
+              }}
+              bg="rgba(71, 91, 216, 1)"
+              rightIcon={
+                <MaterialIcon
+                  name="show-chart"
+                  size={16}
+                  color="rgba(255, 255, 255, 1.0)"
+                />
+              }>
+              Rewards
+            </Button>
           </Center>
           <Center>
             {breakOutActive === false ? (
