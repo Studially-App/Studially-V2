@@ -182,6 +182,22 @@ const Habitos = () => {
     setHabitosTendencia(statsOrdered);
   };
 
+  const getFires = async () => {
+    try {
+      const getFuegos = await firestore()
+        .collection('usuarios')
+        .doc(userInfo.userId)
+        .get();
+      setFuegos({
+        nombres: getFuegos._data.nombres,
+        apellidos: getFuegos._data.apellidos,
+        fuegos: getFuegos._data.fuegos,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateFire = async () => {
     const fires = {...fuegos};
     fires.fuegos = fires.fuegos + 1;
@@ -388,6 +404,7 @@ const Habitos = () => {
                 onPress={() => {
                   setTab('Tendencias');
                   refreshFriends();
+                  getFires();
                 }}
                 bg="white"
                 w={'33%'}>
@@ -418,6 +435,7 @@ const Habitos = () => {
                 onPress={() => {
                   setTab('Tendencias');
                   refreshFriends();
+                  getFires();
                 }}
                 bg="white"
                 w={'33%'}>
@@ -448,6 +466,7 @@ const Habitos = () => {
                 onPress={() => {
                   setTab('Tendencias');
                   refreshFriends();
+                  getFires();
                 }}
                 bg="#475BD8"
                 w={'33%'}>
@@ -706,7 +725,13 @@ const Habitos = () => {
                 {fuegos.nombres} {fuegos.apellidos}
               </Text>
               <Text fontSize={15}>
-                {fuegos.fuegos} <MCIcon size={20} color="orange" name="fire" />
+                {fuegos.fuegos}{' '}
+                <MCIcon
+                  size={20}
+                  color="orange"
+                  name="fire"
+                  onPress={() => getFires()}
+                />
               </Text>
             </HStack>
             <Divider my={2} />

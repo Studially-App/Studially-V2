@@ -181,11 +181,12 @@ const App = () => {
                   borderBottomRightRadius: 16,
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
-                  marginBottom: '5%',
+                  marginBottom: '1%',
                   height: '9%',
                   width: '95%',
                 },
                 tabBarInactiveTintColor: 'rgba(39, 44, 70, 1)',
+                tabBarHideOnKeyboard: true,
               }}>
               <Tabs.Screen
                 name="Organización"

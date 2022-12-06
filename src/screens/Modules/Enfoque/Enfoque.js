@@ -162,6 +162,7 @@ const Enfoque = () => {
                           maxLength={2}
                           textAlign="center"
                           keyboardType="numeric"
+                          marginLeft={'50%'}
                           onChangeText={text => setInputMin(text)}
                         />
                         <Text
@@ -177,6 +178,7 @@ const Enfoque = () => {
                           fontSize={48}
                           size="2xl"
                           maxLength={2}
+                          marginRight={'50%'}
                           onChangeText={text => setInputSec(text)}
                         />
                       </HStack>
