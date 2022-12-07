@@ -12,10 +12,15 @@ import {
 } from 'native-base';
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
+import RedimirRewards from '../../../components/Enfoque/RedimirRewards';
 
 const StudiallyRewards = () => {
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] =
+    React.useState(false);
+
+  // Estado redimir modal
+  const [redimirModalVisibility, setRedimirModalVisibility] =
     React.useState(false);
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
@@ -40,6 +45,10 @@ const StudiallyRewards = () => {
 
   return (
     <VStack space={2} alignItems="center">
+      <RedimirRewards
+        modalVisibility={redimirModalVisibility}
+        setModalVisibility={setRedimirModalVisibility}
+      />
       <ModalDetalleBeneficios
         modalVisibility={detalleModalVisibility}
         setModalVisibility={setDetalleModalVisibility}
@@ -49,14 +58,7 @@ const StudiallyRewards = () => {
       <ScrollView w="100%" h="95%">
         <VStack space="15px" alignItems="center">
           {data.map((item, i) => (
-            <Pressable
-              onPress={() => {
-                setDataDetalle(item);
-                setDetalleModalVisibility(true);
-              }}
-              w="100%"
-              alignItems="center"
-              key={i}>
+            <Pressable w="100%" alignItems="center" key={i}>
               <Box
                 w="90%"
                 bg="white"
@@ -83,7 +85,7 @@ const StudiallyRewards = () => {
                 </HStack>
                 <Button
                   onPress={() => {
-                    console.log('Redimir');
+                    setRedimirModalVisibility(true);
                   }}
                   bg="white"
                   borderWidth={1}
