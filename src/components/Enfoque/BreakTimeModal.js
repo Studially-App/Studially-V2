@@ -73,7 +73,7 @@ const BreakTimeModal = ({
                         textAlign="center"
                         defaultValue={minutsInput}
                         onChangeText={text => {
-                          setBreakOutTime(parseInt(text, 10));
+                          setBreakOutTime(parseInt(text, 10) * 60);
                           setMinutsInput(text);
                         }}
                         _focus={{
@@ -84,7 +84,7 @@ const BreakTimeModal = ({
                         <Pressable
                           onPress={() => {
                             let temp = parseInt(minutsInput, 10) + 1;
-                            setBreakOutTime(temp);
+                            setBreakOutTime(temp * 60);
                             setMinutsInput(temp.toString());
                           }}>
                           <MaterialCommunityIcon
@@ -104,12 +104,12 @@ const BreakTimeModal = ({
                     mt="2"
                     w="80%"
                     onPress={() => {
-                      if (minutsInput !== '0' && breakOutTime !== null) {
+                      if (minutsInput >= '0' && breakOutTime !== null) {
                         setBreakOutActive(true);
                         setBreakTimeModalVisibility(false);
                         setBreakOutOn(true);
                       }
-                      if (minutsInput === '0' && breakOutTime === null) {
+                      if (minutsInput <= '0' && breakOutTime === null) {
                         toast.show({
                           description: 'Selecciona un tiempo de descanso',
                           duration: 1000,

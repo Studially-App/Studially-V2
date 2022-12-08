@@ -120,34 +120,39 @@ const Enfoque = () => {
       <View h={height} width={width}>
         <VStack space={4} justifyContent="center">
           <Center mt="6">
-            <Button
-              onPress={() => {
-                navigation.navigate('Estadisticas');
-              }}
-              bg="rgba(71, 91, 216, 1)"
-              rightIcon={
-                <MaterialIcon
-                  name="show-chart"
-                  size={16}
-                  color="rgba(255, 255, 255, 1.0)"
-                />
-              }>
-              Estadísticas
-            </Button>
-            <Button
-              onPress={() => {
-                navigation.navigate('Rewards');
-              }}
-              bg="rgba(71, 91, 216, 1)"
-              rightIcon={
-                <MaterialIcon
-                  name="show-chart"
-                  size={16}
-                  color="rgba(255, 255, 255, 1.0)"
-                />
-              }>
-              Rewards
-            </Button>
+            <HStack>
+              <Button
+                onPress={() => {
+                  navigation.navigate('Estadisticas');
+                }}
+                bg="rgba(71, 91, 216, 1)"
+                rightIcon={
+                  <MaterialIcon
+                    name="show-chart"
+                    size={16}
+                    color="rgba(255, 255, 255, 1.0)"
+                  />
+                }>
+                Estadísticas
+              </Button>
+              <Button
+                onPress={() => {
+                  navigation.navigate('Rewards');
+                }}
+                bg="rgba(71, 91, 216, 1)"
+                rightIcon={
+                  <MaterialIcon
+                    name="show-chart"
+                    size={16}
+                    color="rgba(255, 255, 255, 1.0)"
+                  />
+                }>
+                Rewards
+              </Button>
+            </HStack>
+            <Text fontSize={20} fontWeight="bold">
+              Edita tu tiempo de enfoque
+            </Text>
           </Center>
           <Center>
             {breakOutActive === false ? (
@@ -167,34 +172,51 @@ const Enfoque = () => {
                   if (remainingTime === 0) {
                     return (
                       <HStack alignItems="center">
-                        <Input
-                          placeholder={placeholder}
-                          // defaultValue="00"
-                          variant="unstyled"
-                          fontSize={48}
-                          size="2xl"
-                          maxLength={2}
-                          textAlign="center"
-                          keyboardType="numeric"
-                          marginLeft={'50%'}
-                          onChangeText={text => setInputMin(text)}
-                        />
+                        <Center w={'150'}>
+                          <Input
+                            placeholder={placeholder}
+                            // defaultValue="25"
+                            variant="unstyled"
+                            fontSize={48}
+                            size="2xl"
+                            maxLength={2}
+                            textAlign="center"
+                            keyboardType="numeric"
+                            marginLeft={'50%'}
+                            onChangeText={text => setInputMin(text)}
+                          />
+                          <Text
+                            fontSize="10"
+                            marginLeft={'50%'}
+                            color={timerStart === true ? 'black' : '#a3a3a3'}>
+                            min
+                          </Text>
+                        </Center>
                         <Text
                           fontSize="48"
                           color={timerStart === true ? 'black' : '#a3a3a3'}>
                           :
                         </Text>
-                        <Input
-                          placeholder={placeholder}
-                          variant="unstyled"
-                          textAlign="center"
-                          keyboardType="numeric"
-                          fontSize={48}
-                          size="2xl"
-                          maxLength={2}
-                          marginRight={'50%'}
-                          onChangeText={text => setInputSec(text)}
-                        />
+                        <Center w={'150'}>
+                          <Input
+                            placeholder={placeholder}
+                            // defaultValue="00"
+                            variant="unstyled"
+                            textAlign="center"
+                            keyboardType="numeric"
+                            fontSize={48}
+                            size="2xl"
+                            maxLength={2}
+                            marginRight={'50%'}
+                            onChangeText={text => setInputSec(text)}
+                          />
+                          <Text
+                            fontSize="10"
+                            marginRight={'50%'}
+                            color={timerStart === true ? 'black' : '#a3a3a3'}>
+                            seg
+                          </Text>
+                        </Center>
                       </HStack>
                     );
                   }
