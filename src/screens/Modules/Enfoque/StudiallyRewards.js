@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 // Native Base
 import {
   VStack,
@@ -10,54 +11,44 @@ import {
   Image,
   Button,
 } from 'native-base';
-
-import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
+import firestore from '@react-native-firebase/firestore';
 import RedimirRewards from '../../../components/Enfoque/RedimirRewards';
 
 const StudiallyRewards = () => {
-  // Estado modal detalle
-  const [detalleModalVisibility, setDetalleModalVisibility] =
-    React.useState(false);
-
   // Estado redimir modal
-  const [redimirModalVisibility, setRedimirModalVisibility] =
-    React.useState(false);
-  // Data detalle
-  const [dataDetalle, setDataDetalle] = React.useState({});
+  const [redimirModalVisibility, setRedimirModalVisibility] = useState(false);
 
-  const data = [
-    {
-      nombre: 'Teclado',
-      imagenURL: 'https://i.imgur.com/An4m8A4.jpeg',
-      puntos: '999,999',
-    },
-    {
-      nombre: 'Teclado',
-      imagenURL: 'https://i.imgur.com/An4m8A4.jpeg',
-      puntos: '999,999',
-    },
-    {
-      nombre: 'Teclado',
-      imagenURL: 'https://i.imgur.com/An4m8A4.jpeg',
-      puntos: '999,999',
-    },
-  ];
+  const [products, setProducts] = useState([]);
+
+  const [idProducto, setIdProducto] = useState(0);
+
+  const getProductsRewards = async () => {
+    try {
+      const products = await firestore()
+        .collection('productosRewards')
+        .doc('Productos')
+        .get();
+
+      setProducts(products._data.productos);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProductsRewards();
+  }, []);
 
   return (
     <VStack space={2} alignItems="center">
       <RedimirRewards
         modalVisibility={redimirModalVisibility}
         setModalVisibility={setRedimirModalVisibility}
-      />
-      <ModalDetalleBeneficios
-        modalVisibility={detalleModalVisibility}
-        setModalVisibility={setDetalleModalVisibility}
-        data={dataDetalle}
-        setData={setDataDetalle}
+        idProducto={idProducto}
       />
       <ScrollView w="100%" h="95%">
         <VStack space="15px" alignItems="center">
-          {data.map((item, i) => (
+          {products.map((item, i) => (
             <Pressable w="100%" alignItems="center" key={i}>
               <Box
                 w="90%"
@@ -85,6 +76,7 @@ const StudiallyRewards = () => {
                 </HStack>
                 <Button
                   onPress={() => {
+                    setIdProducto(item.idProducto);
                     setRedimirModalVisibility(true);
                   }}
                   bg="white"

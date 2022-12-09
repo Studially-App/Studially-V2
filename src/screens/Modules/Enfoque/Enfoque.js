@@ -49,7 +49,7 @@ const Enfoque = () => {
   // timer input
   const [timerInput, setTimerInput] = React.useState(0);
   // Timer minut input
-  const [inputMin, setInputMin] = React.useState(0);
+  const [inputMin, setInputMin] = React.useState(25);
   // Timer seconds input
   const [inputSec, setInputSec] = React.useState(0);
   // Placeholder Timer
@@ -71,7 +71,7 @@ const Enfoque = () => {
   // BreakOut Timer key
   const breakOutKey = uuid.v4().slice(0, 13);
   // Input value
-  const [minutsInput, setMinutsInput] = React.useState('0');
+  const [minutsInput, setMinutsInput] = React.useState('5');
   // BreakOut time
   const [breakOutTime, setBreakOutTime] = React.useState(null);
 
@@ -175,7 +175,7 @@ const Enfoque = () => {
                         <Center w={'150'}>
                           <Input
                             placeholder={placeholder}
-                            // defaultValue="25"
+                            defaultValue="25"
                             variant="unstyled"
                             fontSize={48}
                             size="2xl"
@@ -200,7 +200,7 @@ const Enfoque = () => {
                         <Center w={'150'}>
                           <Input
                             placeholder={placeholder}
-                            // defaultValue="00"
+                            defaultValue="00"
                             variant="unstyled"
                             textAlign="center"
                             keyboardType="numeric"

@@ -5,22 +5,17 @@ import {
   Input,
   HStack,
   Text,
-  Pressable,
   View,
-  Circle,
-  useToast,
   Modal,
   Button,
   NativeBaseProvider,
-  // FlatList,
-  Heading,
+  useToast,
 } from 'native-base';
 
-// Icons
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FoundationIcon from 'react-native-vector-icons/Foundation';
+import firestore from '@react-native-firebase/firestore';
+import uuid from 'react-native-uuid';
 
-const RedimirRewards = ({modalVisibility, setModalVisibility}) => {
+const RedimirRewards = ({modalVisibility, setModalVisibility, idProducto}) => {
   // Toast
   const toast = useToast();
 
@@ -35,19 +30,39 @@ const RedimirRewards = ({modalVisibility, setModalVisibility}) => {
   const [municipio, setMunicipio] = useState('');
   const [pais, setPais] = useState('');
 
-  const sendData = () => {
-    console.log(
-      nombre,
-      apellidos,
-      correo,
-      calleDireccion,
-      numExtDireccion,
-      numIntDireccion,
-      colDireccion,
-      cp,
-      municipio,
-      pais,
-    );
+  const sendData = async () => {
+    try {
+      var redimirId = uuid.v4();
+      const today = new Date();
+      await firestore().collection('redimirRewards').doc(redimirId).set({
+        nombre: nombre,
+        apellidos: apellidos,
+        correo: correo,
+        calleDireccion: calleDireccion,
+        numExtDireccion: numExtDireccion,
+        numIntDireccion: numIntDireccion,
+        colDireccion: colDireccion,
+        cp: cp,
+        municipio: municipio,
+        pais: pais,
+        idProducto: idProducto,
+        redimirId: redimirId,
+        fecha: today,
+      });
+      return toast.show({
+        description: 'Recibimos su solicitud, espera un correo de nosotros',
+        duration: 3000,
+        placement: 'top',
+      });
+    } catch (error) {
+      console.log(error);
+      return toast.show({
+        description:
+          'Tuvimos un error al procesar su solicitud, inténtelo más tarde',
+        duration: 3000,
+        placement: 'top',
+      });
+    }
   };
 
   return (
@@ -173,7 +188,7 @@ const RedimirRewards = ({modalVisibility, setModalVisibility}) => {
                   </HStack>
                   <Input
                     variant="outline"
-                    placeholder={'Colonia'}
+                    placeholder={'País'}
                     w="100%"
                     onChangeText={text => {
                       setPais(text);
@@ -202,6 +217,7 @@ const RedimirRewards = ({modalVisibility, setModalVisibility}) => {
                       w="45%"
                       onPress={() => {
                         sendData();
+                        setModalVisibility(false);
                       }}>
                       Redimir
                     </Button>

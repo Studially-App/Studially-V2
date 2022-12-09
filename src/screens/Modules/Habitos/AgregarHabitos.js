@@ -34,8 +34,6 @@ const AgregarHabitos = () => {
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
 
-  const [preview, setPreview] = React.useState([]);
-
   const [data, setData] = React.useState([
     {
       name: 'Actividad Física',

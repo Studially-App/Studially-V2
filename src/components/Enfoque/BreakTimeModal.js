@@ -39,7 +39,7 @@ const BreakTimeModal = ({
           isOpen={breakTimeModalVisibility}
           onClose={() => {
             setBreakTimeModalVisibility(false);
-            setMinutsInput('0');
+            setMinutsInput('5');
           }}>
           <Modal.Content w="90%" justify="flex-end">
             <Modal.Body>
