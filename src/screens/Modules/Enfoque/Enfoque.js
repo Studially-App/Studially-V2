@@ -82,9 +82,11 @@ const Enfoque = () => {
     setTimerOn(false);
     setTimerStart(false);
     //setCategory('');
-    setInputMin(0);
+    setInputMin(25);
     setInputSec(0);
     setTimerInput(0);
+    setBreakOutOn(false);
+    setBreakOutActive(false);
   };
 
   // Set time
@@ -277,7 +279,6 @@ const Enfoque = () => {
                       </Text>
                     );
                   }
-                  // return <Input />;
                 }}
               />
             )}
@@ -391,11 +392,10 @@ const Enfoque = () => {
                 </HStack>
               ) : breakOutActive === true ? (
                 <Pressable
-                // onPress={() => {
-                //   // setTimerOn(false);
-                //   setStopModalVisibility(true);
-                // }}
-                >
+                  onPress={() => {
+                    // setTimerOn(false);
+                    setStopModalVisibility(true);
+                  }}>
                   <Circle size="48px" bg="rgba(71, 91, 216, 1)">
                     <Ionicons
                       name="stop"

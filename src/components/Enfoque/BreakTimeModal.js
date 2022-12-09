@@ -54,7 +54,7 @@ const BreakTimeModal = ({
                         <Pressable
                           onPress={() => {
                             let temp = parseInt(minutsInput, 10) - 1;
-                            setBreakOutTime(temp);
+                            setBreakOutTime(temp * 60);
                             setMinutsInput(temp.toString());
                           }}>
                           <FoundationIcon
