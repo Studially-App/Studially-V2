@@ -31,6 +31,7 @@ import AprendizajeLista from './src/screens/Modules/Recursos/AprendizajeLista';
 import ComunidadLista from './src/screens/Modules/Recursos/ComunidadLista';
 
 import StudiallyRewards from './src/screens/Modules/Enfoque/StudiallyRewards';
+import EstadisticasEnfoque from './src/screens/Modules/Enfoque/EstadisticasEnfoque';
 
 import Mas from './src/screens/Modules/Perfil/Mas';
 import Profile from './src/screens/Modules/Perfil/Profile';
@@ -128,6 +129,13 @@ const EnfoqueStackScreen = () => (
     <EnfoqueStack.Screen
       name="Rewards"
       component={StudiallyRewards}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <EnfoqueStack.Screen
+      name="Estadisticas"
+      component={EstadisticasEnfoque}
       options={{
         headerShown: false,
       }}
