@@ -46,7 +46,7 @@ const StudiallyRewards = () => {
         setModalVisibility={setRedimirModalVisibility}
         idProducto={idProducto}
       />
-      <ScrollView w="100%" h="95%">
+      <ScrollView w="100%" h="88%">
         <VStack space="15px" alignItems="center">
           {products.map((item, i) => (
             <Pressable w="100%" alignItems="center" key={i}>
