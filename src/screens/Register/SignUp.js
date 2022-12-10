@@ -124,8 +124,30 @@ const SignUp = ({navigation}) => {
             habitos: [],
             fuegos: 0,
             listaAmigos: [],
-            firehabits: [],
             finanzas: [],
+            estrellas: 0,
+            minutos: [
+              {
+                categoria: 'Académico',
+                minutos: 0,
+              },
+              {
+                categoria: 'Proyectos',
+                minutos: 0,
+              },
+              {
+                categoria: 'Personal',
+                minutos: 0,
+              },
+              {
+                categoria: 'Trabajo',
+                minutos: 0,
+              },
+              {
+                categoria: 'Aprendizaje',
+                minutos: 0,
+              },
+            ],
             userId: userId,
           })
           .then(() => {

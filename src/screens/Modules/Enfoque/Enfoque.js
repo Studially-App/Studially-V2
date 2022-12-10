@@ -1,5 +1,9 @@
 //import React from 'react';
 import * as React from 'react';
+import {useState, useEffect} from 'react';
+
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 import {
   Text,
@@ -36,44 +40,50 @@ import uuid from 'react-native-uuid';
 
 const Enfoque = () => {
   const navigation = useNavigation();
+
+  // get user data
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+  const [userInfo, setUserInfo] = useState();
+
   // Toast
   const toast = useToast();
   // Screen Dimentions
   const {width, height} = useWindowDimensions();
   // Timer ON State
-  const [timerOn, setTimerOn] = React.useState(false);
+  const [timerOn, setTimerOn] = useState(false);
   // Timer Start State
-  const [timerStart, setTimerStart] = React.useState(false);
+  const [timerStart, setTimerStart] = useState(false);
   // TimetKey
-  const [timerKey, setTimerKey] = React.useState(uuid.v4().slice(0, 13));
+  const [timerKey, setTimerKey] = useState(uuid.v4().slice(0, 13));
   // timer input
-  const [timerInput, setTimerInput] = React.useState(0);
+  const [timerInput, setTimerInput] = useState(0);
   // Timer minut input
-  const [inputMin, setInputMin] = React.useState(25);
+  const [inputMin, setInputMin] = useState(25);
   // Timer seconds input
-  const [inputSec, setInputSec] = React.useState(0);
+  const [inputSec, setInputSec] = useState(0);
   // Placeholder Timer
   const placeholder = '00';
   // Stop Modal Visibility
-  const [stopModalVisibility, setStopModalVisibility] = React.useState(false);
+  const [stopModalVisibility, setStopModalVisibility] = useState(false);
   // Break Time Modal Visibility
   const [breakTimeModalVisibility, setBreakTimeModalVisibility] =
-    React.useState(false);
+    useState(false);
   // Focus finished Modal Visibility
   const [focusFinishedModalVisibility, setFocusFinishedModalVisibility] =
-    React.useState(false);
+    useState(false);
   // Categoria
-  const [category, setCategory] = React.useState('');
+  const [category, setCategory] = useState('');
   // BreakOut Active
-  const [breakOutActive, setBreakOutActive] = React.useState(false);
+  const [breakOutActive, setBreakOutActive] = useState(false);
   // Break Out TimerOn
-  const [breakOutOn, setBreakOutOn] = React.useState(false);
+  const [breakOutOn, setBreakOutOn] = useState(false);
   // BreakOut Timer key
   const breakOutKey = uuid.v4().slice(0, 13);
   // Input value
-  const [minutsInput, setMinutsInput] = React.useState('5');
+  const [minutsInput, setMinutsInput] = useState('5');
   // BreakOut time
-  const [breakOutTime, setBreakOutTime] = React.useState(null);
+  const [breakOutTime, setBreakOutTime] = useState(null);
 
   // Reiniciar timer
   const restartTimer = () => {
@@ -81,7 +91,6 @@ const Enfoque = () => {
     setTimerKey(key);
     setTimerOn(false);
     setTimerStart(false);
-    //setCategory('');
     setInputMin(25);
     setInputSec(0);
     setTimerInput(0);
@@ -96,6 +105,62 @@ const Enfoque = () => {
     setTimerOn(true);
     setTimerStart(true);
   };
+
+  const getMinutes = () => {
+    try {
+      const minutesDB = userInfo.estrellas;
+      console.log(minutesDB);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const countMinutes = async () => {
+    const minutes = Math.floor(timerInput / 60);
+    console.log(minutes, userInfo.userId, category);
+    try {
+      getMinutes();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserInfo = async (user, mounted) => {
+    if (mounted) {
+      const userInfoFB = await firestore()
+        .collection('usuarios')
+        .where('email', '==', user.email)
+        .get();
+      setUserInfo(userInfoFB._docs[0]._data);
+    }
+  };
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) {
+      setInitializing(false);
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    if (user !== undefined) {
+      getUserInfo(user, isMounted);
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [user]);
+
+  if (initializing) {
+    return null;
+  }
 
   return (
     <NativeBaseProvider>
@@ -169,6 +234,7 @@ const Enfoque = () => {
                   //uploadStats();
                   restartTimer();
                   setFocusFinishedModalVisibility(true);
+                  countMinutes();
                 }}
                 children={({remainingTime}) => {
                   if (remainingTime === 0) {
