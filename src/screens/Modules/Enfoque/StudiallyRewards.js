@@ -14,6 +14,9 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import RedimirRewards from '../../../components/Enfoque/RedimirRewards';
 
+// Icons
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+
 const StudiallyRewards = () => {
   // Estado redimir modal
   const [redimirModalVisibility, setRedimirModalVisibility] = useState(false);
@@ -71,7 +74,14 @@ const StudiallyRewards = () => {
                     <Text fontSize="xl" bold>
                       {item.nombre}
                     </Text>
-                    <Text fontSize="md">{item.puntos}</Text>
+                    <Text fontSize="md">
+                      {item.puntos}{' '}
+                      <MaterialIcon
+                        name="star-outline"
+                        size={20}
+                        color="rgba(71, 91, 216, 1)"
+                      />
+                    </Text>
                   </VStack>
                 </HStack>
                 <Button

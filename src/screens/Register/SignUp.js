@@ -130,22 +130,27 @@ const SignUp = ({navigation}) => {
               {
                 categoria: 'Académico',
                 minutos: 0,
+                minutosSemana: 0,
               },
               {
                 categoria: 'Proyectos',
                 minutos: 0,
+                minutosSemana: 0,
               },
               {
                 categoria: 'Personal',
                 minutos: 0,
+                minutosSemana: 0,
               },
               {
                 categoria: 'Trabajo',
                 minutos: 0,
+                minutosSemana: 0,
               },
               {
                 categoria: 'Aprendizaje',
                 minutos: 0,
+                minutosSemana: 0,
               },
             ],
             userId: userId,
