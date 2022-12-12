@@ -257,7 +257,7 @@ const Enfoque = () => {
                 mb={2}>
                 <Button
                   onPress={() => {
-                    navigation.navigate('Rewards');
+                    navigation.navigate('Rewards', {stars: studiallyStars});
                   }}
                   borderColor="rgba(71, 91, 216, 1)"
                   bg={'white'}

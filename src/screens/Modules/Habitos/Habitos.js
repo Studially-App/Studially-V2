@@ -503,7 +503,6 @@ const Habitos = () => {
               Aún no tienes hábitos en la lista
               <Button
                 onPress={() => {
-                  console.log('AgregarHabitos');
                   navigation.navigate('Agregar Habitos', {
                     onGoBack: () => {
                       setSpinnerModal(true);

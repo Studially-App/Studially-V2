@@ -12,6 +12,7 @@ import {
   Button,
 } from 'native-base';
 import firestore from '@react-native-firebase/firestore';
+import {useRoute} from '@react-navigation/native';
 import RedimirRewards from '../../../components/Enfoque/RedimirRewards';
 
 // Icons
@@ -20,6 +21,8 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 const StudiallyRewards = () => {
   // Estado redimir modal
   const [redimirModalVisibility, setRedimirModalVisibility] = useState(false);
+
+  const route = useRoute();
 
   const [products, setProducts] = useState([]);
 
@@ -51,6 +54,23 @@ const StudiallyRewards = () => {
       />
       <ScrollView w="100%" h="88%">
         <VStack space="15px" alignItems="center">
+          <HStack
+            justifyContent="space-around"
+            w="100%"
+            alignItems="center"
+            mb={2}>
+            <Text fontSize={20} fontWeight="bold">
+              Tus estrellas
+            </Text>
+            <Text fontSize={20} fontWeight="bold">
+              {route.params.stars}
+              <MaterialIcon
+                name="star-outline"
+                size={20}
+                color="rgba(71, 91, 216, 1)"
+              />
+            </Text>
+          </HStack>
           {products.map((item, i) => (
             <Pressable w="100%" alignItems="center" key={i}>
               <Box
@@ -89,15 +109,22 @@ const StudiallyRewards = () => {
                     setIdProducto(item.idProducto);
                     setRedimirModalVisibility(true);
                   }}
+                  disabled={route.params.stars <= item.puntos}
                   bg="white"
                   borderWidth={1}
-                  borderColor="#475BD8"
+                  borderColor={
+                    route.params.stars <= item.puntos ? 'gray.400' : '#475BD8'
+                  }
                   alignContent="center"
                   justifyContent="center"
                   alignItems="center"
                   w={'90%'}
                   mb="2">
-                  <Text fontSize="18" color="#475BD8">
+                  <Text
+                    fontSize="18"
+                    color={
+                      route.params.stars <= item.puntos ? 'gray.400' : '#475BD8'
+                    }>
                     Redimir producto
                   </Text>
                 </Button>
