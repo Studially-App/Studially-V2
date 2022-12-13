@@ -126,6 +126,7 @@ const SignUp = ({navigation}) => {
             listaAmigos: [],
             finanzas: [],
             estrellas: 0,
+            minutosTotales: 0,
             minutos: [
               {
                 categoria: 'Académico',
