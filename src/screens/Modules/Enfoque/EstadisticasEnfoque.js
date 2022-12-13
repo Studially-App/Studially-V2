@@ -152,7 +152,7 @@ const EstadisticasEnfoque = () => {
             </HStack>
             {tab === 'Semana' ? (
               <Text fontSize={15}>
-                Esta semana hiciste{' '}
+                Esta semana te enfocaste{' '}
                 <Text fontSize={15} fontWeight="bold">
                   {minTotalesSemana}
                 </Text>{' '}
@@ -167,7 +167,7 @@ const EstadisticasEnfoque = () => {
                 minutos
               </Text>
             )}
-            {tab === 'Semana' ? (
+            {tab === 'Semana' && minTotalesSemana > 0 ? (
               <>
                 <VictoryPie
                   data={[
@@ -240,7 +240,7 @@ const EstadisticasEnfoque = () => {
                   labels={({datum}) => `${datum.y}%`}
                 />
               </>
-            ) : (
+            ) : tab === 'Mes' && minTotalesMes > 0 ? (
               <>
                 <VictoryPie
                   data={[
@@ -309,7 +309,7 @@ const EstadisticasEnfoque = () => {
                   labels={({datum}) => `${datum.y}%`}
                 />
               </>
-            )}
+            ) : null}
 
             <VStack w="100%" alignItems="center" space="2">
               <HStack
