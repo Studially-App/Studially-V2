@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import {
   ScrollView,
   VStack,
@@ -10,7 +11,9 @@ import {
   Square,
 } from 'native-base';
 
-// Firestore
+import {useRoute} from '@react-navigation/native';
+
+// stats Graph
 import {VictoryPie} from 'victory-native';
 // DayJs
 import dayjs from 'dayjs';
@@ -18,45 +21,77 @@ import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 
 const EstadisticasEnfoque = () => {
-  // Toas
+  // route params
+  const route = useRoute();
 
   // tab de tiempo
-  const [tab, setTab] = React.useState('Semana');
+  const [tab, setTab] = useState('Semana');
   // Estadisticas segun categoria
   // Estadisticas academico
-  const [academicoSemanalStats, setAcademicoSemanalStats] = React.useState(0);
-  const [academicoMensualStats, setAcademicoMensualStats] = React.useState(0);
+  const [academicoSemanalStats, setAcademicoSemanalStats] = useState(0);
+  const [academicoMensualStats, setAcademicoMensualStats] = useState(0);
 
   // Estadisticas aprendizaje
-  const [aprendizajeSemanalStats, setAprendizajeSemanalStats] =
-    React.useState(0);
-  const [aprendizajeMensualStats, setAprendizajeMensualStats] =
-    React.useState(0);
+  const [aprendizajeSemanalStats, setAprendizajeSemanalStats] = useState(0);
+  const [aprendizajeMensualStats, setAprendizajeMensualStats] = useState(0);
 
   // Estadisticas Proyecto
-  const [proyectoSemanalStats, setProyectoSemanalStats] = React.useState(0);
-  const [proyectoMensualStats, setProyectoMensualStats] = React.useState(0);
+  const [proyectoSemanalStats, setProyectoSemanalStats] = useState(0);
+  const [proyectoMensualStats, setProyectoMensualStats] = useState(0);
 
   // Estadisticas academico
-  const [trabajoSemanalStats, setTrabajoSemanalStats] = React.useState(0);
-  const [trabajoMensualStats, setTrabajoMensualStats] = React.useState(0);
+  const [trabajoSemanalStats, setTrabajoSemanalStats] = useState(0);
+  const [trabajoMensualStats, setTrabajoMensualStats] = useState(0);
 
   // Estadisticas academico
-  const [personalSemanalStats, setPersonalSemanalStats] = React.useState(0);
-  const [personalMensualStats, setPersonalMensualStats] = React.useState(0);
+  const [personalSemanalStats, setPersonalSemanalStats] = useState(0);
+  const [personalMensualStats, setPersonalMensualStats] = useState(0);
 
-  const format = (num, decimals) =>
-    num.toLocaleString('en-US', {
-      minimumFractionDigits: 4,
-      maximumFractionDigits: 5,
+  const [minTotalesSemana, setMinTotalesSemana] = useState(0);
+  const [minTotalesMes, setMinTotalesMes] = useState(0);
+
+  const setMinutes = () => {
+    const stats = route.params.minutes;
+    let minTotalSem = 0;
+    let minTotalMes = 0;
+    stats.map(stat => {
+      minTotalSem = minTotalSem + stat.minutosSemana;
+      minTotalMes = minTotalMes + stat.minutos;
+      if (stat.categoria === 'Académico') {
+        setAcademicoMensualStats(stat.minutos);
+        setAcademicoSemanalStats(stat.minutosSemana);
+      }
+      if (stat.categoria === 'Aprendizaje') {
+        setAprendizajeMensualStats(stat.minutos);
+        setAprendizajeSemanalStats(stat.minutosSemana);
+      }
+      if (stat.categoria === 'Proyectos') {
+        setProyectoMensualStats(stat.minutos);
+        setProyectoSemanalStats(stat.minutosSemana);
+      }
+      if (stat.categoria === 'Trabajo') {
+        setTrabajoMensualStats(stat.minutos);
+        setTrabajoSemanalStats(stat.minutosSemana);
+      }
+      if (stat.categoria === 'Personal') {
+        setPersonalMensualStats(stat.minutos);
+        setPersonalSemanalStats(stat.minutosSemana);
+      }
     });
+    setMinTotalesSemana(minTotalSem);
+    setMinTotalesMes(minTotalMes);
+  };
+
+  useEffect(() => {
+    setMinutes();
+  });
 
   return (
     <NativeBaseProvider>
       <VStack mt="8" alignItems="center">
         <ScrollView w="100%" h="85%">
           <VStack alignItems="center">
-            <HStack space="2" justifyContent="center">
+            <HStack space="2" justifyContent="center" mb={2}>
               <Button
                 w="24"
                 onPress={() => {
@@ -115,38 +150,167 @@ const EstadisticasEnfoque = () => {
                 Mes
               </Button>
             </HStack>
-            <>
-              <VictoryPie
-                data={[
-                  {x: 'Académico', y: 25},
-                  {x: 'Aprendizaje', y: 10},
-                  {x: 'Proyecto', y: 20},
-                  {x: 'Trabajo', y: 35},
-                  {x: 'Personal', y: 20},
-                ]}
-                colorScale={[
-                  '#7381FF',
-                  '#FE718C',
-                  '#FEB543',
-                  '#018254',
-                  '#30357C',
-                ]}
-                labelRadius={({innerRadius}) => innerRadius + 20}
-                innerRadius={56}
-                width={328}
-                origin={{y: 148}}
-                height={300}
-                style={{
-                  labels: {
-                    fill: 'white',
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                  },
-                }}
-                padding={{bottom: 0, top: 36, left: 36, right: 36}}
-                labels={({datum}) => `${datum.y}%`}
-              />
-            </>
+            {tab === 'Semana' ? (
+              <Text fontSize={15}>
+                Esta semana hiciste{' '}
+                <Text fontSize={15} fontWeight="bold">
+                  {minTotalesSemana}
+                </Text>{' '}
+                minutos
+              </Text>
+            ) : (
+              <Text fontSize={15}>
+                Este mes hiciste{' '}
+                <Text fontSize={15} fontWeight="bold">
+                  {minTotalesMes}
+                </Text>{' '}
+                minutos
+              </Text>
+            )}
+            {tab === 'Semana' ? (
+              <>
+                <VictoryPie
+                  data={[
+                    {
+                      x: 'Académico',
+                      y: parseFloat(
+                        (
+                          (academicoSemanalStats * 100) /
+                          minTotalesSemana
+                        ).toFixed(1),
+                      ),
+                    },
+                    {
+                      x: 'Aprendizaje',
+                      y: parseFloat(
+                        (
+                          (aprendizajeSemanalStats * 100) /
+                          minTotalesSemana
+                        ).toFixed(1),
+                      ),
+                    },
+                    {
+                      x: 'Proyecto',
+                      y: parseFloat(
+                        (
+                          (proyectoSemanalStats * 100) /
+                          minTotalesSemana
+                        ).toFixed(1),
+                      ),
+                    },
+                    {
+                      x: 'Trabajo',
+                      y: parseFloat(
+                        (
+                          (trabajoSemanalStats * 100) /
+                          minTotalesSemana
+                        ).toFixed(1),
+                      ),
+                    },
+                    {
+                      x: 'Personal',
+                      y: parseFloat(
+                        (
+                          (personalSemanalStats * 100) /
+                          minTotalesSemana
+                        ).toFixed(1),
+                      ),
+                    },
+                  ]}
+                  colorScale={[
+                    '#7381FF',
+                    '#FE718C',
+                    '#FEB543',
+                    '#018254',
+                    '#30357C',
+                  ]}
+                  labelRadius={({innerRadius}) => innerRadius + 20}
+                  innerRadius={56}
+                  width={328}
+                  origin={{y: 148}}
+                  height={300}
+                  style={{
+                    labels: {
+                      fill: 'white',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                    },
+                  }}
+                  padding={{bottom: 0, top: 36, left: 36, right: 36}}
+                  labels={({datum}) => `${datum.y}%`}
+                />
+              </>
+            ) : (
+              <>
+                <VictoryPie
+                  data={[
+                    {
+                      x: 'Académico',
+                      y: parseFloat(
+                        ((academicoMensualStats * 100) / minTotalesMes).toFixed(
+                          1,
+                        ),
+                      ),
+                    },
+                    {
+                      x: 'Aprendizaje',
+                      y: parseFloat(
+                        (
+                          (aprendizajeMensualStats * 100) /
+                          minTotalesMes
+                        ).toFixed(1),
+                      ),
+                    },
+                    {
+                      x: 'Proyecto',
+                      y: parseFloat(
+                        ((proyectoMensualStats * 100) / minTotalesMes).toFixed(
+                          1,
+                        ),
+                      ),
+                    },
+                    {
+                      x: 'Trabajo',
+                      y: parseFloat(
+                        ((trabajoMensualStats * 100) / minTotalesMes).toFixed(
+                          1,
+                        ),
+                      ),
+                    },
+                    {
+                      x: 'Personal',
+                      y: parseFloat(
+                        ((personalMensualStats * 100) / minTotalesMes).toFixed(
+                          1,
+                        ),
+                      ),
+                    },
+                  ]}
+                  colorScale={[
+                    '#7381FF',
+                    '#FE718C',
+                    '#FEB543',
+                    '#018254',
+                    '#30357C',
+                  ]}
+                  labelRadius={({innerRadius}) => innerRadius + 20}
+                  innerRadius={56}
+                  width={328}
+                  origin={{y: 148}}
+                  height={300}
+                  style={{
+                    labels: {
+                      fill: 'white',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                    },
+                  }}
+                  padding={{bottom: 0, top: 36, left: 36, right: 36}}
+                  labels={({datum}) => `${datum.y}%`}
+                />
+              </>
+            )}
+
             <VStack w="100%" alignItems="center" space="2">
               <HStack
                 w="100%"
@@ -162,16 +326,10 @@ const EstadisticasEnfoque = () => {
                 <Flex direction="row" alignItems="center">
                   <Text fontSize="18">
                     {tab === 'Semana'
-                      ? `${format(academicoSemanalStats / 3600)} horas`
+                      ? `${academicoSemanalStats} minutos`
                       : tab === 'Mes'
-                      ? `${format(academicoMensualStats / 3600)} horas`
+                      ? `${academicoMensualStats} minutos`
                       : null}
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    -
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    00%
                   </Text>
                 </Flex>
               </HStack>
@@ -189,16 +347,10 @@ const EstadisticasEnfoque = () => {
                 <Flex direction="row" alignItems="center">
                   <Text fontSize="18">
                     {tab === 'Semana'
-                      ? `${format(aprendizajeSemanalStats / 3600)} horas`
+                      ? `${aprendizajeSemanalStats} minutos`
                       : tab === 'Mes'
-                      ? `${aprendizajeMensualStats / 3600} horas`
+                      ? `${aprendizajeMensualStats} minutos`
                       : null}
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    -
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    00%
                   </Text>
                 </Flex>
               </HStack>
@@ -216,16 +368,10 @@ const EstadisticasEnfoque = () => {
                 <Flex direction="row" alignItems="center">
                   <Text fontSize="18">
                     {tab === 'Semana'
-                      ? `${format(proyectoSemanalStats / 3600)} horas`
+                      ? `${proyectoSemanalStats} minutos`
                       : tab === 'Mes'
-                      ? `${format(proyectoMensualStats / 3600)} horas`
+                      ? `${proyectoMensualStats} minutos`
                       : null}
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    -
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    00%
                   </Text>
                 </Flex>
               </HStack>
@@ -243,16 +389,10 @@ const EstadisticasEnfoque = () => {
                 <Flex direction="row" alignItems="center">
                   <Text fontSize="18">
                     {tab === 'Semana'
-                      ? `${format(trabajoSemanalStats / 3600)} horas`
+                      ? `${trabajoSemanalStats} minutos`
                       : tab === 'Mes'
-                      ? `${format(trabajoMensualStats / 3600)} horas`
+                      ? `${trabajoMensualStats} minutos`
                       : null}
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    -
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    00%
                   </Text>
                 </Flex>
               </HStack>
@@ -270,16 +410,10 @@ const EstadisticasEnfoque = () => {
                 <Flex direction="row" alignItems="center">
                   <Text fontSize="18">
                     {tab === 'Semana'
-                      ? `${format(personalSemanalStats / 3600)} hora/s`
+                      ? `${personalSemanalStats} minutos`
                       : tab === 'Mes'
-                      ? `${format(personalMensualStats / 3600)} hora/s`
+                      ? `${personalMensualStats} minutos`
                       : null}
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    -
-                  </Text>
-                  <Text fontSize="18" ml="3">
-                    00%
                   </Text>
                 </Flex>
               </HStack>

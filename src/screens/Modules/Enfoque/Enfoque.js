@@ -87,6 +87,8 @@ const Enfoque = () => {
   const [breakOutTime, setBreakOutTime] = useState(null);
   // Stars to get gifts
   const [studiallyStars, setStudiallyStars] = useState(0);
+  // Stats minutes
+  const [minutesStats, setMinutesStats] = useState([]);
 
   // Reiniciar timer
   const restartTimer = () => {
@@ -136,6 +138,7 @@ const Enfoque = () => {
     minutosTotal = minutosTotal + calculatedMinutes;
 
     countStars(minutosTotal);
+    setMinutesStats(minutesDB);
 
     try {
       firestore()
@@ -158,6 +161,15 @@ const Enfoque = () => {
       if (userInfo) {
         var estrellas = userInfo.estrellas;
         setStudiallyStars(estrellas);
+      }
+    }
+  };
+
+  const getMinutesStats = (userInfo, mounted) => {
+    if (mounted) {
+      if (userInfo) {
+        var minutesDB = [...userInfo.minutos];
+        setMinutesStats(minutesDB);
       }
     }
   };
@@ -199,6 +211,7 @@ const Enfoque = () => {
     let isMounted = true;
     if (userInfo !== undefined) {
       getStars(userInfo, isMounted);
+      getMinutesStats(userInfo, isMounted);
       return () => {
         isMounted = false;
       };
@@ -237,7 +250,7 @@ const Enfoque = () => {
             <Center mt="6">
               <Button
                 onPress={() => {
-                  navigation.navigate('Estadisticas');
+                  navigation.navigate('Estadisticas', {minutes: minutesStats});
                 }}
                 bg="rgba(71, 91, 216, 1)"
                 mb={2}
