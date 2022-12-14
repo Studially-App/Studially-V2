@@ -1,10 +1,13 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 
 // Native Base
 import {VStack, ScrollView, Pressable} from 'native-base';
 
 import CardBeneficio from '../../../components/Recursos/CardBeneficio';
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
+
+import firestore from '@react-native-firebase/firestore';
 
 const OportunidadesLista = () => {
   // Estado modal detalle

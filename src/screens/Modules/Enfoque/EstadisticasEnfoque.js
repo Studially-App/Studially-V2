@@ -232,12 +232,12 @@ const EstadisticasEnfoque = () => {
                   style={{
                     labels: {
                       fill: 'white',
-                      fontSize: 20,
+                      fontSize: 17,
                       fontWeight: 'bold',
                     },
                   }}
                   padding={{bottom: 0, top: 36, left: 36, right: 36}}
-                  labels={({datum}) => `${datum.y}%`}
+                  labels={({datum}) => (datum.y === 0 ? '' : `${datum.y}%`)}
                 />
               </>
             ) : tab === 'Mes' && minTotalesMes > 0 ? (
