@@ -1,10 +1,17 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 // Native Base
-import {VStack, ScrollView, Pressable} from 'native-base';
+import {
+  VStack,
+  HStack,
+  ScrollView,
+  Pressable,
+  Box,
+  Text,
+  Spacer,
+} from 'native-base';
 
-import CardBeneficio from '../../../components/Recursos/CardBeneficio';
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 
 import firestore from '@react-native-firebase/firestore';
@@ -15,6 +22,8 @@ const OportunidadesLista = () => {
     React.useState(false);
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
+
+  const [oportunidades, setOportunidades] = useState([]);
 
   const data = [
     {
@@ -40,6 +49,24 @@ const OportunidadesLista = () => {
     },
   ];
 
+  const getOpportunities = async () => {
+    const snapshot = await firestore().collection('oportunidades').get();
+    const oportunities = snapshot.docs.map(doc => doc.data());
+    const newOP = [];
+    oportunities.sort(function (a, b) {
+      return (
+        new Date(b.vencimiento.toDate()) - new Date(a.vencimiento.toDate())
+      );
+    });
+    //console.log(oportunities[0].vencimiento.toDate().toDateString());
+    setOportunidades(oportunities);
+    //return snapshot.docs.map(doc => doc.data());
+  };
+
+  useEffect(() => {
+    getOpportunities();
+  });
+
   return (
     <VStack space={2} alignItems="center">
       <ModalDetalleBeneficios
@@ -50,7 +77,7 @@ const OportunidadesLista = () => {
       />
       <ScrollView w="100%" h="75%">
         <VStack space="15px" alignItems="center">
-          {data.map((item, i) => (
+          {oportunidades.map((item, i) => (
             <Pressable
               onPress={() => {
                 setDataDetalle(item);
@@ -59,11 +86,18 @@ const OportunidadesLista = () => {
               w="100%"
               alignItems="center"
               key={i}>
-              <CardBeneficio
-                titulo={item.titulo}
-                organizacion={item.organizacion}
-                fecha={item.fecha}
-              />
+              <Box w="90%" bg="white" shadow={2} rounded={4}>
+                <VStack m="15px">
+                  <Text fontSize="xl" bold>
+                    {item.titulo}
+                  </Text>
+                  <Text fontSize="md">{item.descripcion}</Text>
+                  <Spacer />
+                  <Text fontSize="md" color="#475BD8" textAlign="right">
+                    {item.titulo}
+                  </Text>
+                </VStack>
+              </Box>
             </Pressable>
           ))}
         </VStack>
