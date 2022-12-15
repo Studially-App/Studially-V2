@@ -126,7 +126,6 @@ const Enfoque = () => {
   const countMinutes = async () => {
     const calculatedMinutes = Math.floor(timerInput / 60);
     const minutesDB = [...userInfo.minutos];
-    let minutosTotal = userInfo.minutosTotales;
 
     let index = minutesDB.findIndex(object => {
       return object.categoria === category;
@@ -135,6 +134,10 @@ const Enfoque = () => {
     minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
     minutesDB[index].minutosSemana =
       minutesDB[index].minutosSemana + calculatedMinutes;
+
+    await getUserInfo();
+
+    let minutosTotal = userInfo.minutosTotales;
     minutosTotal = minutosTotal + calculatedMinutes;
 
     countStars(minutosTotal);

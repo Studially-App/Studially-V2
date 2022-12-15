@@ -2,15 +2,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 
 // Native Base
-import {
-  VStack,
-  HStack,
-  ScrollView,
-  Pressable,
-  Box,
-  Text,
-  Spacer,
-} from 'native-base';
+import {VStack, ScrollView, Pressable, Box, Text, Spacer} from 'native-base';
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 
@@ -25,39 +17,17 @@ const OportunidadesLista = () => {
 
   const [oportunidades, setOportunidades] = useState([]);
 
-  const data = [
-    {
-      titulo: 'Oportunidad 1',
-      organizacion: 'Organización 1',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      fecha: '31/12/2021',
-    },
-    {
-      titulo: 'Oportunidad 2',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      organizacion: 'Organización 2',
-      fecha: '31/12/2021',
-    },
-    {
-      titulo: 'Oportunidad 3',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      organizacion: 'Organización 3',
-      fecha: '31/12/2021',
-    },
-  ];
-
   const getOpportunities = async () => {
-    const snapshot = await firestore().collection('oportunidades').get();
+    const snapshot = await firestore()
+      .collection('oportunidades')
+      .orderBy('vencimiento', 'asc')
+      .get();
     const oportunities = snapshot.docs.map(doc => doc.data());
-    const newOP = [];
-    oportunities.sort(function (a, b) {
-      return (
-        new Date(b.vencimiento.toDate()) - new Date(a.vencimiento.toDate())
-      );
-    });
+    // oportunities.sort(function (a, b) {
+    //   return (
+    //     new Date(b.vencimiento.toDate()) - new Date(a.vencimiento.toDate())
+    //   );
+    // });
     //console.log(oportunities[0].vencimiento.toDate().toDateString());
     setOportunidades(oportunities);
     //return snapshot.docs.map(doc => doc.data());
@@ -94,7 +64,7 @@ const OportunidadesLista = () => {
                   <Text fontSize="md">{item.descripcion}</Text>
                   <Spacer />
                   <Text fontSize="md" color="#475BD8" textAlign="right">
-                    {item.titulo}
+                    {item.vencimiento.toDate().toDateString()}
                   </Text>
                 </VStack>
               </Box>

@@ -1,9 +1,10 @@
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 // Native Base
-import {VStack, ScrollView, Pressable} from 'native-base';
+import {VStack, ScrollView, Pressable, Box, Text, Spacer} from 'native-base';
 
-import CardBeneficio from '../../../components/Recursos/CardBeneficio';
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
+import firestore from '@react-native-firebase/firestore';
 
 const SaludMentalLista = () => {
   // Estado modal detalle
@@ -12,29 +13,27 @@ const SaludMentalLista = () => {
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
 
-  const data = [
-    {
-      titulo: 'Salud Mental 1',
-      organizacion: 'Organización 1',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      fecha: '31/12/2021',
-    },
-    {
-      titulo: 'Salud Mental 2',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      organizacion: 'Organización 2',
-      fecha: '31/12/2021',
-    },
-    {
-      titulo: 'Salud Mental 3',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      organizacion: 'Organización 3',
-      fecha: '31/12/2021',
-    },
-  ];
+  const [saludMental, setSaludMental] = useState([]);
+
+  const getSaludMental = async () => {
+    const snapshot = await firestore()
+      .collection('saludMental')
+      .orderBy('fecha', 'desc')
+      .get();
+    const sm = snapshot.docs.map(doc => doc.data());
+    // oportunities.sort(function (a, b) {
+    //   return (
+    //     new Date(b.vencimiento.toDate()) - new Date(a.vencimiento.toDate())
+    //   );
+    // });
+    //console.log(oportunities[0].vencimiento.toDate().toDateString());
+    setSaludMental(sm);
+    //return snapshot.docs.map(doc => doc.data());
+  };
+
+  useEffect(() => {
+    getSaludMental();
+  });
 
   return (
     <VStack space={2} alignItems="center">
@@ -46,7 +45,7 @@ const SaludMentalLista = () => {
       />
       <ScrollView w="100%" h="75%">
         <VStack space="15px" alignItems="center">
-          {data.map((item, i) => (
+          {saludMental.map((item, i) => (
             <Pressable
               onPress={() => {
                 setDataDetalle(item);
@@ -55,11 +54,18 @@ const SaludMentalLista = () => {
               w="100%"
               alignItems="center"
               key={i}>
-              <CardBeneficio
-                titulo={item.titulo}
-                organizacion={item.organizacion}
-                fecha={item.fecha}
-              />
+              <Box w="90%" bg="white" shadow={2} rounded={4}>
+                <VStack m="15px">
+                  <Text fontSize="xl" bold>
+                    {item.titulo}
+                  </Text>
+                  <Text fontSize="md">{item.autor}</Text>
+                  <Spacer />
+                  <Text fontSize="md" color="#475BD8" textAlign="right">
+                    {item.fecha.toDate().toDateString()}
+                  </Text>
+                </VStack>
+              </Box>
             </Pressable>
           ))}
         </VStack>
