@@ -1,40 +1,39 @@
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 // Native Base
-import {VStack, ScrollView, Pressable} from 'native-base';
+import {
+  VStack,
+  ScrollView,
+  Pressable,
+  Box,
+  Text,
+  Spacer,
+  HStack,
+} from 'native-base';
 
-import CardBeneficio from '../../../components/Recursos/CardBeneficio';
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
+import firestore from '@react-native-firebase/firestore';
 
 const AprendizajeLista = () => {
   // Estado modal detalle
-  const [detalleModalVisibility, setDetalleModalVisibility] =
-    React.useState(false);
+  const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
   // Data detalle
-  const [dataDetalle, setDataDetalle] = React.useState({});
+  const [dataDetalle, setDataDetalle] = useState({});
 
-  const data = [
-    {
-      titulo: 'Aprendizaje 1',
-      organizacion: 'Organización 1',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      fecha: '31/12/2021',
-    },
-    {
-      titulo: 'Aprendizaje 2',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      organizacion: 'Organización 2',
-      fecha: '31/12/2021',
-    },
-    {
-      titulo: 'Aprendizaje 3',
-      texto:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-      organizacion: 'Organización 3',
-      fecha: '31/12/2021',
-    },
-  ];
+  const [aprendizaje, setAprendizaje] = useState([]);
+
+  const getAprendizaje = async () => {
+    const snapshot = await firestore()
+      .collection('aprendizaje')
+      .orderBy('fecha', 'asc')
+      .get();
+    const ap = snapshot.docs.map(doc => doc.data());
+    setAprendizaje(ap);
+  };
+
+  useEffect(() => {
+    getAprendizaje();
+  });
 
   return (
     <VStack space={2} alignItems="center">
@@ -44,9 +43,9 @@ const AprendizajeLista = () => {
         data={dataDetalle}
         setData={setDataDetalle}
       />
-      <ScrollView w="100%" h="75%">
+      <ScrollView w="100%" h="85%">
         <VStack space="15px" alignItems="center">
-          {data.map((item, i) => (
+          {aprendizaje.map((item, i) => (
             <Pressable
               onPress={() => {
                 setDataDetalle(item);
@@ -55,11 +54,23 @@ const AprendizajeLista = () => {
               w="100%"
               alignItems="center"
               key={i}>
-              <CardBeneficio
-                titulo={item.titulo}
-                organizacion={item.organizacion}
-                fecha={item.fecha}
-              />
+              <Box w="90%" bg="white" shadow={2} rounded={4}>
+                <VStack m="15px">
+                  <Text fontSize="xl" bold>
+                    {item.titulo}
+                  </Text>
+                  <Text fontSize="md">{item.autor}</Text>
+                  <Spacer />
+                  <HStack justifyContent={'space-between'}>
+                    <Text fontSize="md" color="#475BD8">
+                      {item.categoria}
+                    </Text>
+                    <Text fontSize="md" color="#475BD8" textAlign="right">
+                      {item.fecha.toDate().toDateString()}
+                    </Text>
+                  </HStack>
+                </VStack>
+              </Box>
             </Pressable>
           ))}
         </VStack>

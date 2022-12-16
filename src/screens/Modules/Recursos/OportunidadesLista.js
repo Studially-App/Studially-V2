@@ -23,14 +23,7 @@ const OportunidadesLista = () => {
       .orderBy('vencimiento', 'asc')
       .get();
     const oportunities = snapshot.docs.map(doc => doc.data());
-    // oportunities.sort(function (a, b) {
-    //   return (
-    //     new Date(b.vencimiento.toDate()) - new Date(a.vencimiento.toDate())
-    //   );
-    // });
-    //console.log(oportunities[0].vencimiento.toDate().toDateString());
     setOportunidades(oportunities);
-    //return snapshot.docs.map(doc => doc.data());
   };
 
   useEffect(() => {
@@ -45,7 +38,7 @@ const OportunidadesLista = () => {
         data={dataDetalle}
         setData={setDataDetalle}
       />
-      <ScrollView w="100%" h="75%">
+      <ScrollView w="100%" h="85%">
         <VStack space="15px" alignItems="center">
           {oportunidades.map((item, i) => (
             <Pressable

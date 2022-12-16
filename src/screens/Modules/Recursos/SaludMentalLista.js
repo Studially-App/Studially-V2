@@ -11,7 +11,7 @@ const SaludMentalLista = () => {
   const [detalleModalVisibility, setDetalleModalVisibility] =
     React.useState(false);
   // Data detalle
-  const [dataDetalle, setDataDetalle] = React.useState({});
+  const [dataDetalle, setDataDetalle] = useState({});
 
   const [saludMental, setSaludMental] = useState([]);
 
@@ -21,14 +21,7 @@ const SaludMentalLista = () => {
       .orderBy('fecha', 'desc')
       .get();
     const sm = snapshot.docs.map(doc => doc.data());
-    // oportunities.sort(function (a, b) {
-    //   return (
-    //     new Date(b.vencimiento.toDate()) - new Date(a.vencimiento.toDate())
-    //   );
-    // });
-    //console.log(oportunities[0].vencimiento.toDate().toDateString());
     setSaludMental(sm);
-    //return snapshot.docs.map(doc => doc.data());
   };
 
   useEffect(() => {
@@ -43,7 +36,7 @@ const SaludMentalLista = () => {
         data={dataDetalle}
         setData={setDataDetalle}
       />
-      <ScrollView w="100%" h="75%">
+      <ScrollView w="100%" h="85%">
         <VStack space="15px" alignItems="center">
           {saludMental.map((item, i) => (
             <Pressable
