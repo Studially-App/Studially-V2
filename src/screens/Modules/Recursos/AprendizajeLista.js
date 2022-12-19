@@ -9,16 +9,25 @@ import {
   Text,
   Spacer,
   HStack,
+  Button,
 } from 'native-base';
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 import firestore from '@react-native-firebase/firestore';
+
+import ModalFiltroCategoria from '../../../components/Recursos/ModalFiltroCategoria';
+
+import Ficon from 'react-native-vector-icons/Fontisto';
 
 const AprendizajeLista = () => {
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
   // Data detalle
   const [dataDetalle, setDataDetalle] = useState({});
+
+  // categoría modal detalle
+  const [categoriaModalVisibility, setCategoriaModalVisibility] =
+    useState(false);
 
   const [aprendizaje, setAprendizaje] = useState([]);
 
@@ -43,8 +52,22 @@ const AprendizajeLista = () => {
         data={dataDetalle}
         setData={setDataDetalle}
       />
+      <ModalFiltroCategoria
+        modalVisibility={categoriaModalVisibility}
+        setModalVisibility={setCategoriaModalVisibility}
+      />
       <ScrollView w="100%" h="85%">
         <VStack space="15px" alignItems="center">
+          <Button
+            bg="white"
+            borderColor="black"
+            borderStyle="solid"
+            borderWidth="1"
+            onPress={() => setCategoriaModalVisibility(true)}>
+            <Text>
+              Filtrar <Ficon name="equalizer" color="black" size={16} />
+            </Text>
+          </Button>
           {aprendizaje.map((item, i) => (
             <Pressable
               onPress={() => {

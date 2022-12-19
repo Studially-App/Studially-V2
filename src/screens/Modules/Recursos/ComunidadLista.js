@@ -9,16 +9,28 @@ import {
   Text,
   Spacer,
   HStack,
+  Button,
 } from 'native-base';
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
+import ModalFiltroCategoria from '../../../components/Recursos/ModalFiltroCategoria';
+import ModalFiltroUniversidad from '../../../components/Recursos/ModalFiltroUniversidad';
 import firestore from '@react-native-firebase/firestore';
+import Ficon from 'react-native-vector-icons/Fontisto';
 
 const ComunidadLista = () => {
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
   // Data detalle
   const [dataDetalle, setDataDetalle] = useState({});
+
+  // categoría modal detalle
+  const [categoriaModalVisibility, setCategoriaModalVisibility] =
+    useState(false);
+
+  // categoría modal detalle
+  const [universidadModalVisibility, setUniversidadModalVisibility] =
+    useState(false);
 
   const [comunidad, setComunidad] = useState([]);
 
@@ -40,8 +52,39 @@ const ComunidadLista = () => {
         data={dataDetalle}
         setData={setDataDetalle}
       />
+      <ModalFiltroCategoria
+        modalVisibility={categoriaModalVisibility}
+        setModalVisibility={setCategoriaModalVisibility}
+      />
+      <ModalFiltroUniversidad
+        modalVisibility={universidadModalVisibility}
+        setModalVisibility={setUniversidadModalVisibility}
+      />
       <ScrollView w="100%" h="75%">
         <VStack space="15px" alignItems="center">
+          <HStack>
+            <Button
+              bg="white"
+              borderColor="black"
+              borderStyle="solid"
+              borderWidth="1"
+              onPress={() => setCategoriaModalVisibility(true)}>
+              <Text>
+                Categoría <Ficon name="equalizer" color="black" size={16} />
+              </Text>
+            </Button>
+            <Button
+              bg="white"
+              borderColor="black"
+              borderStyle="solid"
+              borderWidth="1"
+              onPress={() => setUniversidadModalVisibility(true)}>
+              <Text>
+                Universidad <Ficon name="equalizer" color="black" size={16} />
+              </Text>
+            </Button>
+          </HStack>
+
           {comunidad.map((item, i) => (
             <Pressable
               onPress={() => {
