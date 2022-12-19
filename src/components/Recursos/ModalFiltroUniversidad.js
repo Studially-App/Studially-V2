@@ -82,7 +82,7 @@ const ModalFiltroUniversidad = ({modalVisibility, setModalVisibility}) => {
                 marginBottom: 0,
                 marginLeft: 0,
                 marginRight: 0,
-                marginTop: 50,
+                marginTop: 20,
                 borderTopLeftRadius: 30,
                 borderTopRightRadius: 30,
               }}
@@ -94,7 +94,7 @@ const ModalFiltroUniversidad = ({modalVisibility, setModalVisibility}) => {
                   onScroll={handleOnScroll}
                   scrollEventThrottle={16}
                   h="100%">
-                  <VStack space="5" h="100%">
+                  <VStack space="5" h="80%">
                     <Center>
                       <Box mb="0">
                         <MaterialIcon

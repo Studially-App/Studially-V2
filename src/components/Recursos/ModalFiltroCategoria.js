@@ -46,7 +46,7 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
     <NativeBaseProvider>
       <Formik
         initialValues={{
-          correoAmigo: '',
+          checked: [],
         }}
         onSubmit={(values, actions) => {
           actions.resetForm();

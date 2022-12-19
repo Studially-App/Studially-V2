@@ -62,7 +62,7 @@ const ComunidadLista = () => {
       />
       <ScrollView w="100%" h="75%">
         <VStack space="15px" alignItems="center">
-          <HStack>
+          <HStack justifyContent="space-around" w="80%">
             <Button
               bg="white"
               borderColor="black"
