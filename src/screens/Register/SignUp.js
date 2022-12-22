@@ -155,6 +155,9 @@ const SignUp = ({navigation}) => {
               },
             ],
             userId: userId,
+            minutosHoy: 0,
+            minutosMes: '',
+            minutosSemana: '',
           })
           .then(() => {
             console.log('User added!');

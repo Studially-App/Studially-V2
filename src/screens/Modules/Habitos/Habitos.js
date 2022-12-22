@@ -102,7 +102,7 @@ const Habitos = () => {
       setData(markedData);
     }
     marcado[i].marked = true;
-    marcado[i].dayMarked = dayjs().day();
+    marcado[i].dayMarked = dayjs().date();
     setTodayData(marcado);
   };
 
@@ -150,7 +150,7 @@ const Habitos = () => {
     let today = dayjs().day() - 1;
     today === -1 ? (today = 6) : null;
     selectedHabits.map(item => {
-      if (dayjs().day() !== item.dayMarked) {
+      if (dayjs().date() !== item.dayMarked) {
         item.finalMarked = false;
         item.marked = false;
       }

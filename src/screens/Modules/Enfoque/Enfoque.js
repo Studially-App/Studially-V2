@@ -38,6 +38,9 @@ import StopModal from '../../../components/Enfoque/StopModal';
 
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 import uuid from 'react-native-uuid';
+import dayjs from 'dayjs';
+let weekOfYear = require('dayjs/plugin/weekOfYear');
+dayjs.extend(weekOfYear);
 
 const Enfoque = () => {
   const navigation = useNavigation();
@@ -89,6 +92,8 @@ const Enfoque = () => {
   const [studiallyStars, setStudiallyStars] = useState(0);
   // Stats minutes
   const [minutesStats, setMinutesStats] = useState([]);
+  // Máximo 6 horas al día
+  const [minutesLimit, setMinutesLimit] = useState(0);
 
   // Reiniciar timer
   const restartTimer = () => {
@@ -106,9 +111,17 @@ const Enfoque = () => {
   // Set time
   const setTimer = () => {
     const totalTime = parseInt(inputMin, 10) * 60 + parseInt(inputSec, 10);
-    setTimerInput(totalTime);
-    setTimerOn(true);
-    setTimerStart(true);
+    if (minutesLimit + totalTime < 360) {
+      setTimerInput(totalTime);
+      setTimerOn(true);
+      setTimerStart(true);
+    } else {
+      toast.show({
+        description: 'No puedes tener más de 6 horas de enfoque al día',
+        duration: 1500,
+        placement: 'top',
+      });
+    }
   };
 
   const countStars = async minutosTotal => {
@@ -131,17 +144,35 @@ const Enfoque = () => {
       return object.categoria === category;
     });
 
-    minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
-    minutesDB[index].minutosSemana =
-      minutesDB[index].minutosSemana + calculatedMinutes;
+    if (dayjs.month() === userInfo.minutosMes) {
+      minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
+    } else {
+      minutesDB.map(cat => {
+        cat.minutos = 0;
+      });
+    }
 
-    await getUserInfo();
+    if (dayjs(new Date()).week === userInfo.minutosSemana) {
+      minutesDB[index].minutosSemana =
+        minutesDB[index].minutosSemana + calculatedMinutes;
+    } else {
+      minutesDB.map(cat => {
+        cat.minutosSemana = 0;
+      });
+    }
 
-    let minutosTotal = userInfo.minutosTotales;
+    const newData = await firestore()
+      .collection('usuarios')
+      .doc(userInfo.userId)
+      .get();
+    let minutosTotal = newData._data.minutosTotales;
     minutosTotal = minutosTotal + calculatedMinutes;
+    let limite = minutesLimit;
+    limite = limite + calculatedMinutes;
 
     countStars(minutosTotal);
     setMinutesStats(minutesDB);
+    setMinutesLimit(limite);
 
     try {
       firestore()
@@ -150,6 +181,9 @@ const Enfoque = () => {
         .update({
           minutos: minutesDB,
           minutosTotales: minutosTotal,
+          minutosHoy: limite,
+          minutosMes: dayjs().month(),
+          minutosSemana: dayjs(new Date()).week,
         })
         .then(() => {
           console.log('User minutes updated!');

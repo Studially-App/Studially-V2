@@ -160,7 +160,7 @@ const EstadisticasEnfoque = () => {
               </Text>
             ) : (
               <Text fontSize={15}>
-                Este mes hiciste{' '}
+                Este mes te enfocaste{' '}
                 <Text fontSize={15} fontWeight="bold">
                   {minTotalesMes}
                 </Text>{' '}
