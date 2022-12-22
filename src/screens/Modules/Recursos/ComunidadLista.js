@@ -102,10 +102,10 @@ const ComunidadLista = () => {
                   <HStack>
                     <Text fontSize="md">{item.universidad}</Text>
                     <Spacer />
-                    <Text fontSize="md" color="#475BD8" textAlign="right">
-                      {item.categoria}
-                    </Text>
                   </HStack>
+                  <Text fontSize="md" color="#475BD8" textAlign="right">
+                    {item.categoria}
+                  </Text>
                 </VStack>
               </Box>
             </Pressable>

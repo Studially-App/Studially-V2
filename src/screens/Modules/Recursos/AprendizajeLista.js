@@ -31,6 +31,8 @@ const AprendizajeLista = () => {
 
   const [aprendizaje, setAprendizaje] = useState([]);
 
+  const [categories, setCategories] = useState(['Ciencia', 'Productividad']);
+
   const getAprendizaje = async () => {
     const snapshot = await firestore()
       .collection('aprendizaje')
@@ -38,6 +40,16 @@ const AprendizajeLista = () => {
       .get();
     const ap = snapshot.docs.map(doc => doc.data());
     setAprendizaje(ap);
+  };
+
+  const getAprendizajeFilter = async () => {
+    const snapshot = await firestore()
+      .collection('aprendizaje')
+      .where('categoria', '==', 'Ciencia')
+      .get();
+    console.log(snapshot);
+    const ap = snapshot.docs.map(doc => doc.data());
+    console.log(ap);
   };
 
   useEffect(() => {
