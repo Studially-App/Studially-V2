@@ -109,18 +109,31 @@ const Enfoque = () => {
   };
 
   // Set time
-  const setTimer = () => {
+  const setTimer = async () => {
     const totalTime = parseInt(inputMin, 10) * 60 + parseInt(inputSec, 10);
-    if (minutesLimit + totalTime < 360) {
+    if (dayjs().day() === userInfo.minutosHoyDia) {
+      if (minutesLimit + totalTime / 60 < 360) {
+        setTimerInput(totalTime);
+        setTimerOn(true);
+        setTimerStart(true);
+      } else {
+        toast.show({
+          description: 'No puedes tener más de 6 horas de enfoque al día',
+          duration: 1500,
+          placement: 'top',
+        });
+      }
+    } else {
+      try {
+        await firestore().collection('usuarios').doc(userInfo.userId).update({
+          minutosHoyDia: dayjs().day(),
+        });
+      } catch (error) {
+        console.log(error);
+      }
       setTimerInput(totalTime);
       setTimerOn(true);
       setTimerStart(true);
-    } else {
-      toast.show({
-        description: 'No puedes tener más de 6 horas de enfoque al día',
-        duration: 1500,
-        placement: 'top',
-      });
     }
   };
 
@@ -144,7 +157,7 @@ const Enfoque = () => {
       return object.categoria === category;
     });
 
-    if (dayjs.month() === userInfo.minutosMes) {
+    if (dayjs().month() === userInfo.minutosMes) {
       minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
     } else {
       minutesDB.map(cat => {
@@ -152,7 +165,7 @@ const Enfoque = () => {
       });
     }
 
-    if (dayjs(new Date()).week === userInfo.minutosSemana) {
+    if (dayjs(new Date()).week() === userInfo.minutosSemana) {
       minutesDB[index].minutosSemana =
         minutesDB[index].minutosSemana + calculatedMinutes;
     } else {
@@ -160,6 +173,10 @@ const Enfoque = () => {
         cat.minutosSemana = 0;
       });
     }
+
+    minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
+    minutesDB[index].minutosSemana =
+      minutesDB[index].minutosSemana + calculatedMinutes;
 
     const newData = await firestore()
       .collection('usuarios')
@@ -183,7 +200,8 @@ const Enfoque = () => {
           minutosTotales: minutosTotal,
           minutosHoy: limite,
           minutosMes: dayjs().month(),
-          minutosSemana: dayjs(new Date()).week,
+          minutosSemana: dayjs(new Date()).week(),
+          minutosHoyDia: dayjs().day(),
         })
         .then(() => {
           console.log('User minutes updated!');

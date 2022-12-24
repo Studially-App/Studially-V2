@@ -156,6 +156,7 @@ const SignUp = ({navigation}) => {
             ],
             userId: userId,
             minutosHoy: 0,
+            minutosHoyDia: '',
             minutosMes: '',
             minutosSemana: '',
           })
