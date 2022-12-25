@@ -49,7 +49,8 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
           checked: [],
         }}
         onSubmit={(values, actions) => {
-          actions.resetForm();
+          console.log(values);
+          //actions.resetForm();
         }}>
         {({
           handleChange,
@@ -119,6 +120,7 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
                         <Checkbox
                           value="Artes"
                           accessibilityLabel="Artes checkbox"
+                          name="checked"
                         />
                       </HStack>
                       <HStack
@@ -129,6 +131,7 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
                         <Checkbox
                           value="Ciencia"
                           accessibilityLabel="Artes checkbox"
+                          name="checked"
                         />
                       </HStack>
                       <HStack
@@ -139,6 +142,7 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
                         <Checkbox
                           value="Economía"
                           accessibilityLabel="Artes checkbox"
+                          name="checked"
                         />
                       </HStack>
                       <HStack
@@ -149,6 +153,7 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
                         <Checkbox
                           value="Productividad"
                           accessibilityLabel="Artes checkbox"
+                          name="checked"
                         />
                       </HStack>
                       <HStack
@@ -159,6 +164,7 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
                         <Checkbox
                           value="Tecnología"
                           accessibilityLabel="Artes checkbox"
+                          name="checked"
                         />
                       </HStack>
 

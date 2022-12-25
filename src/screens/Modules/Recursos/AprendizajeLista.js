@@ -42,19 +42,21 @@ const AprendizajeLista = () => {
     setAprendizaje(ap);
   };
 
-  const getAprendizajeFilter = async () => {
-    const snapshot = await firestore()
-      .collection('aprendizaje')
-      .where('categoria', '==', 'Ciencia')
-      .get();
-    console.log(snapshot);
-    const ap = snapshot.docs.map(doc => doc.data());
-    console.log(ap);
+  const getAprendizajeFilter = () => {
+    let filtro = [];
+    aprendizaje.map(ap => {
+      categories.map(cat => {
+        if (ap.categoria === cat) {
+          filtro.push(ap);
+        }
+      });
+    });
+    setAprendizaje(filtro);
   };
 
   useEffect(() => {
     getAprendizaje();
-  });
+  }, []);
 
   return (
     <VStack space={2} alignItems="center">

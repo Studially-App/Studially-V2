@@ -174,10 +174,6 @@ const Enfoque = () => {
       });
     }
 
-    minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
-    minutesDB[index].minutosSemana =
-      minutesDB[index].minutosSemana + calculatedMinutes;
-
     const newData = await firestore()
       .collection('usuarios')
       .doc(userInfo.userId)
