@@ -112,7 +112,7 @@ const Enfoque = () => {
   const setTimer = async () => {
     const totalTime = parseInt(inputMin, 10) * 60 + parseInt(inputSec, 10);
     if (dayjs().day() === userInfo.minutosHoyDia) {
-      if (minutesLimit + totalTime / 60 < 360) {
+      if (userInfo.minutosHoy + totalTime / 60 < 360) {
         setTimerInput(totalTime);
         setTimerOn(true);
         setTimerStart(true);
@@ -127,6 +127,7 @@ const Enfoque = () => {
       try {
         await firestore().collection('usuarios').doc(userInfo.userId).update({
           minutosHoyDia: dayjs().day(),
+          minutosHoy: 0,
         });
       } catch (error) {
         console.log(error);
@@ -134,6 +135,7 @@ const Enfoque = () => {
       setTimerInput(totalTime);
       setTimerOn(true);
       setTimerStart(true);
+      setMinutesLimit(0);
     }
   };
 

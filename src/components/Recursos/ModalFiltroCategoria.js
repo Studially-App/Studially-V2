@@ -20,13 +20,21 @@ import {useWindowDimensions} from 'react-native';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import {Formik} from 'formik';
+import {Formik, Field, Form} from 'formik';
 
 import firestore from '@react-native-firebase/firestore';
 
-const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
+const ModalFiltroCategoria = ({
+  modalVisibility,
+  setModalVisibility,
+  categories,
+  setCategories,
+  getAprendizajeFilter,
+}) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
+
+  const [groupValues, setGroupValues] = React.useState([]);
 
   const toast = useToast();
 
@@ -49,7 +57,9 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
           checked: [],
         }}
         onSubmit={(values, actions) => {
-          console.log(values);
+          //console.log(categories);
+          getAprendizajeFilter();
+          setModalVisibility(false);
           //actions.resetForm();
         }}>
         {({
@@ -112,62 +122,69 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
                         textAlign="center">
                         Filtrar por
                       </Text>
-                      <HStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                        w="80%">
-                        <Text fontSize="18">Artes</Text>
-                        <Checkbox
-                          value="Artes"
-                          accessibilityLabel="Artes checkbox"
-                          name="checked"
-                        />
-                      </HStack>
-                      <HStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                        w="80%">
-                        <Text fontSize="18">Ciencia</Text>
-                        <Checkbox
-                          value="Ciencia"
-                          accessibilityLabel="Artes checkbox"
-                          name="checked"
-                        />
-                      </HStack>
-                      <HStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                        w="80%">
-                        <Text fontSize="18">Economía</Text>
-                        <Checkbox
-                          value="Economía"
-                          accessibilityLabel="Artes checkbox"
-                          name="checked"
-                        />
-                      </HStack>
-                      <HStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                        w="80%">
-                        <Text fontSize="18">Productividad</Text>
-                        <Checkbox
-                          value="Productividad"
-                          accessibilityLabel="Artes checkbox"
-                          name="checked"
-                        />
-                      </HStack>
-                      <HStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                        w="80%">
-                        <Text fontSize="18">Tecnología</Text>
-                        <Checkbox
-                          value="Tecnología"
-                          accessibilityLabel="Artes checkbox"
-                          name="checked"
-                        />
-                      </HStack>
-
+                      <Checkbox.Group
+                        onChange={setCategories}
+                        value={categories}
+                        accessibilityLabel="choose category"
+                        justifyContent="center"
+                        alignContent="center"
+                        alignItems="center">
+                        <HStack
+                          justifyContent="space-between"
+                          alignItems="center"
+                          w="80%">
+                          <Text fontSize="18">Artes</Text>
+                          <Checkbox
+                            value="Artes"
+                            accessibilityLabel="Artes checkbox"
+                            name="checked"
+                          />
+                        </HStack>
+                        <HStack
+                          justifyContent="space-between"
+                          alignItems="center"
+                          w="80%">
+                          <Text fontSize="18">Ciencia</Text>
+                          <Checkbox
+                            value="Ciencia"
+                            accessibilityLabel="Artes checkbox"
+                            name="checked"
+                          />
+                        </HStack>
+                        <HStack
+                          justifyContent="space-between"
+                          alignItems="center"
+                          w="80%">
+                          <Text fontSize="18">Economía</Text>
+                          <Checkbox
+                            value="Economía"
+                            accessibilityLabel="Artes checkbox"
+                            name="checked"
+                          />
+                        </HStack>
+                        <HStack
+                          justifyContent="space-between"
+                          alignItems="center"
+                          w="80%">
+                          <Text fontSize="18">Productividad</Text>
+                          <Checkbox
+                            value="Productividad"
+                            accessibilityLabel="Artes checkbox"
+                            name="checked"
+                          />
+                        </HStack>
+                        <HStack
+                          justifyContent="space-between"
+                          alignItems="center"
+                          w="80%">
+                          <Text fontSize="18">Tecnología</Text>
+                          <Checkbox
+                            value="Tecnología"
+                            accessibilityLabel="Artes checkbox"
+                            name="checked"
+                          />
+                        </HStack>
+                      </Checkbox.Group>
                       <Button
                         bg="#475BD8"
                         _text={{
@@ -177,6 +194,7 @@ const ModalFiltroCategoria = ({modalVisibility, setModalVisibility}) => {
                         onPress={() => {
                           handleSubmit();
                         }}
+                        type="submit"
                         w="80%"
                         mb="0">
                         Guardar cambios

@@ -31,7 +31,15 @@ const AprendizajeLista = () => {
 
   const [aprendizaje, setAprendizaje] = useState([]);
 
-  const [categories, setCategories] = useState(['Ciencia', 'Productividad']);
+  const [aprendizajeFiltrado, setAprendizajeFiltrado] = useState([]);
+
+  const [categories, setCategories] = useState([
+    'Ciencia',
+    'Productividad',
+    'Artes',
+    'Economía',
+    'Tecnología',
+  ]);
 
   const getAprendizaje = async () => {
     const snapshot = await firestore()
@@ -40,10 +48,12 @@ const AprendizajeLista = () => {
       .get();
     const ap = snapshot.docs.map(doc => doc.data());
     setAprendizaje(ap);
+    setAprendizajeFiltrado(ap);
   };
 
   const getAprendizajeFilter = () => {
     let filtro = [];
+    console.log(categories);
     aprendizaje.map(ap => {
       categories.map(cat => {
         if (ap.categoria === cat) {
@@ -51,7 +61,7 @@ const AprendizajeLista = () => {
         }
       });
     });
-    setAprendizaje(filtro);
+    setAprendizajeFiltrado(filtro);
   };
 
   useEffect(() => {
@@ -69,6 +79,9 @@ const AprendizajeLista = () => {
       <ModalFiltroCategoria
         modalVisibility={categoriaModalVisibility}
         setModalVisibility={setCategoriaModalVisibility}
+        categories={categories}
+        setCategories={setCategories}
+        getAprendizajeFilter={getAprendizajeFilter}
       />
       <ScrollView w="100%" h="85%">
         <VStack space="15px" alignItems="center">
@@ -82,7 +95,7 @@ const AprendizajeLista = () => {
               Filtrar <Ficon name="equalizer" color="black" size={16} />
             </Text>
           </Button>
-          {aprendizaje.map((item, i) => (
+          {aprendizajeFiltrado.map((item, i) => (
             <Pressable
               onPress={() => {
                 setDataDetalle(item);
