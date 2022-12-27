@@ -9,7 +9,6 @@ import {
   View,
   Button,
   NativeBaseProvider,
-  useToast,
   Checkbox,
   HStack,
 } from 'native-base';
@@ -20,9 +19,7 @@ import {useWindowDimensions} from 'react-native';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import {Formik, Field, Form} from 'formik';
-
-import firestore from '@react-native-firebase/firestore';
+import {Formik} from 'formik';
 
 const ModalFiltroCategoria = ({
   modalVisibility,
@@ -33,10 +30,6 @@ const ModalFiltroCategoria = ({
 }) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
-
-  const [groupValues, setGroupValues] = React.useState([]);
-
-  const toast = useToast();
 
   // Screen Dimentions
   const {width} = useWindowDimensions();
@@ -56,21 +49,11 @@ const ModalFiltroCategoria = ({
         initialValues={{
           checked: [],
         }}
-        onSubmit={(values, actions) => {
-          //console.log(categories);
+        onSubmit={() => {
           getAprendizajeFilter();
           setModalVisibility(false);
-          //actions.resetForm();
         }}>
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          setFieldValue,
-          values,
-          errors,
-          touched,
-        }) => (
+        {({handleSubmit}) => (
           <View w={width}>
             <Modal
               isVisible={modalVisibility}

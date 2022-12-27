@@ -53,7 +53,6 @@ const AprendizajeLista = () => {
 
   const getAprendizajeFilter = () => {
     let filtro = [];
-    console.log(categories);
     aprendizaje.map(ap => {
       categories.map(cat => {
         if (ap.categoria === cat) {

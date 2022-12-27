@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
-import ModalFiltroCategoria from '../../../components/Recursos/ModalFiltroCategoria';
+import ModalFiltroCategoriaComunidad from '../../../components/Recursos/ModalFiltroCategoriaComunidad';
 import ModalFiltroUniversidad from '../../../components/Recursos/ModalFiltroUniversidad';
 import firestore from '@react-native-firebase/firestore';
 import Ficon from 'react-native-vector-icons/Fontisto';
@@ -34,10 +34,70 @@ const ComunidadLista = () => {
 
   const [comunidad, setComunidad] = useState([]);
 
+  const [comunidadFiltrado, setComunidadFiltrado] = useState([]);
+
+  const [categories, setCategories] = useState([
+    'Salud y Bienestar',
+    'Alimenticio',
+    'Educación y Pedagogía',
+    'Diseño y Construcción',
+    'Digital y Tecnológico',
+    'Consultoría',
+    'Belleza y Moda',
+    'Sustentabilidad',
+    'Desarrollo e Investigación',
+    'Accesorios',
+    'Electrónicos',
+    'Entretenimiento',
+    'Otros',
+  ]);
+
+  const [universities, setUniversities] = useState([
+    'Anahuac',
+    'EBC',
+    'Ibero',
+    'IPN',
+    'ITAM',
+    'ITESM',
+    'Justo Sierra',
+    'Panamericana',
+    'Tec Milenio',
+    'ULA',
+    'UNAM',
+    'ULSA',
+    'UVM',
+    'Tepeyac',
+  ]);
+
   const getComunidad = async () => {
     const snapshot = await firestore().collection('comunidad').get();
     const com = snapshot.docs.map(doc => doc.data());
     setComunidad(com);
+    setComunidadFiltrado(com);
+  };
+
+  const getComunidadFilter = () => {
+    let filtro = [];
+    comunidad.map(com => {
+      categories.map(cat => {
+        if (com.categoria === cat) {
+          filtro.push(com);
+        }
+      });
+    });
+    setComunidadFiltrado(filtro);
+  };
+
+  const getUniversidadFilter = () => {
+    let filtro = [];
+    comunidad.map(com => {
+      universities.map(uni => {
+        if (com.universidad === uni) {
+          filtro.push(com);
+        }
+      });
+    });
+    setComunidadFiltrado(filtro);
   };
 
   useEffect(() => {
@@ -52,13 +112,19 @@ const ComunidadLista = () => {
         data={dataDetalle}
         setData={setDataDetalle}
       />
-      <ModalFiltroCategoria
+      <ModalFiltroCategoriaComunidad
         modalVisibility={categoriaModalVisibility}
         setModalVisibility={setCategoriaModalVisibility}
+        categories={categories}
+        setCategories={setCategories}
+        getComunidadFilter={getComunidadFilter}
       />
       <ModalFiltroUniversidad
         modalVisibility={universidadModalVisibility}
         setModalVisibility={setUniversidadModalVisibility}
+        universities={universities}
+        setUniversities={setUniversities}
+        getUniversidadFilter={getUniversidadFilter}
       />
       <ScrollView w="100%" h="75%">
         <VStack space="15px" alignItems="center">
@@ -85,7 +151,7 @@ const ComunidadLista = () => {
             </Button>
           </HStack>
 
-          {comunidad.map((item, i) => (
+          {comunidadFiltrado.map((item, i) => (
             <Pressable
               onPress={() => {
                 setDataDetalle(item);

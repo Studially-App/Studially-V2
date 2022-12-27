@@ -21,12 +21,12 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {Formik} from 'formik';
 
-const ModalFiltroUniversidad = ({
+const ModalFiltroCategoriaComunidad = ({
   modalVisibility,
   setModalVisibility,
-  universities,
-  setUniversities,
-  getUniversidadFilter,
+  categories,
+  setCategories,
+  getComunidadFilter,
 }) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
@@ -50,7 +50,7 @@ const ModalFiltroUniversidad = ({
           checked: [],
         }}
         onSubmit={() => {
-          getUniversidadFilter();
+          getComunidadFilter();
           setModalVisibility(false);
         }}>
         {({handleSubmit}) => (
@@ -76,7 +76,7 @@ const ModalFiltroUniversidad = ({
                 marginBottom: 0,
                 marginLeft: 0,
                 marginRight: 0,
-                marginTop: 20,
+                marginTop: 150,
                 borderTopLeftRadius: 30,
                 borderTopRightRadius: 30,
               }}
@@ -106,8 +106,8 @@ const ModalFiltroUniversidad = ({
                         Filtrar por
                       </Text>
                       <Checkbox.Group
-                        onChange={setUniversities}
-                        value={universities}
+                        onChange={setCategories}
+                        value={categories}
                         accessibilityLabel="choose category"
                         justifyContent="center"
                         alignContent="center"
@@ -116,140 +116,132 @@ const ModalFiltroUniversidad = ({
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">Anahuac</Text>
+                          <Text fontSize="18">Salud y Bienestar</Text>
                           <Checkbox
-                            value="Anahuac"
-                            accessibilityLabel="Anahuac checkbox"
+                            value="Salud y Bienestar"
+                            accessibilityLabel="Salud y Bienestar checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">EBC</Text>
+                          <Text fontSize="18">Alimenticio</Text>
                           <Checkbox
-                            value="EBC"
-                            accessibilityLabel="EBC checkbox"
+                            value="Alimenticio"
+                            accessibilityLabel="Alimenticio checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">Ibero</Text>
+                          <Text fontSize="18">Educación y Pedagogía</Text>
                           <Checkbox
-                            value="Ibero"
-                            accessibilityLabel="Ibero checkbox"
+                            value="Educación y Pedagogía"
+                            accessibilityLabel="Educación y Pedagogía checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">IPN</Text>
+                          <Text fontSize="18">Diseño y Construcción</Text>
                           <Checkbox
-                            value="IPN"
-                            accessibilityLabel="IPN checkbox"
+                            value="Diseño y Construcción"
+                            accessibilityLabel="Diseño y Construcción checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">ITAM</Text>
+                          <Text fontSize="18">Consultoría</Text>
                           <Checkbox
-                            value="ITAM"
-                            accessibilityLabel="ITAM checkbox"
+                            value="Consultoría"
+                            accessibilityLabel="Consultoría checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">ITESM</Text>
+                          <Text fontSize="18">Belleza y Moda</Text>
                           <Checkbox
-                            value="ITESM"
-                            accessibilityLabel="ITESM checkbox"
+                            value="Belleza y Moda"
+                            accessibilityLabel="Belleza y Moda checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">Justo Sierra</Text>
+                          <Text fontSize="18">Sustentabilidad</Text>
                           <Checkbox
-                            value="Justo Sierra"
-                            accessibilityLabel="Justo Sierra checkbox"
+                            value="Sustentabilidad"
+                            accessibilityLabel="Sustentabilidad checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">Panamericana</Text>
+                          <Text fontSize="18">Desarrollo e Investigación</Text>
                           <Checkbox
-                            value="Panamericana"
-                            accessibilityLabel="Panamericana checkbox"
+                            value="Desarrollo e Investigación"
+                            accessibilityLabel="Desarrollo e Investigación checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">Tec Milenio</Text>
+                          <Text fontSize="18">Accesorios</Text>
                           <Checkbox
-                            value="Tec Milenio"
-                            accessibilityLabel="Tec Milenio checkbox"
+                            value="Accesorios"
+                            accessibilityLabel="Accesorios checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">ULA</Text>
+                          <Text fontSize="18">Electrónicos</Text>
                           <Checkbox
-                            value="ULA"
-                            accessibilityLabel="ULA checkbox"
+                            value="Electrónicos"
+                            accessibilityLabel="Electrónicos checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">UNAM</Text>
+                          <Text fontSize="18">Entretenimiento</Text>
                           <Checkbox
-                            value="UNAM"
-                            accessibilityLabel="UNAM checkbox"
+                            value="Entretenimiento"
+                            accessibilityLabel="Entretenimiento checkbox"
+                            name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
                           w="80%">
-                          <Text fontSize="18">Universidad la Salle</Text>
+                          <Text fontSize="18">Otros</Text>
                           <Checkbox
-                            value="ULSA"
-                            accessibilityLabel="Universidad la Salle checkbox"
-                          />
-                        </HStack>
-                        <HStack
-                          justifyContent="space-between"
-                          alignItems="center"
-                          w="80%">
-                          <Text fontSize="18">UVM</Text>
-                          <Checkbox
-                            value="UVM"
-                            accessibilityLabel="UVM checkbox"
-                          />
-                        </HStack>
-                        <HStack
-                          justifyContent="space-between"
-                          alignItems="center"
-                          w="80%">
-                          <Text fontSize="18">Tepeyac</Text>
-                          <Checkbox
-                            value="Tepeyac"
-                            accessibilityLabel="Tepeyac checkbox"
+                            value="Otros"
+                            accessibilityLabel="Otros checkbox"
+                            name="checked"
                           />
                         </HStack>
                       </Checkbox.Group>
@@ -298,4 +290,4 @@ const ModalFiltroUniversidad = ({
   );
 };
 
-export default ModalFiltroUniversidad;
+export default ModalFiltroCategoriaComunidad;
