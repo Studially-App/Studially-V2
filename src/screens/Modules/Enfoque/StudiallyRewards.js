@@ -30,12 +30,13 @@ const StudiallyRewards = () => {
 
   const getProductsRewards = async () => {
     try {
-      const products = await firestore()
+      const snapshot = await firestore()
         .collection('productosRewards')
-        .doc('Productos')
+        .orderBy('puntos', 'asc')
         .get();
+      const prod = snapshot.docs.map(doc => doc.data());
 
-      setProducts(products._data.productos);
+      setProducts(prod);
     } catch (error) {
       console.log(error);
     }
