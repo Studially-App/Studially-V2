@@ -57,7 +57,7 @@ const OportunidadesLista = () => {
                   <Text fontSize="md">{item.descripcion}</Text>
                   <Spacer />
                   <Text fontSize="md" color="#475BD8" textAlign="right">
-                    {item.vencimiento.toDate().toDateString()}
+                    {item.vencimiento}
                   </Text>
                 </VStack>
               </Box>

@@ -55,7 +55,7 @@ const SaludMentalLista = () => {
                   <Text fontSize="md">{item.autor}</Text>
                   <Spacer />
                   <Text fontSize="md" color="#475BD8" textAlign="right">
-                    {item.fecha.toDate().toDateString()}
+                    {item.fecha}
                   </Text>
                 </VStack>
               </Box>

@@ -44,7 +44,7 @@ const AprendizajeLista = () => {
   const getAprendizaje = async () => {
     const snapshot = await firestore()
       .collection('aprendizaje')
-      .orderBy('fecha', 'asc')
+      .orderBy('fecha', 'desc')
       .get();
     const ap = snapshot.docs.map(doc => doc.data());
     setAprendizaje(ap);
@@ -115,7 +115,7 @@ const AprendizajeLista = () => {
                       {item.categoria}
                     </Text>
                     <Text fontSize="md" color="#475BD8" textAlign="right">
-                      {item.fecha.toDate().toDateString()}
+                      {item.fecha}
                     </Text>
                   </HStack>
                 </VStack>
