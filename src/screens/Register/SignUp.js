@@ -159,6 +159,8 @@ const SignUp = ({navigation}) => {
             minutosHoyDia: '',
             minutosMes: '',
             minutosSemana: '',
+            tuser: 'Free',
+            since: '',
           })
           .then(() => {
             console.log('User added!');
