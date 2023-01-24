@@ -279,6 +279,20 @@ const App = () => {
                   ),
                 }}
               />
+              <Tabs.Screen
+                name="Perfil"
+                component={PerfilStackScreen}
+                options={{
+                  tarBarLabel: 'Perfil',
+                  tabBarLabelStyle: {
+                    fontSize: 12,
+                    marginBottom: 4,
+                  },
+                  tabBarIcon: ({color, size}) => (
+                    <Icon name="star-outline" color={color} size={24} />
+                  ),
+                }}
+              />
             </Tabs.Navigator>
           </>
         ) : (

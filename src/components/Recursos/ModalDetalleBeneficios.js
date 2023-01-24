@@ -10,11 +10,13 @@ import {
   Button,
   NativeBaseProvider,
   Heading,
+  Image,
+  Link,
 } from 'native-base';
 // Modal
 import Modal from 'react-native-modal';
 // React Native
-import {useWindowDimensions, Animated} from 'react-native';
+import {useWindowDimensions} from 'react-native';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -28,7 +30,7 @@ const ModalDetalleBeneficios = ({
   const scrollViewReff = React.createRef();
 
   // Screen Dimentions
-  const {width, height} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   const handleOnScroll = event => {
     setScrollOffset(event.nativeEvent.contentOffset.y);
@@ -85,7 +87,15 @@ const ModalDetalleBeneficios = ({
                 <Center>
                   <Heading>{data.titulo}</Heading>
                 </Center>
-                <Box bg="#C4C4C4" w="95%" h="48"></Box>
+                <Image
+                  source={{
+                    uri: data.imagenURL,
+                  }}
+                  alt="Alternate Text"
+                  size="xl"
+                  w="95%"
+                  h="48"
+                />
                 <Text w="95%">{data.texto}</Text>
                 <Button
                   bg="rgba(71, 91, 216, 1)"
@@ -93,7 +103,9 @@ const ModalDetalleBeneficios = ({
                     fontSize: 16,
                   }}
                   w="95%">
-                  Más información
+                  <Link href={data.url} _text={{color: 'white'}}>
+                    Más información
+                  </Link>
                 </Button>
               </VStack>
             </ScrollView>

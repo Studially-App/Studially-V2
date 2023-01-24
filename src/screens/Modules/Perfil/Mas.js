@@ -66,7 +66,7 @@ const Mas = ({navigation}) => {
       const info = getUserInfo(user);
       return info;
     }
-  });
+  }, [user]);
 
   if (initializing) {
     return null;

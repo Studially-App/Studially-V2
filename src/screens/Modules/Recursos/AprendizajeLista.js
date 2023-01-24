@@ -107,6 +107,10 @@ const AprendizajeLista = () => {
                 <VStack m="15px">
                   <Text fontSize="xl" bold>
                     {item.titulo}
+                    {'  '}
+                    {item.autor === 'Studially' ? (
+                      <Ficon name="star" color="#475BD8" size={16} />
+                    ) : null}
                   </Text>
                   <Text fontSize="md">{item.autor}</Text>
                   <Spacer />

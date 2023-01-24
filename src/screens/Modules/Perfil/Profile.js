@@ -61,7 +61,6 @@ const Profile = ({navigation}) => {
       .where('email', '==', user.email)
       .get();
     setUserInfo(userInfoFB._docs[0]._data);
-    //console.log(userInfo)
     return userInfoFB;
   };
 
@@ -79,13 +78,11 @@ const Profile = ({navigation}) => {
   });
 
   useEffect(() => {
-    //console.log(user)
     if (user !== undefined) {
-      //console.log(user)
       const info = getUserInfo(user);
       return info;
     }
-  });
+  }, [user]);
 
   if (initializing) {
     return null;
@@ -258,7 +255,7 @@ const Profile = ({navigation}) => {
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
-                onPress={() => navigation.navigate('Plan Studially')}
+                onPress={() => navigation.navigate('Studially Pro')}
                 _pressed={{
                   backgroundColor: 'rgba(71, 91, 216, 1)',
                 }}
@@ -321,7 +318,7 @@ const Profile = ({navigation}) => {
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
-                onPress={() => navigation.navigate('Plan Studially')}
+                onPress={() => navigation.navigate('Studially Pro')}
                 _pressed={{
                   backgroundColor: 'rgba(5, 24, 139, 0.7)',
                 }}

@@ -5,6 +5,7 @@ import {VStack, ScrollView, Pressable, Box, Text, Spacer} from 'native-base';
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 import firestore from '@react-native-firebase/firestore';
+import Ficon from 'react-native-vector-icons/Fontisto';
 
 const SaludMentalLista = () => {
   // Estado modal detalle
@@ -51,6 +52,10 @@ const SaludMentalLista = () => {
                 <VStack m="15px">
                   <Text fontSize="xl" bold>
                     {item.titulo}
+                    {'  '}
+                    {item.autor === 'Studially' ? (
+                      <Ficon name="star" color="#475BD8" size={16} />
+                    ) : null}
                   </Text>
                   <Text fontSize="md">{item.autor}</Text>
                   <Spacer />
