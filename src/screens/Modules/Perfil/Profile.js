@@ -21,8 +21,9 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // React Native
 import {useWindowDimensions, StyleSheet} from 'react-native';
+
 // DateTime Picker
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-date-picker';
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -40,15 +41,8 @@ const Profile = ({navigation}) => {
   const {width, height} = useWindowDimensions();
   const [tab, setTab] = React.useState('Personal');
   // Date states
-  const date = new Date();
-  const [mode, setMode] = React.useState('date');
-  const [show, setShow] = React.useState(false);
-
-  // Shot Date Picker
-  const showDatePicker = () => {
-    setShow(true);
-    setMode('date');
-  };
+  const [date, setDate] = useState(new Date());
+  const [openDate, setOpenDate] = useState(false);
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -192,7 +186,9 @@ const Profile = ({navigation}) => {
                 bgColor="white"
                 borderWidth="1"
                 w="90%"
-                onPress={showDatePicker}
+                onPress={() => {
+                  setOpenDate(true);
+                }}
                 borderColor="#475BD8"
                 // _text={{color: 'rgba(39, 44, 70, 0.5)'}}
                 leftIcon={
@@ -206,19 +202,20 @@ const Profile = ({navigation}) => {
                   {userInfo ? userInfo.fechaNacimiento : 'FechaNacimiento'}
                 </Text>
               </Button>
-              {show && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={mode}
-                  // is24Hour={true}
-                  display="default"
-                  // onChange={() => {
-                  //   onChange();
-                  //   // handleChange('fechaNacimiento');
-                  // }}
-                />
-              )}
+              <DatePicker
+                modal
+                open={openDate}
+                date={date}
+                mode="date"
+                locale="es"
+                onConfirm={dateSelected => {
+                  setOpenDate(false);
+                  setDate(dateSelected);
+                }}
+                onCancel={() => {
+                  setOpenDate(false);
+                }}
+              />
               <Select
                 rounder="4"
                 w="90%"

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -37,9 +38,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 //React Native
 import {StyleSheet} from 'react-native';
-// DateTime Picker
 
-import DateTimePickerAndroid from '@react-native-community/datetimepicker';
+// DateTime Picker
+import DatePicker from 'react-native-date-picker';
 
 // Formik
 import {Formik} from 'formik';
@@ -57,11 +58,9 @@ const styles = StyleSheet.create({
 
 const SignUp = ({navigation}) => {
   //const {signUpEmail, signUpGoogle} = React.useContext(AuthContext);
-  const [date, setDate] = React.useState(new Date());
-  const [mode, setMode] = React.useState('date');
-  const [show, setShow] = React.useState(false);
-  const [text, setText] = React.useState('Fecha de nacimiento');
-  const [TerAndCondState, setTerAndCondState] = React.useState(false);
+  const [date, setDate] = useState(new Date());
+  const [openDate, setOpenDate] = useState(false);
+  const [TerAndCondState, setTerAndCondState] = useState(false);
   const toast = useToast();
 
   const sendEmail = async () => {
@@ -160,7 +159,7 @@ const SignUp = ({navigation}) => {
             minutosMes: '',
             minutosSemana: '',
             tuser: 'Free',
-            since: '',
+            since: dayjs().format('YYYY-MM-DD'),
           })
           .then(() => {
             console.log('User added!');
@@ -281,7 +280,7 @@ const SignUp = ({navigation}) => {
                     bgColor="#FFF"
                     borderWidth="1"
                     onPress={() => {
-                      setShow(true);
+                      setOpenDate(true);
                     }}
                     borderColor="#475BD8"
                     _text={{color: 'rgba(39, 44, 70, 0.5)', fontSize: 'lg'}}
@@ -292,28 +291,22 @@ const SignUp = ({navigation}) => {
                         size={32}
                       />
                     }>
-                    {text}
+                    Fecha de nacimiento
                   </Button>
-                  {show ? (
-                    <DateTimePickerAndroid
-                      testID="dateTimePicker"
-                      value={date}
-                      mode={mode}
-                      display="default"
-                      onChange={(event, selectedDate) => {
-                        if (event.type === 'set') {
-                          console.log(dayjs(selectedDate).format('DD/MM/YYYY'));
-                          setFieldValue(
-                            'fechaNacimiento',
-                            dayjs(selectedDate).format('DD/MM/YYYY'),
-                          );
-                          setText(dayjs(selectedDate).format('DD/MM/YYYY'));
-                        }
-                        setShow(false);
-                        console.log(show);
-                      }}
-                    />
-                  ) : null}
+                  <DatePicker
+                    modal
+                    open={openDate}
+                    date={date}
+                    mode="date"
+                    locale="es"
+                    onConfirm={dateSelected => {
+                      setOpenDate(false);
+                      setDate(dateSelected);
+                    }}
+                    onCancel={() => {
+                      setOpenDate(false);
+                    }}
+                  />
                   <Select
                     placeholder="Institución educativa"
                     placeholderTextColor="rgba(39, 44, 70, 0.5)"
