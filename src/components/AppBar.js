@@ -1,6 +1,4 @@
 import * as React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
 
 // Native Base
 import {Box, StatusBar, HStack, IconButton, Image} from 'native-base';
@@ -9,40 +7,7 @@ import {Box, StatusBar, HStack, IconButton, Image} from 'native-base';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import StudiallyLogo from '../assets/images/Studially-logo.png';
 
-import Mas from '../screens/Modules/Perfil/Mas';
-import Profile from '../screens/Modules/Perfil/Profile';
-import StudiallyPRO from '../screens/Modules/Perfil/StudiallyPro';
-
-const PerfilStack = createNativeStackNavigator();
-
-const PerfilStackScreen = () => (
-  <PerfilStack.Navigator>
-    <PerfilStack.Screen
-      name="MasHome"
-      component={Mas}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <PerfilStack.Screen
-      name="Perfil"
-      component={Profile}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <PerfilStack.Screen
-      name="Studially Pro"
-      component={StudiallyPRO}
-      options={{
-        headerShown: false,
-      }}
-    />
-  </PerfilStack.Navigator>
-);
-
-function AppBar() {
-  const navigation = useNavigation();
+function AppBar(setProfile, condition) {
   return (
     <>
       <StatusBar bg="#3700B3" barStyle="light-content" width={'100%'} />
@@ -63,7 +28,7 @@ function AppBar() {
           <IconButton
             onPress={() => {
               console.log('Abrir mas');
-              navigation.navigate(PerfilStackScreen);
+              setProfile(condition);
             }}
             icon={<MatComIcon name="menu" color="blue" size={24} />}
           />

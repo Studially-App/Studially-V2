@@ -2,12 +2,20 @@ import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NativeBaseProvider, Box, Center} from 'native-base';
+import {
+  NativeBaseProvider,
+  Box,
+  Center,
+  HStack,
+  IconButton,
+  Image,
+} from 'native-base';
 import auth from '@react-native-firebase/auth';
+import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import StudiallyLogo from './src/assets/images/Studially-logo.png';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import AppBar from './src/components/AppBar';
 
 import Onboarding from './src/screens/Onboarding/Onboarding';
 
@@ -170,6 +178,8 @@ const PerfilStackScreen = () => (
 );
 
 const App = () => {
+  const [profile, setProfile] = useState(false);
+
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -195,10 +205,45 @@ const App = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        {user ? (
+        {user && !profile ? (
           <>
             <Center>
-              <AppBar />
+              <Box safeAreaTop bg="white" width={'100px'} shadow="2" />
+              <HStack
+                bg="white"
+                shadow="2"
+                px="1"
+                py="3"
+                justifyContent="flex-start"
+                alignItems="center"
+                w="100%">
+                <HStack
+                  alignItems="flex-start"
+                  space={1}
+                  justifyContent="flex-start"
+                  w={'10%'}>
+                  <IconButton
+                    onPress={() => {
+                      console.log('Abrir mas');
+                      setProfile(true);
+                    }}
+                    icon={<MatComIcon name="menu" color="blue" size={24} />}
+                  />
+                </HStack>
+                <HStack
+                  alignItems="flex-start"
+                  space={6}
+                  justifyContent="center"
+                  w={'90%'}>
+                  <Image
+                    source={StudiallyLogo}
+                    alt="StudiallyLogo"
+                    // h="%"
+                    size="xs"
+                    w={150}
+                  />
+                </HStack>
+              </HStack>
             </Center>
             <Tabs.Navigator
               screenOptions={{
@@ -279,21 +324,71 @@ const App = () => {
                   ),
                 }}
               />
-              <Tabs.Screen
-                name="Perfil"
-                component={PerfilStackScreen}
+            </Tabs.Navigator>
+          </>
+        ) : user && profile ? (
+          <>
+            <Center>
+              <Box safeAreaTop bg="white" width={'100px'} shadow="2" />
+              <HStack
+                bg="white"
+                shadow="2"
+                px="1"
+                py="3"
+                justifyContent="flex-start"
+                alignItems="center"
+                w="100%">
+                <HStack
+                  alignItems="flex-start"
+                  space={1}
+                  justifyContent="flex-start"
+                  w={'10%'}>
+                  <IconButton
+                    onPress={() => {
+                      console.log('Abrir mas');
+                      setProfile(false);
+                    }}
+                    icon={<MatComIcon name="menu" color="blue" size={24} />}
+                  />
+                </HStack>
+                <HStack
+                  alignItems="flex-start"
+                  space={6}
+                  justifyContent="center"
+                  w={'90%'}>
+                  <Image
+                    source={StudiallyLogo}
+                    alt="StudiallyLogo"
+                    // h="%"
+                    size="xs"
+                    w={150}
+                  />
+                </HStack>
+              </HStack>
+            </Center>
+            <PerfilStack.Navigator>
+              <PerfilStack.Screen
+                name="MasHome"
+                component={Mas}
                 options={{
-                  tarBarLabel: 'Perfil',
-                  tabBarLabelStyle: {
-                    fontSize: 12,
-                    marginBottom: 4,
-                  },
-                  tabBarIcon: ({color, size}) => (
-                    <Icon name="star-outline" color={color} size={24} />
-                  ),
+                  headerShown: false,
                 }}
               />
-            </Tabs.Navigator>
+              <PerfilStack.Screen
+                name="Perfil"
+                component={Profile}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <PerfilStack.Screen
+                name="Studially Pro"
+                component={StudiallyPRO}
+                options={{
+                  headerShown: false,
+                }}
+              />
+            </PerfilStack.Navigator>
           </>
         ) : (
           <AuthStack.Navigator options={{headerShown: false}}>
