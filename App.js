@@ -151,32 +151,6 @@ const EnfoqueStackScreen = () => (
   </EnfoqueStack.Navigator>
 );
 
-const PerfilStackScreen = () => (
-  <PerfilStack.Navigator>
-    <PerfilStack.Screen
-      name="MasHome"
-      component={Mas}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <PerfilStack.Screen
-      name="Perfil"
-      component={Profile}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <PerfilStack.Screen
-      name="Studially Pro"
-      component={StudiallyPRO}
-      options={{
-        headerShown: false,
-      }}
-    />
-  </PerfilStack.Navigator>
-);
-
 const App = () => {
   const [profile, setProfile] = useState(false);
 
