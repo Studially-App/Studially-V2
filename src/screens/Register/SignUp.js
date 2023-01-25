@@ -105,78 +105,101 @@ const SignUp = ({navigation}) => {
   // };
 
   const createUser = values => {
-    auth()
-      .createUserWithEmailAndPassword(values.email, values.password)
-      .then(() => {
-        console.log('User account created & signed in!');
-        //Se agrega a la tabla de usuarios una vez registrado
-        var userId = uuid.v4();
-        firestore()
-          .collection('usuarios')
-          .doc(userId)
-          .set({
-            nombres: values.nombres,
-            apellidos: values.apellidos,
-            email: values.email,
-            fechaNacimiento: dayjs(date).format('YYYY-MM-DD'),
-            institucion: values.institucion,
-            habitos: [],
-            fuegos: 0,
-            listaAmigos: [],
-            finanzas: [],
-            estrellas: 0,
-            minutosTotales: 0,
-            minutos: [
-              {
-                categoria: 'Académico',
-                minutos: 0,
-                minutosSemana: 0,
-              },
-              {
-                categoria: 'Proyectos',
-                minutos: 0,
-                minutosSemana: 0,
-              },
-              {
-                categoria: 'Personal',
-                minutos: 0,
-                minutosSemana: 0,
-              },
-              {
-                categoria: 'Trabajo',
-                minutos: 0,
-                minutosSemana: 0,
-              },
-              {
-                categoria: 'Aprendizaje',
-                minutos: 0,
-                minutosSemana: 0,
-              },
-            ],
-            userId: userId,
-            minutosHoy: 0,
-            minutosHoyDia: '',
-            minutosMes: '',
-            minutosSemana: '',
-            tuser: 'Free',
-            since: dayjs().format('YYYY-MM-DD'),
-          })
-          .then(() => {
-            console.log('User added!');
-          });
-        sendEmail();
-      })
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
-
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-
-        console.error(error);
+    if (
+      values.nombres === '' ||
+      values.apellidos === '' ||
+      values.institucion === '' ||
+      values.email === '' ||
+      values.password === '' ||
+      values.confirm_password === '' ||
+      values.fechaNacimiento === '' ||
+      values.termsAndConditions === ''
+    ) {
+      toast.show({
+        description: 'La contraseña no es igual en la confirmación',
+        placement: 'top',
+        duration: 1000,
       });
+    } else if (values.password !== values.confirm_password) {
+      toast.show({
+        description: 'La contraseña no es igual en la confirmación',
+        placement: 'top',
+        duration: 1000,
+      });
+    } else {
+      auth()
+        .createUserWithEmailAndPassword(values.email, values.password)
+        .then(() => {
+          console.log('User account created & signed in!');
+          //Se agrega a la tabla de usuarios una vez registrado
+          var userId = uuid.v4();
+          firestore()
+            .collection('usuarios')
+            .doc(userId)
+            .set({
+              nombres: values.nombres,
+              apellidos: values.apellidos,
+              email: values.email,
+              fechaNacimiento: dayjs(date).format('YYYY-MM-DD'),
+              institucion: values.institucion,
+              habitos: [],
+              fuegos: 0,
+              listaAmigos: [],
+              finanzas: [],
+              estrellas: 0,
+              minutosTotales: 0,
+              minutos: [
+                {
+                  categoria: 'Académico',
+                  minutos: 0,
+                  minutosSemana: 0,
+                },
+                {
+                  categoria: 'Proyectos',
+                  minutos: 0,
+                  minutosSemana: 0,
+                },
+                {
+                  categoria: 'Personal',
+                  minutos: 0,
+                  minutosSemana: 0,
+                },
+                {
+                  categoria: 'Trabajo',
+                  minutos: 0,
+                  minutosSemana: 0,
+                },
+                {
+                  categoria: 'Aprendizaje',
+                  minutos: 0,
+                  minutosSemana: 0,
+                },
+              ],
+              userId: userId,
+              minutosHoy: 0,
+              minutosHoyDia: '',
+              minutosMes: '',
+              minutosSemana: '',
+              tuser: 'Free',
+              since: dayjs().format('YYYY-MM-DD'),
+            })
+            .then(() => {
+              console.log('User added!');
+            });
+          sendEmail();
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
+
+          console.error(error);
+        });
+    }
   };
 
   return (

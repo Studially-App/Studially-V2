@@ -60,7 +60,7 @@ const SignIn = ({navigation}) => {
 
         //console.error(error);
         toast.show({
-          description: 'Hola',
+          description: 'Inicio de sesión inválido',
         });
       });
   };

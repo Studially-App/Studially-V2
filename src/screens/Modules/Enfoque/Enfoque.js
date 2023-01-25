@@ -1,4 +1,4 @@
-//import React from 'react';
+/* eslint-disable no-shadow */
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 
@@ -155,12 +155,18 @@ const Enfoque = () => {
     const calculatedMinutes = Math.floor(timerInput / 60);
     const minutesDB = [...userInfo.minutos];
 
+    console.log('Minutes DB', minutesDB);
+    console.log('Calculated', calculatedMinutes);
+
     let index = minutesDB.findIndex(object => {
       return object.categoria === category;
     });
 
+    console.log('Index', index);
+
     if (dayjs().month() === userInfo.minutosMes) {
       minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
+      console.log('Minutes DB Meses', minutesDB);
     } else {
       minutesDB.map(cat => {
         cat.minutos = 0;
@@ -170,6 +176,7 @@ const Enfoque = () => {
     if (dayjs(new Date()).week() === userInfo.minutosSemana) {
       minutesDB[index].minutosSemana =
         minutesDB[index].minutosSemana + calculatedMinutes;
+      console.log('Minutes DB semanas', minutesDB);
     } else {
       minutesDB.map(cat => {
         cat.minutosSemana = 0;
