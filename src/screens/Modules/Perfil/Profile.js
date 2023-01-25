@@ -25,6 +25,8 @@ import {useWindowDimensions, StyleSheet} from 'react-native';
 // DateTime Picker
 import DatePicker from 'react-native-date-picker';
 
+import dayjs from 'dayjs';
+
 const styles = StyleSheet.create({
   iconInput: {
     marginLeft: 12,
@@ -43,6 +45,7 @@ const Profile = ({navigation}) => {
   // Date states
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
+  const [firstDate, setFirstDate] = useState(true);
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -199,7 +202,9 @@ const Profile = ({navigation}) => {
                   />
                 }>
                 <Text fontSize="lg" color="rgba(39, 44, 70, 0.5)" ml="4">
-                  {userInfo ? userInfo.fechaNacimiento : 'FechaNacimiento'}
+                  {userInfo && firstDate
+                    ? dayjs(userInfo.fechaNacimiento).format('DD-MM-YYYY')
+                    : dayjs(date).format('DD-MM-YYYY')}
                 </Text>
               </Button>
               <DatePicker
@@ -211,6 +216,7 @@ const Profile = ({navigation}) => {
                 onConfirm={dateSelected => {
                   setOpenDate(false);
                   setDate(dateSelected);
+                  setFirstDate(false);
                 }}
                 onCancel={() => {
                   setOpenDate(false);

@@ -118,7 +118,7 @@ const SignUp = ({navigation}) => {
             nombres: values.nombres,
             apellidos: values.apellidos,
             email: values.email,
-            fechaNacimiento: values.fechaNacimiento,
+            fechaNacimiento: dayjs(date).format('YYYY-MM-DD'),
             institucion: values.institucion,
             habitos: [],
             fuegos: 0,
@@ -291,7 +291,7 @@ const SignUp = ({navigation}) => {
                         size={32}
                       />
                     }>
-                    Fecha de nacimiento
+                    {dayjs(date).format('DD-MM-YYYY')}
                   </Button>
                   <DatePicker
                     modal
