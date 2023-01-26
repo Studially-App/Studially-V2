@@ -13,7 +13,6 @@ import {
 // Material-UI Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunitiIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Welcome = ({navigation}) => (
   <NativeBaseProvider>
@@ -29,19 +28,8 @@ const Welcome = ({navigation}) => (
                 shadow="5"
                 rounded="4">
                 <VStack space={1} alignItems="center">
-                  <MaterialIcon name="fact-check" color="#3B1DF9" size={54} />
-                  <Text fontSize={'sm'}>Tareas y equipos</Text>
-                </VStack>
-              </Center>
-              <Center
-                width={[24, 48, 72]}
-                height="32"
-                shadow="5"
-                bg="#FFFFFF"
-                rounded="4">
-                <VStack space={1} alignItems="center">
                   <MaterialIcon name="access-time" color="#3B1DF9" size={54} />
-                  <Text fontSize={'sm'}>Gestión de tiempo</Text>
+                  <Text fontSize={'sm'}>Organización</Text>
                 </VStack>
               </Center>
               <Center
@@ -51,8 +39,27 @@ const Welcome = ({navigation}) => (
                 bg="#FFFFFF"
                 rounded="4">
                 <VStack space={1} alignItems="center">
-                  <Ionicons name="school-outline" color="#3B1DF9" size={54} />
-                  <Text fontSize={'sm'}>Aprendizaje y finanzas</Text>
+                  <MaterialCommunitiIcon
+                    name="meditation"
+                    color="#3B1DF9"
+                    size={54}
+                  />
+                  <Text fontSize={'sm'}>Hábitos</Text>
+                </VStack>
+              </Center>
+              <Center
+                width={[24, 48, 72]}
+                height="32"
+                shadow="5"
+                bg="#FFFFFF"
+                rounded="4">
+                <VStack space={1} alignItems="center">
+                  <MaterialCommunitiIcon
+                    name="piggy-bank-outline"
+                    color="#3B1DF9"
+                    size={54}
+                  />
+                  <Text fontSize={'sm'}>Finanzas</Text>
                 </VStack>
               </Center>
             </Stack>
@@ -65,12 +72,11 @@ const Welcome = ({navigation}) => (
                 rounded="4">
                 <VStack space={1} alignItems="center">
                   <MaterialCommunitiIcon
-                    name="meditation"
+                    name="book-open-blank-variant"
                     color="#3B1DF9"
                     size={54}
                   />
-                  <Text fontSize={'sm'}>Hábitos y</Text>
-                  <Text fontSize={'sm'}>metas</Text>
+                  <Text fontSize={'sm'}>Aprendizaje</Text>
                 </VStack>
               </Center>
               <Center
@@ -91,8 +97,8 @@ const Welcome = ({navigation}) => (
                 bg="#FFFFFF"
                 rounded="4">
                 <VStack space={1} alignItems="center">
-                  <MaterialIcon name="trending-up" color="#3B1DF9" size={54} />
-                  <Text fontSize={'sm'}>Estadísticas</Text>
+                  <MaterialIcon name="people" color="#3B1DF9" size={54} />
+                  <Text fontSize={'sm'}>Comunidad</Text>
                 </VStack>
               </Center>
             </Stack>

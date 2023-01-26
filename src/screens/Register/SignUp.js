@@ -3,6 +3,7 @@ import {useState} from 'react';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+//import PasswordChecklist from 'react-password-checklist';
 
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
@@ -61,6 +62,9 @@ const SignUp = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
   const [TerAndCondState, setTerAndCondState] = useState(false);
+  const passwordRegex = new RegExp(
+    '^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$',
+  );
   const toast = useToast();
 
   const sendEmail = async () => {
@@ -111,18 +115,22 @@ const SignUp = ({navigation}) => {
       values.institucion === '' ||
       values.email === '' ||
       values.password === '' ||
-      values.confirm_password === '' ||
-      values.fechaNacimiento === '' ||
-      values.termsAndConditions === ''
+      values.confirm_password === ''
     ) {
       toast.show({
-        description: 'La contraseña no es igual en la confirmación',
+        description: 'No debes dejar ningun campo vacío',
         placement: 'top',
         duration: 1000,
       });
     } else if (values.password !== values.confirm_password) {
       toast.show({
         description: 'La contraseña no es igual en la confirmación',
+        placement: 'top',
+        duration: 1000,
+      });
+    } else if (!passwordRegex.test(values.password)) {
+      toast.show({
+        description: 'La contraseña no cumple lo mínimo',
         placement: 'top',
         duration: 1000,
       });
@@ -425,6 +433,14 @@ const SignUp = ({navigation}) => {
                       />
                     }
                   />
+                  {/* <MaterialCommunityIcon
+                      name="information-outline"
+                      style={styles.email_input}
+                      size={32}
+                      color="rgba(5, 24, 139, 0.5)"
+                      margin="0 0 0 1rem"
+                    /> */}
+
                   {touched.password && errors.password ? (
                     <Text color="error.700" fontSize="16" lineHeight="16">
                       {touched.password && errors.password}
