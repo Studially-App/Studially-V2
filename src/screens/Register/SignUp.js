@@ -63,7 +63,7 @@ const SignUp = ({navigation}) => {
   const [openDate, setOpenDate] = useState(false);
   const [TerAndCondState, setTerAndCondState] = useState(false);
   const passwordRegex = new RegExp(
-    '^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$',
+    '/^(?=.*[A-Z])(?=.*[W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/gm',
   );
   const toast = useToast();
 
@@ -109,6 +109,7 @@ const SignUp = ({navigation}) => {
   // };
 
   const createUser = values => {
+    console.log('Test Regex', passwordRegex.test(values.password));
     if (
       values.nombres === '' ||
       values.apellidos === '' ||
@@ -128,7 +129,8 @@ const SignUp = ({navigation}) => {
         placement: 'top',
         duration: 1000,
       });
-    } else if (!passwordRegex.test(values.password)) {
+    } else if (passwordRegex.test(values.password) === false) {
+      console.log('Test Regex', passwordRegex.test(values.password));
       toast.show({
         description: 'La contraseña no cumple lo mínimo',
         placement: 'top',
