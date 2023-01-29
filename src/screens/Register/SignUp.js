@@ -31,6 +31,8 @@ import {
   useToast,
   Link,
   ScrollView,
+  HStack,
+  Modal,
 } from 'native-base';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -61,6 +63,7 @@ const SignUp = ({navigation}) => {
   //const {signUpEmail, signUpGoogle} = React.useContext(AuthContext);
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
+  const [openPassword, setOpenPassword] = useState(false);
   const [TerAndCondState, setTerAndCondState] = useState(false);
   const passwordRegex = new RegExp(
     '/^(?=.*[A-Z])(?=.*[W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/gm',
@@ -132,7 +135,7 @@ const SignUp = ({navigation}) => {
     } else if (passwordRegex.test(values.password) === false) {
       console.log('Test Regex', passwordRegex.test(values.password));
       toast.show({
-        description: 'La contraseña no cumple lo mínimo',
+        description: 'La contraseña no cumple con los parámetros',
         placement: 'top',
         duration: 1000,
       });
@@ -383,8 +386,15 @@ const SignUp = ({navigation}) => {
               <Flex direction="row" justify="flex-start" my={2} ml={6}>
                 <Heading size="md">Información de cuenta</Heading>
               </Flex>
-              <Flex direction="column" alignItems="center">
-                <VStack space={2}>
+              <Flex
+                direction="column"
+                justifyContent="center"
+                alignItems="center">
+                <VStack
+                  space={2}
+                  alignContent="center"
+                  justifyContent="center"
+                  alignItems="center">
                   <Input
                     placeholder="Correo electrónico"
                     placeholderTextColor="rgba(39, 44, 70, 0.5)"
@@ -412,37 +422,42 @@ const SignUp = ({navigation}) => {
                       {touched.email && errors.email}
                     </Text>
                   ) : null}
-                  <Input
-                    placeholder="Contraseña"
-                    placeholderTextColor="rgba(39, 44, 70, 0.5)"
-                    onChangeText={handleChange('password')}
-                    w="90%"
-                    value={values.password}
-                    _focus={{
-                      borderColor: '#475BD8',
-                    }}
-                    type="password"
-                    size="xl"
-                    onBlur={handleBlur('password')}
-                    borderColor="#475BD8"
-                    rounded="4"
-                    InputLeftElement={
-                      <MaterialIcon
-                        name="lock-outline"
-                        style={styles.email_input}
-                        size={32}
-                        color="rgba(5, 24, 139, 0.5)"
-                      />
-                    }
-                  />
-                  {/* <MaterialCommunityIcon
+                  <HStack
+                    alignContent="center"
+                    justifyContent="center"
+                    alignItems="center">
+                    <Input
+                      placeholder="Contraseña"
+                      placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                      onChangeText={handleChange('password')}
+                      w="80%"
+                      value={values.password}
+                      _focus={{
+                        borderColor: '#475BD8',
+                      }}
+                      type="password"
+                      size="xl"
+                      onBlur={handleBlur('password')}
+                      borderColor="#475BD8"
+                      rounded="4"
+                      InputLeftElement={
+                        <MaterialIcon
+                          name="lock-outline"
+                          style={styles.email_input}
+                          size={32}
+                          color="rgba(5, 24, 139, 0.5)"
+                        />
+                      }
+                    />
+                    <MaterialCommunityIcon
                       name="information-outline"
                       style={styles.email_input}
                       size={32}
                       color="rgba(5, 24, 139, 0.5)"
                       margin="0 0 0 1rem"
-                    /> */}
-
+                      onPress={() => setOpenPassword(true)}
+                    />
+                  </HStack>
                   {touched.password && errors.password ? (
                     <Text color="error.700" fontSize="16" lineHeight="16">
                       {touched.password && errors.password}
@@ -605,6 +620,20 @@ const SignUp = ({navigation}) => {
           </ScrollView>
         )}
       </Formik>
+      <Modal isOpen={openPassword} onClose={() => setOpenPassword(false)}>
+        <Modal.Content maxH="212">
+          <Modal.CloseButton />
+          <Modal.Header>Parámetros de contraseña</Modal.Header>
+          <Modal.Body>
+            <ScrollView>
+              <Text>- Al menos 8 caracteres</Text>
+              <Text>- Al menos 1 Mayúscula</Text>
+              <Text>- Al menos 1 Minúscula</Text>
+              <Text>- Al menos 1 Número</Text>
+            </ScrollView>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </NativeBaseProvider>
   );
 };
