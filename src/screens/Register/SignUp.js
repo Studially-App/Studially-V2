@@ -64,9 +64,12 @@ const SignUp = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
+  const [typePassword, setTypePassword] = useState(true);
+  const [typeConfirmPassword, setTypeConfirmPassword] = useState(true);
   const [TerAndCondState, setTerAndCondState] = useState(false);
   const passwordRegex = new RegExp(
-    '/^(?=.*[A-Z])(?=.*[W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/gm',
+    '((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).{7,}\\w+',
+    'g',
   );
   const toast = useToast();
 
@@ -435,7 +438,7 @@ const SignUp = ({navigation}) => {
                       _focus={{
                         borderColor: '#475BD8',
                       }}
-                      type="password"
+                      type={typePassword ? 'password' : 'text'}
                       size="xl"
                       onBlur={handleBlur('password')}
                       borderColor="#475BD8"
@@ -446,6 +449,16 @@ const SignUp = ({navigation}) => {
                           style={styles.email_input}
                           size={32}
                           color="rgba(5, 24, 139, 0.5)"
+                        />
+                      }
+                      InputRightElement={
+                        <MaterialCommunityIcon
+                          name="eye"
+                          style={styles.email_input}
+                          size={25}
+                          color="rgba(5, 24, 139, 0.5)"
+                          margin="10px"
+                          onPress={() => setTypePassword(!typePassword)}
                         />
                       }
                     />
@@ -472,7 +485,7 @@ const SignUp = ({navigation}) => {
                     _focus={{
                       borderColor: '#475BD8',
                     }}
-                    type="password"
+                    type={typeConfirmPassword ? 'password' : 'text'}
                     size="xl"
                     onBlur={handleBlur('confirm_password')}
                     borderColor="#475BD8"
@@ -483,6 +496,18 @@ const SignUp = ({navigation}) => {
                         style={styles.email_input}
                         size={32}
                         color="rgba(5, 24, 139, 0.5)"
+                      />
+                    }
+                    InputRightElement={
+                      <MaterialCommunityIcon
+                        name="eye"
+                        style={styles.email_input}
+                        size={25}
+                        color="rgba(5, 24, 139, 0.5)"
+                        margin="10px"
+                        onPress={() =>
+                          setTypeConfirmPassword(!typeConfirmPassword)
+                        }
                       />
                     }
                   />
