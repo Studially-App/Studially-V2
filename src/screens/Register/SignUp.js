@@ -3,14 +3,13 @@ import {useState} from 'react';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-//import PasswordChecklist from 'react-password-checklist';
 
-// import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-// GoogleSignin.configure({
-//   webClientId:
-//     '498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com',
-// });
+GoogleSignin.configure({
+  webClientId:
+    '498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com',
+});
 
 import uuid from 'react-native-uuid';
 
@@ -60,7 +59,6 @@ const styles = StyleSheet.create({
 });
 
 const SignUp = ({navigation}) => {
-  //const {signUpEmail, signUpGoogle} = React.useContext(AuthContext);
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
@@ -80,39 +78,73 @@ const SignUp = ({navigation}) => {
     });
   };
 
-  // const onGoogleButtonPress = async () => {
-  //   // Get the users ID token
-  //   const {idToken} = await GoogleSignin.signIn();
+  const onGoogleButtonPress = async () => {
+    // Get the users ID token
+    const {idToken} = await GoogleSignin.signIn();
 
-  //   // Create a Google credential with the token
-  //   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-  //   // Sign-in the user with the credential
-  //   return auth().signInWithCredential(googleCredential);
-  // };
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  };
 
-  // const createUserGoogle = user => {
-  //   var userId = uuid.v4();
-  //   firestore()
-  //     .collection('usuarios')
-  //     .doc(userId)
-  //     .set({
-  //   nombres: values.nombres,
-  //   apellidos: values.apellidos,
-  //   email: values.email,
-  //   fechaNacimiento: values.fechaNacimiento,
-  //   institucion: values.institucion,
-  //   habitos: [],
-  //   fuegos: 0,
-  //   listaAmigos: [],
-  //   firehabits: [],
-  //   finanzas: [],
-  //   userId: userId,
-  // })
-  //     .then(() => {
-  //       console.log('Google User added!');
-  //     });
-  // };
+  const createUserGoogle = user => {
+    var userId = uuid.v4();
+    firestore()
+      .collection('usuarios')
+      .doc(userId)
+      .set({
+        //nombres: user.nombres,
+        //apellidos: user.apellidos,
+        //email: user.email,
+        fechaNacimiento: dayjs(date).format('YYYY-MM-DD'),
+        //institucion: user.institucion,
+        habitos: [],
+        fuegos: 0,
+        listaAmigos: [],
+        finanzas: [],
+        estrellas: 0,
+        minutosTotales: 0,
+        minutos: [
+          {
+            categoria: 'Académico',
+            minutos: 0,
+            minutosSemana: 0,
+          },
+          {
+            categoria: 'Proyectos',
+            minutos: 0,
+            minutosSemana: 0,
+          },
+          {
+            categoria: 'Personal',
+            minutos: 0,
+            minutosSemana: 0,
+          },
+          {
+            categoria: 'Trabajo',
+            minutos: 0,
+            minutosSemana: 0,
+          },
+          {
+            categoria: 'Aprendizaje',
+            minutos: 0,
+            minutosSemana: 0,
+          },
+        ],
+        userId: userId,
+        minutosHoy: 0,
+        minutosHoyDia: '',
+        minutosMes: '',
+        minutosSemana: '',
+        tuser: 'Free',
+        since: dayjs().format('YYYY-MM-DD'),
+      })
+      .then(() => {
+        console.log('Google User added!');
+      });
+  };
 
   const createUser = values => {
     console.log('Test Regex', passwordRegex.test(values.password));
@@ -596,11 +628,11 @@ const SignUp = ({navigation}) => {
                     onPress={() => {
                       try {
                         console.log('Registro con google');
-                        // onGoogleButtonPress().then(() => {
-                        //   console.log('Signed in with Google!');
-                        //   const user = auth().currentUser;
-                        //   createUserGoogle(user);
-                        // });
+                        onGoogleButtonPress().then(() => {
+                          console.log('Signed in with Google!');
+                          const user = auth().currentUser;
+                          createUserGoogle(user);
+                        });
                       } catch (error) {
                         toast.show({
                           description: 'Se ha producido un error',
