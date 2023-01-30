@@ -13,7 +13,11 @@ import com.studially.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+
 public class MainApplication extends Application implements ReactApplication {
+
+  
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -29,6 +33,11 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           return packages;
+
+          // return Arrays.asList(
+          //           new MainReactPackage(),
+          //           new FBSDKPackage()
+          //   );
         }
 
         @Override

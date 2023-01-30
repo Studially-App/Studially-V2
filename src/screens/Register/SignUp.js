@@ -4,6 +4,8 @@ import {useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 GoogleSignin.configure({
@@ -88,6 +90,33 @@ const SignUp = ({navigation}) => {
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
   };
+
+  async function onFacebookButtonPress() {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken,
+    );
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(facebookCredential);
+  }
 
   const createUserGoogle = user => {
     var userId = uuid.v4();
@@ -657,6 +686,11 @@ const SignUp = ({navigation}) => {
                     rounded="4"
                     leftIcon={
                       <FontistoIcon name="facebook" color="#FFFF" size={30} />
+                    }
+                    onPress={() =>
+                      onFacebookButtonPress().then(() =>
+                        console.log('Signed in with Facebook!'),
+                      )
                     }
                   />
                 </Stack>
