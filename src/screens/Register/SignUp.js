@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
   },
 });
 
+//'((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).{7,}\\w+',
+
 const SignUp = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
@@ -67,10 +69,7 @@ const SignUp = ({navigation}) => {
   const [typePassword, setTypePassword] = useState(true);
   const [typeConfirmPassword, setTypeConfirmPassword] = useState(true);
   const [TerAndCondState, setTerAndCondState] = useState(false);
-  const passwordRegex = new RegExp(
-    '((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).{7,}\\w+',
-    'g',
-  );
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/;
   const toast = useToast();
 
   const sendEmail = async () => {
