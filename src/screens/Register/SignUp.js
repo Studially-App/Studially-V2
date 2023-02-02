@@ -117,17 +117,18 @@ const SignUp = ({navigation}) => {
     return auth().signInWithCredential(facebookCredential);
   }
 
-  const createUserGoogle = user => {
+  const createUserGoogle = async user => {
     var userId = uuid.v4();
+    const currentUser = await GoogleSignin.getCurrentUser();
     firestore()
       .collection('usuarios')
       .doc(userId)
       .set({
-        //nombres: user.nombres,
-        //apellidos: user.apellidos,
-        //email: user.email,
+        nombres: currentUser.user.givenName,
+        apellidos: currentUser.user.familyName,
+        email: user.email,
         fechaNacimiento: dayjs(date).format('YYYY-MM-DD'),
-        //institucion: user.institucion,
+        institucion: '',
         habitos: [],
         fuegos: 0,
         listaAmigos: [],
