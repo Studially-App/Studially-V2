@@ -9,6 +9,7 @@ import {
   Button,
   NativeBaseProvider,
   Square,
+  Badge,
 } from 'native-base';
 
 import {useRoute} from '@react-navigation/native';
@@ -122,6 +123,7 @@ const EstadisticasEnfoque = () => {
                 }>
                 Semana
               </Button>
+
               <Button
                 w="24"
                 onPress={() => {
@@ -147,6 +149,19 @@ const EstadisticasEnfoque = () => {
                         fontWeight: 'bold',
                       }
                 }>
+                <Badge
+                  colorScheme="danger"
+                  rounded="full"
+                  mb={4}
+                  mr={0}
+                  zIndex={1}
+                  variant="solid"
+                  alignSelf="flex-end"
+                  _text={{
+                    fontSize: 15,
+                  }}>
+                  Pro
+                </Badge>
                 Mes
               </Button>
             </HStack>

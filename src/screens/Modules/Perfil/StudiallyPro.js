@@ -44,8 +44,7 @@ const StudiallyPRO = () => {
                     10<Text fontSize="16">USD</Text> / mes
                   </Text>
                   <Flex direction="column" alignItems="flex-start" ml="2%">
-                    <Text fontSize="18">Primer mes</Text>
-                    <Text fontSize="18">gratis</Text>
+                    <Text fontSize="18">Primer mes gratis</Text>
                   </Flex>
                 </VStack>
               </Center>
@@ -58,8 +57,8 @@ const StudiallyPRO = () => {
                       color="rgba(39, 44, 70, 1)"
                       size={16}
                     />
-                    <Text fontSize="24" color="rgba(71, 91, 216, 1)" ml="5%">
-                      Espacio beneficio 1
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Gana premios por tu tiempo de enfoque
                     </Text>
                   </Flex>
                   <Flex direction="row" alignItems="center">
@@ -68,8 +67,8 @@ const StudiallyPRO = () => {
                       color="rgba(39, 44, 70, 1)"
                       size={16}
                     />
-                    <Text fontSize="24" color="rgba(71, 91, 216, 1)" ml="5%">
-                      Espacio beneficio 2
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Sigue más de 2 hábitos
                     </Text>
                   </Flex>
                   <Flex direction="row" alignItems="center">
@@ -78,8 +77,8 @@ const StudiallyPRO = () => {
                       color="rgba(39, 44, 70, 1)"
                       size={16}
                     />
-                    <Text fontSize="24" color="rgba(71, 91, 216, 1)" ml="5%">
-                      Espacio beneficio 3
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Agrega a tus amigos y ve su avance
                     </Text>
                   </Flex>
                   <Flex direction="row" alignItems="center">
@@ -88,8 +87,48 @@ const StudiallyPRO = () => {
                       color="rgba(39, 44, 70, 1)"
                       size={16}
                     />
-                    <Text fontSize="24" color="rgba(71, 91, 216, 1)" ml="5%">
-                      Espacio beneficio 4
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Logra múltiples metas financieras
+                    </Text>
+                  </Flex>
+                  <Flex direction="row" alignItems="center">
+                    <MaterialIcon
+                      name="check"
+                      color="rgba(39, 44, 70, 1)"
+                      size={16}
+                    />
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Accede a oportunidades increíbles
+                    </Text>
+                  </Flex>
+                  <Flex direction="row" alignItems="center">
+                    <MaterialIcon
+                      name="check"
+                      color="rgba(39, 44, 70, 1)"
+                      size={16}
+                    />
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Aprende de diversos temas
+                    </Text>
+                  </Flex>
+                  <Flex direction="row" alignItems="center">
+                    <MaterialIcon
+                      name="check"
+                      color="rgba(39, 44, 70, 1)"
+                      size={16}
+                    />
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Cuida tu salud mental
+                    </Text>
+                  </Flex>
+                  <Flex direction="row" alignItems="center">
+                    <MaterialIcon
+                      name="check"
+                      color="rgba(39, 44, 70, 1)"
+                      size={16}
+                    />
+                    <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                      Obtén beneficios con nuestros partners
                     </Text>
                   </Flex>
                 </VStack>

@@ -10,6 +10,7 @@ import {
   HStack,
   Image,
   Button,
+  Badge,
 } from 'native-base';
 import firestore from '@react-native-firebase/firestore';
 import {useRoute} from '@react-navigation/native';
@@ -105,6 +106,19 @@ const StudiallyRewards = () => {
                     </Text>
                   </VStack>
                 </HStack>
+                <Badge
+                  colorScheme="danger"
+                  rounded="full"
+                  mb={-4}
+                  mr={4}
+                  zIndex={1}
+                  variant="solid"
+                  alignSelf="flex-end"
+                  _text={{
+                    fontSize: 15,
+                  }}>
+                  Pro
+                </Badge>
                 <Button
                   onPress={() => {
                     setIdProducto(item.idProducto);
