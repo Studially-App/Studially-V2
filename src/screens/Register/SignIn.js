@@ -1,6 +1,11 @@
 import * as React from 'react';
 
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+GoogleSignin.configure({
+  webClientId:
+    '498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com',
+});
 
 import {
   NativeBaseProvider,
@@ -42,7 +47,6 @@ const SignIn = ({navigation}) => {
   const toast = useToast();
 
   const loginUser = values => {
-    console.log('En Login User');
     console.log(values);
     auth()
       .signInWithEmailAndPassword(values.email, values.password)
@@ -63,6 +67,17 @@ const SignIn = ({navigation}) => {
           description: 'Inicio de sesión inválido',
         });
       });
+  };
+
+  const onGoogleButtonPress = async () => {
+    // Get the users ID token
+    const {idToken} = await GoogleSignin.signIn();
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
   };
 
   return (
@@ -191,7 +206,18 @@ const SignIn = ({navigation}) => {
                     borderWidth="2"
                     borderColor="#475BD8"
                     onPress={() => {
-                      console.log('inicio con google');
+                      try {
+                        console.log('Registro con google');
+                        onGoogleButtonPress().then(() => {
+                          console.log('Signed in with Google!');
+                        });
+                      } catch (error) {
+                        toast.show({
+                          description: 'Se ha producido un error',
+                          placement: 'top',
+                          duration: 1000,
+                        });
+                      }
                     }}
                     leftIcon={
                       <MaterialCommunityIcon

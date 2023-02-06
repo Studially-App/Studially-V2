@@ -70,7 +70,7 @@ const SignUp = ({navigation}) => {
   const [typeConfirmPassword, setTypeConfirmPassword] = useState(true);
   const [TerAndCondState, setTerAndCondState] = useState(false);
   const passwordRegex =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*-_().:;/]{8,}$/;
   const toast = useToast();
 
   const sendEmail = async () => {
@@ -723,6 +723,7 @@ const SignUp = ({navigation}) => {
               <Text>- Al menos 1 Minúscula</Text>
               <Text>- Al menos 1 Número</Text>
               <Text>- Al menos 1 Caracter Especial</Text>
+              <Text>!@#$%^&*-_().:;/</Text>
             </ScrollView>
           </Modal.Body>
         </Modal.Content>
