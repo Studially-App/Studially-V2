@@ -19,6 +19,7 @@ import {
   Heading,
   Divider,
   Menu,
+  Badge,
 } from 'native-base';
 
 import {useNavigation} from '@react-navigation/native';
@@ -33,6 +34,7 @@ import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 
 import ModalAgregarAmigo from '../../../components/Habitos/ModalAgregarAmigo';
+import StudiallyProModal from '../../../components/StudiallyProModal';
 
 const Habitos = () => {
   const navigation = useNavigation();
@@ -71,6 +73,9 @@ const Habitos = () => {
 
   // Estado modal amigo
   const [amigoModalVisibility, setAmigoModalVisibility] = React.useState(false);
+
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -374,6 +379,10 @@ const Habitos = () => {
 
   return (
     <NativeBaseProvider>
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
+      />
       <Modal isOpen={spinnerModal}>
         <Spinner color="cyan.500" size="lg" />
         <Heading color="cyan.500" fontSize="md">
@@ -747,7 +756,24 @@ const Habitos = () => {
               <Text
                 fontSize={20}
                 fontWeight="bold"
-                onPress={() => setAmigoModalVisibility(true)}>
+                onPress={() => {
+                  userInfo.tuser === 'Free'
+                    ? setProModalVisibility(true)
+                    : setAmigoModalVisibility(true);
+                }}>
+                <Badge
+                  colorScheme="danger"
+                  rounded="full"
+                  mb={4}
+                  mr={0}
+                  zIndex={1}
+                  variant="solid"
+                  alignSelf="flex-end"
+                  _text={{
+                    fontSize: 15,
+                  }}>
+                  Pro
+                </Badge>
                 <IonIcon size={30} color="#061678" name="people-circle-sharp" />
               </Text>
             </HStack>

@@ -96,7 +96,9 @@ const ModalDetalleBeneficios = ({
                   w="95%"
                   h="48"
                 />
+
                 <Text w="95%">{data.texto}</Text>
+
                 <Button
                   bg="rgba(71, 91, 216, 1)"
                   _text={{

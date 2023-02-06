@@ -16,6 +16,7 @@ import {
   ScrollView,
   Menu,
   Pressable,
+  Badge,
 } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -25,12 +26,16 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import ModalCrearFinanzas from '../../../components/Finanzas/ModalCrearFinanzas';
 import ModalAgregarMonto from '../../../components/Finanzas/ModalAgregarMonto';
 import ModalDetalleFinanzas from '../../../components/Finanzas/ModalDetalleFinanzas';
+import StudiallyProModal from '../../../components/StudiallyProModal';
 
 const Finanzas = () => {
   // get user data
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const [userInfo, setUserInfo] = useState();
+
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // Estado modal crear
   const [crearModalVisibility, setCrearModalVisibility] = React.useState(false);
@@ -166,15 +171,37 @@ const Finanzas = () => {
       ) : (
         <>
           {finantialGoals.length < 3 ? (
-            <Fab
-              position="absolute"
-              size="sm"
-              icon={<AntIcon color="white" name="plus" size={20} />}
-              right={30}
-              bottom={90}
-              bg="#061678"
-              onPress={() => setCrearModalVisibility(true)}
-            />
+            <>
+              <Badge
+                colorScheme="danger"
+                rounded="full"
+                // mb={4}
+                // mr={0}
+                position="absolute"
+                right={30}
+                bottom={135}
+                zIndex={1}
+                variant="solid"
+                alignSelf="flex-end"
+                _text={{
+                  fontSize: 15,
+                }}>
+                Pro
+              </Badge>
+              <Fab
+                position="absolute"
+                size="sm"
+                icon={<AntIcon color="white" name="plus" size={20} />}
+                right={30}
+                bottom={90}
+                bg="#061678"
+                onPress={() =>
+                  userInfo.tuser === 'Free'
+                    ? setProModalVisibility(true)
+                    : setCrearModalVisibility(true)
+                }
+              />
+            </>
           ) : null}
 
           <ScrollView h="78%">
@@ -306,6 +333,10 @@ const Finanzas = () => {
         userId={userInfo?.userId}
         data={finantialGoals}
         index={index}
+      />
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
       />
     </NativeBaseProvider>
   );

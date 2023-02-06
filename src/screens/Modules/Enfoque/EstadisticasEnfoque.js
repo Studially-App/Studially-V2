@@ -13,6 +13,7 @@ import {
 } from 'native-base';
 
 import {useRoute} from '@react-navigation/native';
+import StudiallyProModal from '../../../components/StudiallyProModal';
 
 // stats Graph
 import {VictoryPie} from 'victory-native';
@@ -24,6 +25,9 @@ dayjs.extend(isBetween);
 const EstadisticasEnfoque = () => {
   // route params
   const route = useRoute();
+
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // tab de tiempo
   const [tab, setTab] = useState('Semana');
@@ -89,6 +93,10 @@ const EstadisticasEnfoque = () => {
 
   return (
     <NativeBaseProvider>
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
+      />
       <VStack mt="8" alignItems="center">
         <ScrollView w="100%" h="85%">
           <VStack alignItems="center">
@@ -128,6 +136,7 @@ const EstadisticasEnfoque = () => {
                 w="24"
                 onPress={() => {
                   setTab('Mes');
+                  setProModalVisibility(true);
                 }}
                 bg={tab === 'Mes' ? '#475BD8' : '#EEEEEE'}
                 _pressed={{

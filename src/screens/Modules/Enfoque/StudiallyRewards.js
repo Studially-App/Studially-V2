@@ -15,6 +15,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import {useRoute} from '@react-navigation/native';
 import RedimirRewards from '../../../components/Enfoque/RedimirRewards';
+import StudiallyProModal from '../../../components/StudiallyProModal';
 
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -22,6 +23,9 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 const StudiallyRewards = () => {
   // Estado redimir modal
   const [redimirModalVisibility, setRedimirModalVisibility] = useState(false);
+
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
 
   const route = useRoute();
 
@@ -53,6 +57,10 @@ const StudiallyRewards = () => {
         modalVisibility={redimirModalVisibility}
         setModalVisibility={setRedimirModalVisibility}
         idProducto={idProducto}
+      />
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
       />
       <ScrollView w="100%" h="88%">
         <VStack space="15px" alignItems="center">
@@ -121,8 +129,12 @@ const StudiallyRewards = () => {
                 </Badge>
                 <Button
                   onPress={() => {
-                    setIdProducto(item.idProducto);
-                    setRedimirModalVisibility(true);
+                    if (route.params.tuser === 'Free') {
+                      setProModalVisibility(true);
+                    } else {
+                      setIdProducto(item.idProducto);
+                      setRedimirModalVisibility(true);
+                    }
                   }}
                   disabled={route.params.stars <= item.puntos}
                   bg="white"

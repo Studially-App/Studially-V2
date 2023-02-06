@@ -9,6 +9,7 @@ import {
   Text,
   Center,
   Spacer,
+  Badge,
 } from 'native-base';
 // Icons
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -31,6 +32,19 @@ const Recursos = () => {
             <Pressable onPress={() => navigation.navigate('Oportunidades')}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
+                  <Badge
+                    colorScheme="danger"
+                    rounded="full"
+                    mb={-5}
+                    mr={0}
+                    zIndex={1}
+                    variant="solid"
+                    alignSelf="flex-end"
+                    _text={{
+                      fontSize: 15,
+                    }}>
+                    Pro
+                  </Badge>
                   <VStack justifyContent="center" alignItems="center">
                     <Center h="100%">
                       <OctIcon name="verified" color="#475BD8" size={60} />
