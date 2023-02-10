@@ -20,6 +20,7 @@ import {
   Heading,
   useToast,
   ScrollView,
+  Badge,
 } from 'native-base';
 
 import {useNavigation} from '@react-navigation/native';
@@ -35,6 +36,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import BreakTimeModal from '../../../components/Enfoque/BreakTimeModal';
 import FocusFinishedModal from '../../../components/Enfoque/FocusFinishedModal';
 import StopModal from '../../../components/Enfoque/StopModal';
+import StudiallyProModal from '../../../components/StudiallyProModal';
 
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 import uuid from 'react-native-uuid';
@@ -44,6 +46,9 @@ dayjs.extend(weekOfYear);
 
 const Enfoque = () => {
   const navigation = useNavigation();
+
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // get user data
   const [initializing, setInitializing] = useState(true);
@@ -304,13 +309,36 @@ const Enfoque = () => {
         setBreakOutTime={setBreakOutTime}
         setBreakOutOn={setBreakOutOn}
       />
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
+      />
       <View h={height} width={width}>
         <VStack space={4} justifyContent="center">
           <ScrollView w="100%" h="88%">
             <Center mt="6">
+              <Badge
+                colorScheme="danger"
+                rounded="full"
+                mb={-2}
+                mr={150}
+                zIndex={1}
+                variant="solid"
+                alignSelf="flex-end"
+                _text={{
+                  fontSize: 15,
+                }}>
+                Pro
+              </Badge>
               <Button
                 onPress={() => {
-                  navigation.navigate('Estadisticas', {minutes: minutesStats});
+                  if (userInfo.tuser === 'Free') {
+                    setProModalVisibility(true);
+                  } else {
+                    navigation.navigate('Estadisticas', {
+                      minutes: minutesStats,
+                    });
+                  }
                 }}
                 bg="rgba(71, 91, 216, 1)"
                 mb={2}

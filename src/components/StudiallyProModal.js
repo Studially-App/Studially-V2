@@ -20,11 +20,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
   return (
     <Modal
       isVisible={proModalVisibility}
-      // backgroundColor="white"
-      // backdropOpacity={0.72}
       style={{
-        // marginTop: '56%',
-        // marginBottom: '56%',
         borderRadius: 8,
       }}
       onBackdropPress={() => setProModalVisibility(false)}>

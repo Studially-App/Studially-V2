@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 // Native Base
 import {
   Box,
@@ -15,12 +16,20 @@ import {
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import OctIcon from 'react-native-vector-icons/Octicons';
 import {useNavigation} from '@react-navigation/native';
+import StudiallyProModal from '../../../components/StudiallyProModal';
 
 const Recursos = () => {
   const navigation = useNavigation();
 
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
+
   return (
     <NativeBaseProvider>
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
+      />
       <Center h="90%">
         <VStack
           w="330px"
@@ -29,7 +38,11 @@ const Recursos = () => {
           alignContent="center"
           alignItems="center">
           <HStack justifyContent="center">
-            <Pressable onPress={() => navigation.navigate('Oportunidades')}>
+            <Pressable
+              onPress={() => {
+                setProModalVisibility(true);
+                //navigation.navigate('Oportunidades');
+              }}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
                   <Badge
