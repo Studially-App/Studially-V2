@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "studially.app"
-               BlueprintName = "studially"
-               ReferencedContainer = "container:studially.xcodeproj">
+               BuildableName = "Studially.app"
+               BlueprintName = "Studially"
+               ReferencedContainer = "container:Studially.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "studiallyTests.xctest"
-               BlueprintName = "studiallyTests"
-               ReferencedContainer = "container:studially.xcodeproj">
+               BuildableName = "StudiallyTests.xctest"
+               BlueprintName = "StudiallyTests"
+               ReferencedContainer = "container:Studially.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "studially.app"
-            BlueprintName = "studially"
-            ReferencedContainer = "container:studially.xcodeproj">
+            BuildableName = "Studially.app"
+            BlueprintName = "Studially"
+            ReferencedContainer = "container:Studially.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "studially.app"
-            BlueprintName = "studially"
-            ReferencedContainer = "container:studially.xcodeproj">
+            BuildableName = "Studially.app"
+            BlueprintName = "Studially"
+            ReferencedContainer = "container:Studially.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
