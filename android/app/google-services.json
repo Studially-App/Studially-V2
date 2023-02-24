@@ -1,0 +1,92 @@
+{
+  "project_info": {
+    "project_number": "498493727897",
+    "project_id": "studially-2790e",
+    "storage_bucket": "studially-2790e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498493727897:android:415d9540800c796e1e8408",
+        "android_client_info": {
+          "package_name": "com.metasstudially"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498493727897-7jjv561jst3qnrls48fc2s4runhbd2tv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.metasstudially",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "498493727897-vb53cvmq128gfg501h5j7hj4brrhiom1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.metasstudially",
+            "certificate_hash": "c669a546bf9cceefcf2bdb446c53712b49b45eb3"
+          }
+        },
+        {
+          "client_id": "498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvPzCAhI1EZjrnU1UekkH42251TzQxYsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498493727897:android:70be731ec2d4c7471e8408",
+        "android_client_info": {
+          "package_name": "com.studially"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498493727897-m79djb9r4elvgf4nb7tbe65ld5hcfirg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.studially",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvPzCAhI1EZjrnU1UekkH42251TzQxYsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

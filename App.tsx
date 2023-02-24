@@ -18,7 +18,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 import Onboarding from './src/screens/Onboarding/Onboarding';
-
 import Welcome from './src/screens/Register/Welcome';
 import SignIn from './src/screens/Register/SignIn';
 import SignUp from './src/screens/Register/SignUp';
@@ -44,6 +43,7 @@ import EstadisticasEnfoque from './src/screens/Modules/Enfoque/EstadisticasEnfoq
 import Mas from './src/screens/Modules/Perfil/Mas';
 import Profile from './src/screens/Modules/Perfil/Profile';
 import StudiallyPRO from './src/screens/Modules/Perfil/StudiallyPro';
+import {requestNotificationPermission} from './src/utils/notifications';
 
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -164,6 +164,7 @@ const App = () => {
     if (initializing) {
       setInitializing(false);
     }
+    requestNotificationPermission();
   }
 
   useEffect(() => {

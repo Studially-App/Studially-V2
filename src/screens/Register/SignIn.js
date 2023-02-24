@@ -138,7 +138,6 @@ const SignIn = ({navigation}) => {
                       style={styles.email_input}
                       size={28}
                       color="rgba(5, 24, 139, 0.5)"
-                      margin="0 0 0 1rem"
                     />
                   }
                 />
@@ -166,7 +165,6 @@ const SignIn = ({navigation}) => {
                       style={styles.email_input}
                       size={28}
                       color="rgba(5, 24, 139, 0.5)"
-                      margin="0 0 0 1rem"
                     />
                   }
                 />

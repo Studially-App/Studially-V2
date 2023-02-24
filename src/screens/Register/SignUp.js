@@ -339,7 +339,6 @@ const SignUp = ({navigation}) => {
                         style={styles.email_input}
                         size={32}
                         color="rgba(5, 24, 139, 0.5)"
-                        margin="0 0 0 1rem"
                       />
                     }
                   />
@@ -478,7 +477,6 @@ const SignUp = ({navigation}) => {
                         style={styles.email_input}
                         size={32}
                         color="rgba(5, 24, 139, 0.5)"
-                        margin="0 0 0 1rem"
                       />
                     }
                   />
@@ -519,7 +517,6 @@ const SignUp = ({navigation}) => {
                           style={styles.email_input}
                           size={25}
                           color="rgba(5, 24, 139, 0.5)"
-                          margin="10px"
                           onPress={() => setTypePassword(!typePassword)}
                         />
                       }
@@ -529,7 +526,6 @@ const SignUp = ({navigation}) => {
                       style={styles.email_input}
                       size={32}
                       color="rgba(5, 24, 139, 0.5)"
-                      margin="0 0 0 1rem"
                       onPress={() => setOpenPassword(true)}
                     />
                   </HStack>
@@ -566,7 +562,6 @@ const SignUp = ({navigation}) => {
                         style={styles.email_input}
                         size={25}
                         color="rgba(5, 24, 139, 0.5)"
-                        margin="10px"
                         onPress={() =>
                           setTypeConfirmPassword(!typeConfirmPassword)
                         }
