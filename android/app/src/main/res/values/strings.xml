@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Studially</string>
+    <string name="facebook_app_id">726701455686399</string>
+    <string name="facebook_client_token">8d09a378dda3fc5c55bdb4f25b68c461</string>
 </resources>
