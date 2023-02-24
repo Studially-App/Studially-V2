@@ -204,14 +204,16 @@ const MarcarHabitos = () => {
                       name="close-circle"
                       onPress={() => {
                         marcarHabito(i, 'No Completado');
-                      }}></MCIcon>
+                      }}
+                    />
                     <Icon
                       size={35}
                       color="#23C820"
                       name="check-circle"
                       onPress={() => {
                         marcarHabito(i, 'Completado');
-                      }}></Icon>
+                      }}
+                    />
                   </HStack>
                 </Box>
               ),
