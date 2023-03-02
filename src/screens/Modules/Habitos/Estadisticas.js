@@ -1,10 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
 import {ScrollView} from 'react-native';
-
 import {
   Text,
   HStack,
@@ -16,11 +11,9 @@ import {
   Spinner,
   Heading,
 } from 'native-base';
-
-import {useNavigation} from '@react-navigation/native';
-
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import dayjs from 'dayjs';
+import {useUser} from '../../../context/User';
 
 const Estadisticas = () => {
   const [selectedData, setSelectedData] = React.useState([]);
@@ -28,81 +21,34 @@ const Estadisticas = () => {
   const [spinnerModal, setSpinnerModal] = useState(true);
 
   // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-  const [userInfo, setUserInfo] = useState();
+  const {userInfo} = useUser();
 
-  const getUserInfo = async (user, mounted) => {
-    if (mounted) {
-      const userInfoFB = await firestore()
-        .collection('usuarios')
-        .where('email', '==', user.email)
-        .get();
-      setUserInfo(userInfoFB._docs[0]._data);
-      setSpinnerModal(false);
-    }
-  };
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) {
-      setInitializing(false);
-    }
-  }
-
-  const getHabits = (userInfo, mounted) => {
-    if (mounted) {
-      if (userInfo) {
-        if (Object.keys(userInfo.habitos).length != 0) {
-          var userHabits = userInfo.habitos;
-          var selectedHabits = [];
-          userHabits.map(item =>
-            item.selected ? selectedHabits.push(item) : null,
-          );
-          selectedHabits.map(item => {
-            if (dayjs().date(1) === 1) {
-              item.marcadoMes = [];
-            }
-            var dias = item.marcadoMes.reduce(function (a, b) {
-              return a + b;
-            }, 0);
-            item.dias = dias;
-          });
-          setSelectedData(selectedHabits);
+  const getHabits = userInfo => {
+    if (Object.keys(userInfo.habitos).length !== 0) {
+      var userHabits = userInfo.habitos;
+      var selectedHabits = [];
+      userHabits.map(item =>
+        item.selected ? selectedHabits.push(item) : null,
+      );
+      selectedHabits.map(item => {
+        if (dayjs().date(1) === 1) {
+          item.marcadoMes = [];
         }
-      }
+        var dias = item.marcadoMes.reduce(function (a, b) {
+          return a + b;
+        }, 0);
+        item.dias = dias;
+      });
+      setSelectedData(selectedHabits);
     }
+    setSpinnerModal(false);
   };
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-    if (user !== undefined) {
-      getUserInfo(user, isMounted);
-      return () => {
-        isMounted = false;
-      };
-    }
-  }, [user]);
-
-  useEffect(() => {
-    let isMounted = true;
-    if (userInfo !== undefined) {
-      getHabits(userInfo, isMounted);
-      return () => {
-        isMounted = false;
-      };
+    if (userInfo) {
+      getHabits(userInfo);
     }
   }, [userInfo]);
-
-  if (initializing) {
-    return null;
-  }
 
   return (
     <NativeBaseProvider>

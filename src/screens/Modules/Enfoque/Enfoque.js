@@ -1,10 +1,7 @@
 /* eslint-disable no-shadow */
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
 import {
   Text,
   HStack,
@@ -22,7 +19,6 @@ import {
   ScrollView,
   Badge,
 } from 'native-base';
-
 import {useNavigation} from '@react-navigation/native';
 
 // React Native
@@ -41,6 +37,7 @@ import StudiallyProModal from '../../../components/StudiallyProModal';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 import uuid from 'react-native-uuid';
 import dayjs from 'dayjs';
+import {useUser} from '../../../context/User';
 let weekOfYear = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear);
 
@@ -49,11 +46,7 @@ const Enfoque = () => {
 
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
-
-  // get user data
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-  const [userInfo, setUserInfo] = useState();
+  const {userInfo} = useUser();
 
   // Toast
   const toast = useToast();
@@ -221,71 +214,21 @@ const Enfoque = () => {
     }
   };
 
-  const getStars = (userInfo, mounted) => {
-    if (mounted) {
-      if (userInfo) {
-        var estrellas = userInfo.estrellas;
-        setStudiallyStars(estrellas);
-      }
-    }
+  const getStars = userInfo => {
+    setStudiallyStars(userInfo.estrellas);
   };
 
   const getMinutesStats = (userInfo, mounted) => {
-    if (mounted) {
-      if (userInfo) {
-        var minutesDB = [...userInfo.minutos];
-        setMinutesStats(minutesDB);
-      }
-    }
+    const minutesDB = [...userInfo.minutos];
+    setMinutesStats(minutesDB);
   };
 
-  const getUserInfo = async (user, mounted) => {
-    if (mounted) {
-      const userInfoFB = await firestore()
-        .collection('usuarios')
-        .where('email', '==', user.email)
-        .get();
-      setUserInfo(userInfoFB._docs[0]._data);
-    }
-  };
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) {
-      setInitializing(false);
-    }
-  }
-
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-    if (user !== undefined) {
-      getUserInfo(user, isMounted);
-      return () => {
-        isMounted = false;
-      };
-    }
-  }, [user]);
-
-  useEffect(() => {
-    let isMounted = true;
-    if (userInfo !== undefined) {
-      getStars(userInfo, isMounted);
-      getMinutesStats(userInfo, isMounted);
-      return () => {
-        isMounted = false;
-      };
+    if (userInfo) {
+      getStars(userInfo);
+      getMinutesStats(userInfo);
     }
   }, [userInfo]);
-
-  if (initializing) {
-    return null;
-  }
 
   return (
     <NativeBaseProvider>

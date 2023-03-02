@@ -21,6 +21,7 @@
     "@react-navigation/drawer": "^6.6.1",
     "@react-navigation/native": "^6.1.5",
     "@react-navigation/native-stack": "^6.9.11",
+    "@stripe/stripe-react-native": "^0.25.0",
     "eslint-config-prettier": "^8.6.0",
     "formik": "^2.2.9",
     "native-base": "^3.4.25",
