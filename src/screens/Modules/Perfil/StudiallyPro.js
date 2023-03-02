@@ -59,10 +59,10 @@ const StudiallyPRO = () => {
             name: `${userInfo.nombres} ${userInfo.apellidos}`,
             email: user.email,
             address: {country: 'MX'},
-            googlePay: {
-              merchantCountryCode: 'MX',
-              testEnv: true, // use test environment
-            },
+          },
+          googlePay: {
+            merchantCountryCode: 'MX',
+            testEnv: true, // use test environment
           },
         });
         if (!error) {
