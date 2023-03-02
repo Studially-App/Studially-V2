@@ -160,12 +160,10 @@ const SignUp = ({navigation}) => {
             minutosSemana: 0,
           },
         ],
-        userId: user.uid,
         minutosHoy: 0,
         minutosHoyDia: '',
         minutosMes: '',
         minutosSemana: '',
-        tuser: 'Free',
         since: dayjs().format('YYYY-MM-DD'),
       })
       .then(() => {
@@ -250,12 +248,10 @@ const SignUp = ({navigation}) => {
                   minutosSemana: 0,
                 },
               ],
-              userId: user.uid,
               minutosHoy: 0,
               minutosHoyDia: '',
               minutosMes: '',
               minutosSemana: '',
-              tuser: 'Free',
               since: dayjs().format('YYYY-MM-DD'),
             })
             .then(() => {

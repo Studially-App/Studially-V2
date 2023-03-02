@@ -27,7 +27,7 @@ import {useUser} from '../../../context/User';
 
 const Finanzas = () => {
   // get user data
-  const {userInfo} = useUser();
+  const {userInfo, userTier, user} = useUser();
 
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
@@ -65,7 +65,7 @@ const Finanzas = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           finanzas: deleted,
         })
@@ -146,7 +146,7 @@ const Finanzas = () => {
                 bottom={90}
                 bg="#061678"
                 onPress={() =>
-                  userInfo.tuser === 'Free'
+                  userTier !== 'premium'
                     ? setProModalVisibility(true)
                     : setCrearModalVisibility(true)
                 }
@@ -261,7 +261,7 @@ const Finanzas = () => {
         modalVisibility={crearModalVisibility}
         setModalVisibility={setCrearModalVisibility}
         setData={setDataDetalle}
-        userId={userInfo?.userId}
+        userId={user.uid}
         data={finantialGoals}
         userInfo={userInfo}
         //reloadGoals={reloadGoals}
@@ -271,7 +271,7 @@ const Finanzas = () => {
         setModalVisibility={setMontoModalVisibility}
         setData={setDataDetalle}
         selected={metaSelected}
-        userId={userInfo?.userId}
+        userId={user.uid}
         data={finantialGoals}
         userInfo={userInfo}
       />
@@ -280,7 +280,7 @@ const Finanzas = () => {
         setModalVisibility={setDetalleModalVisibility}
         setData={setFinantialGoals}
         dataDetalle={dataDetalle}
-        userId={userInfo?.userId}
+        userId={user.uid}
         data={finantialGoals}
         index={index}
       />

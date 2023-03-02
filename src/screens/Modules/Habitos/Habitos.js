@@ -75,7 +75,7 @@ const Habitos = () => {
   const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // Set an initializing state whilst Firebase connects
-  const {user, userInfo} = useUser();
+  const {user, userInfo, userTier} = useUser();
 
   const marcarHabito = (i, accion, name) => {
     let marcado = [...todayData];
@@ -131,7 +131,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           habitos: data,
         })
@@ -176,7 +176,7 @@ const Habitos = () => {
     try {
       const getFuegos = await firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .get();
       setFuegos({
         nombres: getFuegos._data.nombres,
@@ -195,7 +195,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           fuegos: fires.fuegos,
         })
@@ -213,7 +213,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           fireHabits: fireHabits,
         })
@@ -254,7 +254,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           listaAmigos: orderedRefresh,
         })
@@ -319,7 +319,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           listaAmigos: deleted,
         })
@@ -710,7 +710,7 @@ const Habitos = () => {
                 fontSize={20}
                 fontWeight="bold"
                 onPress={() => {
-                  userInfo.tuser === 'Free'
+                  userTier !== 'premium'
                     ? setProModalVisibility(true)
                     : setAmigoModalVisibility(true);
                 }}>
@@ -809,7 +809,7 @@ const Habitos = () => {
         setModalVisibility={setAmigoModalVisibility}
         amigos={amigos}
         setAmigos={setAmigos}
-        userId={userInfo?.userId}
+        userId={user.uid}
       />
     </NativeBaseProvider>
   );

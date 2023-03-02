@@ -36,7 +36,7 @@ const AgregarHabitos = () => {
   const [spinnerModal, setSpinnerModal] = useState(true);
 
   // Set an initializing state whilst Firebase connects
-  const {userInfo} = useUser();
+  const {userInfo, user} = useUser();
 
   const getHabitsStats = async () => {
     const habitsStats = await firestore()
@@ -49,7 +49,7 @@ const AgregarHabitos = () => {
   const updateHabitsStats = async () => {
     const getPreviewHabits = await firestore()
       .collection('usuarios')
-      .doc(userInfo.userId)
+      .doc(user.uid)
       .get();
     const previewHabits = getPreviewHabits._data.habitos;
 
@@ -126,7 +126,7 @@ const AgregarHabitos = () => {
       updateHabitsStats();
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           habitos: data,
         })

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 //Native Base
 import {
   NativeBaseProvider,
@@ -13,7 +13,6 @@ import {
   Divider,
 } from 'native-base';
 import functions from '@react-native-firebase/functions';
-
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -28,59 +27,57 @@ const StudiallyPRO = () => {
   const {userInfo, user, userTier, refreshTier} = useUser();
 
   const openPaymentSheet = async () => {
-    const {error} = await presentPaymentSheet();
+    try {
+      setLoading(true);
+      const fetchPaymentSheetParams = async () => {
+        const response = await functions().httpsCallable('createSubscription')({
+          priceId: 'price_1Mh2lnAX9PxeRGsUGz8oQQjs',
+        });
+        const {clientSecret, ephemeralKey, customer} = response.data;
 
-    if (error) {
-      console.error(`Error code: ${error.code}`, error.message);
-    } else {
-      console.log('Success', 'Your order is confirmed!');
-      refreshTier();
+        return {
+          clientSecret,
+          ephemeralKey,
+          customer,
+        };
+      };
+
+      const initializePaymentSheet = async () => {
+        const {customer, ephemeralKey, clientSecret} =
+          await fetchPaymentSheetParams();
+        const {error} = await initPaymentSheet({
+          merchantDisplayName: 'Studially',
+          customerId: customer,
+          customerEphemeralKeySecret: ephemeralKey,
+          paymentIntentClientSecret: clientSecret,
+          // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+          //methods that complete payment after a delay, like SEPA Debit and Sofort.
+          allowsDelayedPaymentMethods: false,
+          defaultBillingDetails: {
+            name: `${userInfo.nombres} ${userInfo.apellidos}`,
+            email: user.email,
+            address: {country: 'MX'},
+          },
+        });
+        if (!error) {
+          setLoading(false);
+        }
+      };
+      await initializePaymentSheet();
+      const {error} = await presentPaymentSheet();
+
+      if (error) {
+        console.error(`Error code: ${error.code}`, error.message);
+      } else {
+        console.log('Success', 'Your order is confirmed!');
+        refreshTier();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchPaymentSheetParams = async () => {
-      const response = await functions().httpsCallable('createSubscription')({
-        priceId: 'price_1Mh2lnAX9PxeRGsUGz8oQQjs',
-      });
-      const {clientSecret, ephemeralKey, customer} = response.data;
-
-      return {
-        clientSecret,
-        ephemeralKey,
-        customer,
-      };
-    };
-
-    const initializePaymentSheet = async () => {
-      const {customer, ephemeralKey, clientSecret} =
-        await fetchPaymentSheetParams();
-      const {error} = await initPaymentSheet({
-        merchantDisplayName: 'Studially',
-        customerId: customer,
-        customerEphemeralKeySecret: ephemeralKey,
-        paymentIntentClientSecret: clientSecret,
-        // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
-        //methods that complete payment after a delay, like SEPA Debit and Sofort.
-        allowsDelayedPaymentMethods: false,
-        defaultBillingDetails: {
-          name: `${userInfo.nombres} ${userInfo.apellidos}`,
-          email: user.email,
-          address: {country: 'MX'},
-        },
-      });
-      if (!error) {
-        setLoading(true);
-      }
-    };
-    initializePaymentSheet();
-  }, [
-    initPaymentSheet,
-    user.email,
-    user.uid,
-    userInfo.apellidos,
-    userInfo.nombres,
-  ]);
 
   return (
     <NativeBaseProvider>
@@ -204,7 +201,8 @@ const StudiallyPRO = () => {
                     w="90%"
                     _text={{fontSize: 20}}
                     bg="rgba(71, 91, 216, 1)"
-                    disabled={!loading}
+                    isLoading={loading}
+                    disabled={loading}
                     onPress={openPaymentSheet}>
                     Adquirir premium
                   </Button>

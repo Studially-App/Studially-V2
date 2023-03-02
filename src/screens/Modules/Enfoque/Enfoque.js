@@ -46,7 +46,7 @@ const Enfoque = () => {
 
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
-  const {userInfo} = useUser();
+  const {userInfo, userTier, user} = useUser();
 
   // Toast
   const toast = useToast();
@@ -123,7 +123,7 @@ const Enfoque = () => {
       }
     } else {
       try {
-        await firestore().collection('usuarios').doc(userInfo.userId).update({
+        await firestore().collection('usuarios').doc(user.uid).update({
           minutosHoyDia: dayjs().day(),
           minutosHoy: 0,
         });
@@ -140,7 +140,7 @@ const Enfoque = () => {
   const countStars = async minutosTotal => {
     const stars = Math.floor(minutosTotal / 6);
     try {
-      await firestore().collection('usuarios').doc(userInfo.userId).update({
+      await firestore().collection('usuarios').doc(user.uid).update({
         estrellas: stars,
       });
       setStudiallyStars(stars);
@@ -183,7 +183,7 @@ const Enfoque = () => {
 
     const newData = await firestore()
       .collection('usuarios')
-      .doc(userInfo.userId)
+      .doc(user.uid)
       .get();
     let minutosTotal = newData._data.minutosTotales;
     minutosTotal = minutosTotal + calculatedMinutes;
@@ -197,7 +197,7 @@ const Enfoque = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           minutos: minutesDB,
           minutosTotales: minutosTotal,
@@ -275,7 +275,7 @@ const Enfoque = () => {
               </Badge>
               <Button
                 onPress={() => {
-                  if (userInfo.tuser === 'Free') {
+                  if (userTier !== 'premium') {
                     setProModalVisibility(true);
                   } else {
                     navigation.navigate('Estadisticas', {
@@ -303,7 +303,7 @@ const Enfoque = () => {
                   onPress={() => {
                     navigation.navigate('Rewards', {
                       stars: studiallyStars,
-                      tuser: userInfo.tuser,
+                      userTier,
                     });
                   }}
                   borderColor="rgba(71, 91, 216, 1)"

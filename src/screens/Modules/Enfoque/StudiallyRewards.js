@@ -129,7 +129,7 @@ const StudiallyRewards = () => {
                 </Badge>
                 <Button
                   onPress={() => {
-                    if (route.params.tuser === 'Free') {
+                    if (route.params.userTier !== 'premium') {
                       setProModalVisibility(true);
                     } else {
                       setIdProducto(item.idProducto);

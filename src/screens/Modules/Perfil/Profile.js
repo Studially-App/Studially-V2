@@ -18,13 +18,14 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // React Native
-import {useWindowDimensions, StyleSheet} from 'react-native';
+import {useWindowDimensions, StyleSheet, Linking} from 'react-native';
 
 // DateTime Picker
 import DatePicker from 'react-native-date-picker';
 
 import dayjs from 'dayjs';
 import {useUser} from '../../../context/User';
+import functions from '@react-native-firebase/functions';
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -46,7 +47,14 @@ const Profile = ({navigation}) => {
   const [openDate, setOpenDate] = useState(false);
   const [firstDate, setFirstDate] = useState(true);
 
-  const {user, userInfo} = useUser();
+  const {user, userInfo, userTier} = useUser();
+
+  const openSubscriptionPage = async () => {
+    const result = await functions().httpsCallable('customerPortal')({
+      returnUrl: 'https://studially.com',
+    });
+    result.data.url && Linking.openURL(result.data.url);
+  };
 
   return (
     <NativeBaseProvider>
@@ -221,7 +229,11 @@ const Profile = ({navigation}) => {
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
-                onPress={() => navigation.navigate('Studially Pro')}
+                onPress={() =>
+                  userTier !== 'premium'
+                    ? navigation.navigate('Studially Pro')
+                    : openSubscriptionPage()
+                }
                 _pressed={{
                   backgroundColor: 'rgba(71, 91, 216, 1)',
                 }}
@@ -229,7 +241,9 @@ const Profile = ({navigation}) => {
                   fontSize: 16,
                   fontWeight: 'bold',
                 }}>
-                Cámbiate a Studially PRO
+                {userTier !== 'premium'
+                  ? 'Cámbiate a Studially PRO'
+                  : 'Administrar subscripción'}
               </Button>
             </VStack>
           ) : (
@@ -284,7 +298,11 @@ const Profile = ({navigation}) => {
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
-                onPress={() => navigation.navigate('Studially Pro')}
+                onPress={() =>
+                  userTier !== 'premium'
+                    ? navigation.navigate('Studially Pro')
+                    : openSubscriptionPage()
+                }
                 _pressed={{
                   backgroundColor: 'rgba(5, 24, 139, 0.7)',
                 }}
@@ -292,7 +310,9 @@ const Profile = ({navigation}) => {
                   fontSize: 16,
                   fontWeight: 'bold',
                 }}>
-                Cámbiate a Studially PRO
+                {userTier !== 'premium'
+                  ? 'Cámbiate a Studially PRO'
+                  : 'Administrar subscripción'}
               </Button>
             </VStack>
           )}
