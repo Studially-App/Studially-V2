@@ -24,7 +24,7 @@ import {useUser} from '../../../context/User';
 const StudiallyPRO = () => {
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
-  const {userInfo, user, userTier, refreshTier} = useUser();
+  const {userInfo, user, refreshTier} = useUser();
 
   const openPaymentSheet = async () => {
     try {
@@ -57,6 +57,10 @@ const StudiallyPRO = () => {
             name: `${userInfo.nombres} ${userInfo.apellidos}`,
             email: user.email,
             address: {country: 'MX'},
+            googlePay: {
+              merchantCountryCode: 'US',
+              testEnv: true, // use test environment
+            },
           },
         });
         if (!error) {
@@ -85,7 +89,6 @@ const StudiallyPRO = () => {
         <View h="100%">
           <Center flex={1} my="4">
             <Center w="100%">
-              <Text>tier: {userTier}</Text>
               <Box
                 w="80%"
                 h="80%"
