@@ -154,13 +154,13 @@ const EnfoqueStackScreen = () => (
 
 const App = () => {
   const [profile, setProfile] = useState(false);
-  const {user, initialized, userInfo} = useUser();
+  const {user, initialized} = useUser();
 
   useEffect(() => {
     if (initialized && user) {
       requestNotificationPermission();
     }
-  }, [initialized, user, userInfo]);
+  }, [initialized, user]);
 
   if (!initialized) {
     return null;

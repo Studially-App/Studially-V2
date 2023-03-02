@@ -4,17 +4,21 @@ import React, {
   useContext,
   useEffect,
   useReducer,
+  useCallback,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+type UserTier = 'premium' | undefined;
 type UserInfo = Record<string, any>;
 type Action =
   | {type: 'setUser'; payload: FirebaseAuthTypes.User | null}
-  | {type: 'setUserInfo'; payload: UserInfo | undefined};
+  | {type: 'setUserInfo'; payload: UserInfo | undefined}
+  | {type: 'setUserTier'; payload: UserTier};
 type Dispatch = (action: Action) => void;
 type State = {
   user: FirebaseAuthTypes.User | null;
   userInfo: UserInfo | null;
+  userTier: UserTier;
   initialized: boolean;
 };
 type UserProviderProps = {children: ReactNode};
@@ -31,6 +35,9 @@ function userReducer(state: State, action: Action) {
     case 'setUserInfo': {
       return {...state, userInfo: action?.payload ?? null};
     }
+    case 'setUserTier': {
+      return {...state, userTier: action.payload};
+    }
     default: {
       throw new Error(`Unhandled action type: ${action}`);
     }
@@ -40,6 +47,7 @@ const initialState: State = {
   user: null,
   userInfo: null,
   initialized: false,
+  userTier: undefined,
 };
 
 function UserProvider({children}: UserProviderProps) {
@@ -54,7 +62,21 @@ function useUser() {
     throw new Error('useUser must be used within a UserProvider');
   }
   const {state, dispatch} = context;
-  const {user, userInfo, initialized} = state;
+  const {user, userInfo, initialized, userTier} = state;
+
+  const getCustomClaimRole = useCallback(async () => {
+    if (user) {
+      await auth().currentUser!.getIdToken(true);
+      const decodedToken = await auth().currentUser!.getIdTokenResult();
+      return decodedToken.claims.stripeRole;
+    }
+    return undefined;
+  }, [user]);
+
+  const refreshTier = () =>
+    getCustomClaimRole().then(role =>
+      dispatch({type: 'setUserTier', payload: role}),
+    );
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(authUser =>
@@ -78,7 +100,19 @@ function useUser() {
     }
   }, [dispatch, user]);
 
-  return {user, userInfo, initialized};
+  useEffect(() => {
+    getCustomClaimRole().then(role =>
+      dispatch({type: 'setUserTier', payload: role}),
+    );
+  }, [dispatch, getCustomClaimRole]);
+
+  return {
+    user,
+    userInfo,
+    initialized,
+    userTier,
+    refreshTier,
+  };
 }
 
 export {UserProvider, useUser};
