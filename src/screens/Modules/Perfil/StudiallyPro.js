@@ -20,11 +20,13 @@ import StudiallyPROIcon from './StudiallyPRO.png';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import {useStripe} from '@stripe/stripe-react-native';
 import {useUser} from '../../../context/User';
+import {useNavigation} from '@react-navigation/native';
 
 const StudiallyPRO = () => {
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [loading, setLoading] = useState(false);
   const {userInfo, user, refreshTier} = useUser();
+  const navigation = useNavigation();
 
   const openPaymentSheet = async () => {
     try {
@@ -58,7 +60,7 @@ const StudiallyPRO = () => {
             email: user.email,
             address: {country: 'MX'},
             googlePay: {
-              merchantCountryCode: 'US',
+              merchantCountryCode: 'MX',
               testEnv: true, // use test environment
             },
           },
@@ -75,6 +77,7 @@ const StudiallyPRO = () => {
       } else {
         console.log('Success', 'Your order is confirmed!');
         refreshTier();
+        navigation.goBack();
       }
     } catch (error) {
       console.error(error);

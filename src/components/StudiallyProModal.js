@@ -57,7 +57,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
             address: {country: 'MX'},
           },
           googlePay: {
-            merchantCountryCode: 'US',
+            merchantCountryCode: 'MX',
             testEnv: true, // use test environment
           },
         });
