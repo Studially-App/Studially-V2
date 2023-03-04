@@ -21,12 +21,7 @@ const getFCMToken = async () => {
     const fcmToken = await firebaseMessaging().getToken();
 
     // Update backend (e.g. Firestore) with our token for the user
-    const email = auth().currentUser.email;
-    const query = await firestore()
-      .collection('usuarios')
-      .where('email', '==', email)
-      .get();
-    const uid = query.docs[0].data().userId;
+    const uid = auth().currentUser.uid;
     await firestore()
       .doc(`usuarios/${uid}`)
       .update({

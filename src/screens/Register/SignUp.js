@@ -13,8 +13,6 @@ GoogleSignin.configure({
     '498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com',
 });
 
-import uuid from 'react-native-uuid';
-
 //Native Base
 import {
   NativeBaseProvider,
@@ -119,11 +117,10 @@ const SignUp = ({navigation}) => {
   }
 
   const createUserGoogle = async user => {
-    var userId = uuid.v4();
     const currentUser = await GoogleSignin.getCurrentUser();
     firestore()
       .collection('usuarios')
-      .doc(userId)
+      .doc(user.uid)
       .set({
         nombres: currentUser.user.givenName,
         apellidos: currentUser.user.familyName,
@@ -163,12 +160,10 @@ const SignUp = ({navigation}) => {
             minutosSemana: 0,
           },
         ],
-        userId: userId,
         minutosHoy: 0,
         minutosHoyDia: '',
         minutosMes: '',
         minutosSemana: '',
-        tuser: 'Free',
         since: dayjs().format('YYYY-MM-DD'),
       })
       .then(() => {
@@ -207,13 +202,13 @@ const SignUp = ({navigation}) => {
     } else {
       auth()
         .createUserWithEmailAndPassword(values.email, values.password)
-        .then(() => {
+        .then(({user}) => {
           console.log('User account created & signed in!');
           //Se agrega a la tabla de usuarios una vez registrado
-          var userId = uuid.v4();
+
           firestore()
             .collection('usuarios')
-            .doc(userId)
+            .doc(user.uid)
             .set({
               nombres: values.nombres,
               apellidos: values.apellidos,
@@ -253,12 +248,10 @@ const SignUp = ({navigation}) => {
                   minutosSemana: 0,
                 },
               ],
-              userId: userId,
               minutosHoy: 0,
               minutosHoyDia: '',
               minutosMes: '',
               minutosSemana: '',
-              tuser: 'Free',
               since: dayjs().format('YYYY-MM-DD'),
             })
             .then(() => {

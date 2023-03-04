@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   VStack,
   Flex,
@@ -14,9 +14,75 @@ import {
 import Modal from 'react-native-modal';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import StudiallyPROIcon from '../screens/Modules/Perfil/StudiallyPRO.png';
+import {useStripe} from '@stripe/stripe-react-native';
+import {useUser} from '../context/User';
+import functions from '@react-native-firebase/functions';
 
 // Modal Stop
 const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
+  const [loading, setLoading] = useState(false);
+  const {userInfo, user, refreshTier} = useUser();
+
+  const openPaymentSheet = async () => {
+    try {
+      setLoading(true);
+      const fetchPaymentSheetParams = async () => {
+        const response = await functions().httpsCallable('createSubscription')({
+          priceId: 'price_1Mh2lnAX9PxeRGsUGz8oQQjs',
+        });
+        const {clientSecret, ephemeralKey, customer} = response.data;
+
+        return {
+          clientSecret,
+          ephemeralKey,
+          customer,
+        };
+      };
+
+      const initializePaymentSheet = async () => {
+        const {customer, ephemeralKey, clientSecret} =
+          await fetchPaymentSheetParams();
+        const {error} = await initPaymentSheet({
+          merchantDisplayName: 'Studially',
+          customerId: customer,
+          customerEphemeralKeySecret: ephemeralKey,
+          paymentIntentClientSecret: clientSecret,
+          // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+          //methods that complete payment after a delay, like SEPA Debit and Sofort.
+          allowsDelayedPaymentMethods: false,
+          defaultBillingDetails: {
+            name: `${userInfo.nombres} ${userInfo.apellidos}`,
+            email: user.email,
+            address: {country: 'MX'},
+          },
+          googlePay: {
+            merchantCountryCode: 'MX',
+            testEnv: true, // use test environment
+          },
+        });
+        if (!error) {
+          setLoading(false);
+        }
+      };
+
+      await initializePaymentSheet();
+      const {error} = await presentPaymentSheet();
+
+      if (error) {
+        console.error(`Error code: ${error.code}`, error.message);
+      } else {
+        console.log('Success', 'Your order is confirmed!');
+        refreshTier();
+        setProModalVisibility(false);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal
       isVisible={proModalVisibility}
@@ -136,7 +202,13 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           </Center>
           <Divider my="3" />
           <Center>
-            <Button w="90%" _text={{fontSize: 20}} bg="rgba(71, 91, 216, 1)">
+            <Button
+              w="90%"
+              _text={{fontSize: 20}}
+              bg="rgba(71, 91, 216, 1)"
+              disabled={loading}
+              isLoading={loading}
+              onPress={openPaymentSheet}>
               Adquirir premium
             </Button>
           </Center>

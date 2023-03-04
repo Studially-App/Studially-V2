@@ -1,10 +1,6 @@
 import React, {useState, useEffect} from 'react';
-
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
 import {ScrollView} from 'react-native';
-
 import {
   Text,
   HStack,
@@ -22,6 +18,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import ModalDetalleHabito from '../../../components/Habitos/ModalDetalleHabito';
+import {useUser} from '../../../context/User';
 
 const AgregarHabitos = () => {
   const navigation = useNavigation();
@@ -39,20 +36,7 @@ const AgregarHabitos = () => {
   const [spinnerModal, setSpinnerModal] = useState(true);
 
   // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-  const [userInfo, setUserInfo] = useState();
-
-  const getUserInfo = async (user, mounted) => {
-    if (mounted) {
-      const userInfoFB = await firestore()
-        .collection('usuarios')
-        .where('email', '==', user.email)
-        .get();
-      setUserInfo(userInfoFB._docs[0]._data);
-      setSpinnerModal(false);
-    }
-  };
+  const {userInfo, user} = useUser();
 
   const getHabitsStats = async () => {
     const habitsStats = await firestore()
@@ -65,7 +49,7 @@ const AgregarHabitos = () => {
   const updateHabitsStats = async () => {
     const getPreviewHabits = await firestore()
       .collection('usuarios')
-      .doc(userInfo.userId)
+      .doc(user.uid)
       .get();
     const previewHabits = getPreviewHabits._data.habitos;
 
@@ -119,64 +103,30 @@ const AgregarHabitos = () => {
     }
   };
 
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) {
-      setInitializing(false);
+  const getHabits = async userInfo => {
+    if (Object.keys(userInfo.habitos).length !== 0) {
+      const userHabits = userInfo.habitos;
+      setData(userHabits);
+    } else {
+      const snapshot = await firestore().collection('habitosApp').get();
+      const habitos = snapshot.docs.map(doc => doc.data());
+      setData(habitos);
     }
-  }
-
-  const getHabits = async (userInfo, mounted) => {
-    if (mounted) {
-      if (userInfo) {
-        if (Object.keys(userInfo.habitos).length !== 0) {
-          var userHabits = userInfo.habitos;
-          setData(userHabits);
-        } else {
-          const snapshot = await firestore().collection('habitosApp').get();
-          const habitos = snapshot.docs.map(doc => doc.data());
-          setData(habitos);
-        }
-      }
-    }
+    setSpinnerModal(false);
   };
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-    if (user !== undefined) {
-      getUserInfo(user, isMounted);
-      return () => {
-        isMounted = false;
-      };
-    }
-  }, [user]);
-
-  useEffect(() => {
-    let isMounted = true;
-    if (userInfo !== undefined) {
-      getHabits(userInfo, isMounted);
-      return () => {
-        isMounted = false;
-      };
+    if (userInfo) {
+      getHabits(userInfo);
     }
   }, [userInfo]);
-
-  if (initializing) {
-    return null;
-  }
 
   const updateHabits = () => {
     try {
       updateHabitsStats();
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           habitos: data,
         })
