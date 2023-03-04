@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   VStack,
   Flex,
@@ -14,7 +14,7 @@ import {
 import Modal from 'react-native-modal';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import StudiallyPROIcon from '../screens/Modules/Perfil/StudiallyPRO.png';
-import {useStripe} from '@stripe/stripe-react-native';
+import {StripeProvider, useStripe} from '@stripe/stripe-react-native';
 import {useUser} from '../context/User';
 import functions from '@react-native-firebase/functions';
 
@@ -218,4 +218,8 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
   );
 };
 
-export default StudiallyProModal;
+export default () => (
+  <StripeProvider publishableKey="pk_test_51Me4GBAX9PxeRGsU1wcpPqZdRg8tQHB2BjLECNbAT9jF0XRrZX96Q6fdXhUmdvmtsODc7BTC6VhNyHjvSuzODahs00JoJE7BwH">
+    <StudiallyProModal />
+  </StripeProvider>
+);
