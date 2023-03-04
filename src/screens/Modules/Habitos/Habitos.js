@@ -1,10 +1,6 @@
-import React, {useState, useEffect} from 'react';
-
-import auth from '@react-native-firebase/auth';
+import React, {useState, useEffect, useCallback} from 'react';
 import firestore from '@react-native-firebase/firestore';
-
 import {ScrollView} from 'react-native';
-
 import {
   Text,
   HStack,
@@ -35,6 +31,7 @@ import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 
 import ModalAgregarAmigo from '../../../components/Habitos/ModalAgregarAmigo';
 import StudiallyProModal from '../../../components/StudiallyProModal';
+import {useUser} from '../../../context/User';
 
 const Habitos = () => {
   const navigation = useNavigation();
@@ -78,9 +75,7 @@ const Habitos = () => {
   const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-  const [userInfo, setUserInfo] = useState();
+  const {user, userInfo, userTier} = useUser();
 
   const marcarHabito = (i, accion, name) => {
     let marcado = [...todayData];
@@ -136,14 +131,14 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           habitos: data,
         })
         .then(() => {
           console.log('User habits marked updated!');
           setTodayData(popHabits);
-          getHabits(userInfo, true);
+          getHabits(userInfo);
         });
     } catch (error) {
       console.log(error);
@@ -164,16 +159,6 @@ const Habitos = () => {
     setTodayData(todayHabits);
   };
 
-  const getUserInfo = async (user, mounted) => {
-    if (mounted) {
-      const userInfoFB = await firestore()
-        .collection('usuarios')
-        .where('email', '==', user.email)
-        .get();
-      setUserInfo(userInfoFB._docs[0]._data);
-    }
-  };
-
   const getHabitosTendencias = async () => {
     const habitsStats = await firestore()
       .collection('habitos')
@@ -191,7 +176,7 @@ const Habitos = () => {
     try {
       const getFuegos = await firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .get();
       setFuegos({
         nombres: getFuegos._data.nombres,
@@ -210,7 +195,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           fuegos: fires.fuegos,
         })
@@ -228,7 +213,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           fireHabits: fireHabits,
         })
@@ -269,7 +254,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           listaAmigos: orderedRefresh,
         })
@@ -282,81 +267,51 @@ const Habitos = () => {
     }
   };
 
-  const getHabits = (userInfo, mounted) => {
-    if (mounted) {
-      if (userInfo) {
-        var userHabits = userInfo.habitos;
-        setData(userHabits);
-        var selectedHabits = [];
-        userHabits.map(item =>
-          item.selected ? selectedHabits.push(item) : null,
-        );
-        selectedHabits.map(item => {
-          var veces = item.frecuencia.reduce(function (a, b) {
-            return a + b;
-          }, 0);
-          item.veces = veces;
-        });
-        selectedHabits.map(item => {
-          if (dayjs().day() === 1) {
-            item.marcadoSemana = [];
-          }
-          var dias = item.marcadoSemana.reduce(function (a, b) {
-            return a + b;
-          }, 0);
-          item.dias = dias;
-        });
-        getTodayHabits(selectedHabits);
-        setSelectedData(selectedHabits);
-        const listaOrdenadaAmigos = userInfo.listaAmigos.sort(
-          (a, b) => b.fuegos - a.fuegos,
-        );
-        setAmigos(listaOrdenadaAmigos);
-        setFuegos({
-          nombres: userInfo.nombres,
-          apellidos: userInfo.apellidos,
-          fuegos: userInfo.fuegos,
-        });
-        setFireList(userInfo.fireHabits);
+  const getHabits = useCallback(userInfo => {
+    var userHabits = userInfo.habitos;
+    setData(userHabits);
+    var selectedHabits = [];
+    userHabits.map(item => (item.selected ? selectedHabits.push(item) : null));
+    selectedHabits.map(item => {
+      var veces = item.frecuencia.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      item.veces = veces;
+    });
+    selectedHabits.map(item => {
+      if (dayjs().day() === 1) {
+        item.marcadoSemana = [];
       }
-    }
-  };
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) {
-      setInitializing(false);
-    }
-  }
+      var dias = item.marcadoSemana.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      item.dias = dias;
+    });
+    getTodayHabits(selectedHabits);
+    setSelectedData(selectedHabits);
+    const listaOrdenadaAmigos = userInfo.listaAmigos.sort(
+      (a, b) => b.fuegos - a.fuegos,
+    );
+    setAmigos(listaOrdenadaAmigos);
+    setFuegos({
+      nombres: userInfo.nombres,
+      apellidos: userInfo.apellidos,
+      fuegos: userInfo.fuegos,
+    });
+    setFireList(userInfo.fireHabits);
+  }, []);
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-    if (user !== undefined) {
-      getUserInfo(user, isMounted);
+    if (user) {
       getHabitosTendencias();
-      return () => {
-        isMounted = false;
-      };
     }
   }, [user]);
 
   useEffect(() => {
-    let isMounted = true;
-    if (userInfo !== undefined) {
-      getHabits(userInfo, isMounted);
+    if (userInfo) {
+      getHabits(userInfo);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo]);
-
-  if (initializing) {
-    return null;
-  }
+  }, [getHabits, userInfo]);
 
   const deleteFriend = id => {
     const deleted = [...amigos];
@@ -364,7 +319,7 @@ const Habitos = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           listaAmigos: deleted,
         })
@@ -515,8 +470,7 @@ const Habitos = () => {
                   navigation.navigate('Agregar Habitos', {
                     onGoBack: () => {
                       setSpinnerModal(true);
-                      getUserInfo(user, true);
-                      getHabits(userInfo, true);
+                      getHabits(userInfo);
                       setSpinnerModal(false);
                     },
                   });
@@ -541,8 +495,7 @@ const Habitos = () => {
                     navigation.navigate('Agregar Habitos', {
                       onGoBack: () => {
                         setSpinnerModal(true);
-                        getUserInfo(user, true);
-                        getHabits(userInfo, true);
+                        getHabits(userInfo);
                         setSpinnerModal(false);
                       },
                     });
@@ -757,7 +710,7 @@ const Habitos = () => {
                 fontSize={20}
                 fontWeight="bold"
                 onPress={() => {
-                  userInfo.tuser === 'Free'
+                  userTier !== 'premium'
                     ? setProModalVisibility(true)
                     : setAmigoModalVisibility(true);
                 }}>
@@ -856,7 +809,7 @@ const Habitos = () => {
         setModalVisibility={setAmigoModalVisibility}
         amigos={amigos}
         setAmigos={setAmigos}
-        userId={userInfo?.userId}
+        userId={user.uid}
       />
     </NativeBaseProvider>
   );

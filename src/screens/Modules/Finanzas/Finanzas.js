@@ -1,9 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
-// Auth
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
 import {
   Text,
   NativeBaseProvider,
@@ -27,12 +23,11 @@ import ModalCrearFinanzas from '../../../components/Finanzas/ModalCrearFinanzas'
 import ModalAgregarMonto from '../../../components/Finanzas/ModalAgregarMonto';
 import ModalDetalleFinanzas from '../../../components/Finanzas/ModalDetalleFinanzas';
 import StudiallyProModal from '../../../components/StudiallyProModal';
+import {useUser} from '../../../context/User';
 
 const Finanzas = () => {
   // get user data
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-  const [userInfo, setUserInfo] = useState();
+  const {userInfo, userTier, user} = useUser();
 
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
@@ -55,50 +50,13 @@ const Finanzas = () => {
   // index
   const [index, setIndex] = React.useState(0);
 
-  const getUserInfo = async (user, mounted) => {
-    if (mounted) {
-      const userInfoFB = await firestore()
-        .collection('usuarios')
-        .where('email', '==', user.email)
-        .get();
-      setUserInfo(userInfoFB._docs[0]._data);
-    }
-  };
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) {
-      setInitializing(false);
-    }
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  });
-
-  useEffect(() => {
-    let isMounted = true;
-    if (user !== undefined) {
-      getUserInfo(user, isMounted);
-      return () => {
-        isMounted = false;
-      };
-    }
-  }, [user]);
-
   // Finanzas states
   const [finantialGoals, setFinantialGoals] = useState([]);
 
   //Funcion para sacar los hábitos
-  const getFinance = (userInfo, mounted) => {
-    if (mounted) {
-      if (userInfo) {
-        let userFinantialGoals = userInfo.finanzas;
-        setFinantialGoals(userFinantialGoals);
-      }
-    }
+  const getFinance = userInfo => {
+    const userFinantialGoals = userInfo.finanzas;
+    setFinantialGoals(userFinantialGoals);
   };
 
   const deleteFinance = id => {
@@ -107,7 +65,7 @@ const Finanzas = () => {
     try {
       firestore()
         .collection('usuarios')
-        .doc(userInfo.userId)
+        .doc(user.uid)
         .update({
           finanzas: deleted,
         })
@@ -122,18 +80,10 @@ const Finanzas = () => {
 
   // useEffect para iniciar con las metas agregadas
   useEffect(() => {
-    let isMounted = true;
-    if (userInfo !== undefined) {
-      getFinance(userInfo, isMounted);
-      return () => {
-        isMounted = false;
-      };
+    if (userInfo) {
+      getFinance(userInfo);
     }
   }, [userInfo]);
-
-  if (initializing) {
-    return null;
-  }
 
   return (
     <NativeBaseProvider>
@@ -196,7 +146,7 @@ const Finanzas = () => {
                 bottom={90}
                 bg="#061678"
                 onPress={() =>
-                  userInfo.tuser === 'Free'
+                  userTier !== 'premium'
                     ? setProModalVisibility(true)
                     : setCrearModalVisibility(true)
                 }
@@ -311,7 +261,7 @@ const Finanzas = () => {
         modalVisibility={crearModalVisibility}
         setModalVisibility={setCrearModalVisibility}
         setData={setDataDetalle}
-        userId={userInfo?.userId}
+        userId={user.uid}
         data={finantialGoals}
         userInfo={userInfo}
         //reloadGoals={reloadGoals}
@@ -321,7 +271,7 @@ const Finanzas = () => {
         setModalVisibility={setMontoModalVisibility}
         setData={setDataDetalle}
         selected={metaSelected}
-        userId={userInfo?.userId}
+        userId={user.uid}
         data={finantialGoals}
         userInfo={userInfo}
       />
@@ -330,7 +280,7 @@ const Finanzas = () => {
         setModalVisibility={setDetalleModalVisibility}
         setData={setFinantialGoals}
         dataDetalle={dataDetalle}
-        userId={userInfo?.userId}
+        userId={user.uid}
         data={finantialGoals}
         index={index}
       />

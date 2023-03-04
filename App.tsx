@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -10,7 +11,6 @@ import {
   IconButton,
   Image,
 } from 'native-base';
-import auth from '@react-native-firebase/auth';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import StudiallyLogo from './src/assets/images/Studially-logo.png';
 
@@ -18,7 +18,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 import Onboarding from './src/screens/Onboarding/Onboarding';
-
 import Welcome from './src/screens/Register/Welcome';
 import SignIn from './src/screens/Register/SignIn';
 import SignUp from './src/screens/Register/SignUp';
@@ -44,6 +43,8 @@ import EstadisticasEnfoque from './src/screens/Modules/Enfoque/EstadisticasEnfoq
 import Mas from './src/screens/Modules/Perfil/Mas';
 import Profile from './src/screens/Modules/Perfil/Profile';
 import StudiallyPRO from './src/screens/Modules/Perfil/StudiallyPro';
+import {requestNotificationPermission} from './src/utils/notifications';
+import {UserProvider, useUser} from './src/context/User';
 
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -153,26 +154,15 @@ const EnfoqueStackScreen = () => (
 
 const App = () => {
   const [profile, setProfile] = useState(false);
-
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(loggedUser) {
-    setUser(loggedUser);
-    if (initializing) {
-      setInitializing(false);
-    }
-  }
+  const {user, initialized} = useUser();
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    //SplashScreen.hide();
-    return subscriber; // unsubscribe on unmount
-  });
+    if (initialized && user) {
+      requestNotificationPermission();
+    }
+  }, [initialized, user]);
 
-  if (initializing) {
+  if (!initialized) {
     return null;
   }
 
@@ -241,12 +231,12 @@ const App = () => {
                 name="Organización"
                 component={EnfoqueStackScreen}
                 options={{
-                  tarBarLabel: 'Organización',
+                  title: 'Organización',
                   tabBarLabelStyle: {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color, size}) => (
+                  tabBarIcon: ({color}) => (
                     <Box
                       _pressed={{
                         backgroundColor: 'rgba(71, 91, 216, 1)',
@@ -260,12 +250,12 @@ const App = () => {
                 name="Hábitos"
                 component={HabitosStackScreen}
                 options={{
-                  tarBarLabel: 'Hábitos',
+                  title: 'Hábitos',
                   tabBarLabelStyle: {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color, size}) => (
+                  tabBarIcon: ({color}) => (
                     <Icon name="heart-outline" color={color} size={24} />
                   ),
                 }}
@@ -274,12 +264,12 @@ const App = () => {
                 name="Finanzas"
                 component={Finanzas}
                 options={{
-                  tarBarLabel: 'Finanzas',
+                  title: 'Finanzas',
                   tabBarLabelStyle: {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color, size}) => (
+                  tabBarIcon: ({color}) => (
                     <Icon name="piggy-bank-outline" color={color} size={24} />
                   ),
                 }}
@@ -288,12 +278,12 @@ const App = () => {
                 name="Recursos"
                 component={RecursosStackScreen}
                 options={{
-                  tarBarLabel: 'Recursos',
+                  title: 'Recursos',
                   tabBarLabelStyle: {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color, size}) => (
+                  tabBarIcon: ({color}) => (
                     <Icon name="star-outline" color={color} size={24} />
                   ),
                 }}
@@ -365,7 +355,7 @@ const App = () => {
             </PerfilStack.Navigator>
           </>
         ) : (
-          <AuthStack.Navigator options={{headerShown: false}}>
+          <AuthStack.Navigator screenOptions={{headerShown: false}}>
             <AuthStack.Screen
               name="Onboarding"
               component={Onboarding}
@@ -398,4 +388,10 @@ const App = () => {
   );
 };
 
-export default App;
+const AppWrapper = () => (
+  <UserProvider>
+    <App />
+  </UserProvider>
+);
+
+export default AppWrapper;

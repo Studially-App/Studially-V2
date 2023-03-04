@@ -1,8 +1,5 @@
-import React, {useState, useEffect} from 'react';
-
+import React from 'react';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
 import {
   ScrollView,
   VStack,
@@ -27,50 +24,12 @@ import {useWindowDimensions} from 'react-native';
 
 // Formik
 import {Formik} from 'formik';
+import {useUser} from '../../../context/User';
 
 const Mas = ({navigation}) => {
   const {height} = useWindowDimensions();
 
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-  const [userInfo, setUserInfo] = useState();
-
-  const getUserInfo = async user => {
-    const userInfoFB = await firestore()
-      .collection('usuarios')
-      .where('email', '==', user.email)
-      .get();
-    setUserInfo(userInfoFB._docs[0]._data);
-    //console.log(userInfo)
-    return userInfoFB;
-  };
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) {
-      setInitializing(false);
-    }
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  });
-
-  useEffect(() => {
-    //console.log(user)
-    if (user !== undefined) {
-      //console.log(user)
-      const info = getUserInfo(user);
-      return info;
-    }
-  }, [user]);
-
-  if (initializing) {
-    return null;
-  }
+  const {user, userInfo} = useUser();
 
   const signOut = () => {
     auth()
