@@ -218,8 +218,11 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
   );
 };
 
-export default () => (
+export default ({proModalVisibility, setProModalVisibility}) => (
   <StripeProvider publishableKey="pk_test_51Me4GBAX9PxeRGsU1wcpPqZdRg8tQHB2BjLECNbAT9jF0XRrZX96Q6fdXhUmdvmtsODc7BTC6VhNyHjvSuzODahs00JoJE7BwH">
-    <StudiallyProModal />
+    <StudiallyProModal
+      proModalVisibility={proModalVisibility}
+      setProModalVisibility={setProModalVisibility}
+    />
   </StripeProvider>
 );
