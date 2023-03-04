@@ -323,7 +323,7 @@ const Enfoque = () => {
                 </Text>
               </HStack>
               <Text fontSize={18} fontWeight="bold">
-                Edita tu tiempo de enfoque
+                Edita tu tiempo de enfoque hola
               </Text>
             </Center>
             <Center>
