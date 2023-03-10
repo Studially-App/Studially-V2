@@ -13,6 +13,7 @@ import {
   Modal,
   Spinner,
   Heading,
+  Badge,
 } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -23,6 +24,7 @@ import {useUser} from '../../../context/User';
 const AgregarHabitos = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const {userTier} = useUser();
 
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] =
@@ -34,6 +36,8 @@ const AgregarHabitos = () => {
   const [data, setData] = React.useState([]);
 
   const [spinnerModal, setSpinnerModal] = useState(true);
+
+  const [habitCount, setHabitCount] = useState(0);
 
   // Set an initializing state whilst Firebase connects
   const {userInfo, user} = useUser();
@@ -142,11 +146,14 @@ const AgregarHabitos = () => {
 
   const changeSelected = index => {
     let changeData = [...data];
+    let count = habitCount;
     if (changeData[index].selected) {
       changeData[index].frecuencia = [0, 0, 0, 0, 0, 0, 0];
       changeData[index].marcadoSemana = [];
     }
     changeData[index].selected = !changeData[index].selected;
+    count = count + 1;
+    setHabitCount(count);
     setData(changeData);
   };
 
@@ -179,6 +186,21 @@ const AgregarHabitos = () => {
                 justifyContent="center"
                 rounded="lg"
                 key={i}>
+                {habitCount >= 2 && !item.selected ? (
+                  <Badge
+                    colorScheme="danger"
+                    rounded="full"
+                    mb={-5}
+                    mr={0}
+                    zIndex={1}
+                    variant="solid"
+                    alignSelf="flex-end"
+                    _text={{
+                      fontSize: 10,
+                    }}>
+                    Pro
+                  </Badge>
+                ) : null}
                 <HStack space={2} justifyContent="space-around">
                   <Icon size={30} color="#061678" name={item.icono} />
                   <Spacer />
