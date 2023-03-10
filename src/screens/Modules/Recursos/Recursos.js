@@ -17,9 +17,11 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import OctIcon from 'react-native-vector-icons/Octicons';
 import {useNavigation} from '@react-navigation/native';
 import StudiallyProModal from '../../../components/StudiallyProModal';
+import {useUser} from '../../../context/User';
 
 const Recursos = () => {
   const navigation = useNavigation();
+  const {userTier} = useUser();
 
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
@@ -40,24 +42,29 @@ const Recursos = () => {
           <HStack justifyContent="center">
             <Pressable
               onPress={() => {
-                setProModalVisibility(true);
-                //navigation.navigate('Oportunidades');
+                if (userTier !== 'premium') {
+                  setProModalVisibility(true);
+                } else {
+                  navigation.navigate('Oportunidades');
+                }
               }}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
-                  <Badge
-                    colorScheme="danger"
-                    rounded="full"
-                    mb={-5}
-                    mr={0}
-                    zIndex={1}
-                    variant="solid"
-                    alignSelf="flex-end"
-                    _text={{
-                      fontSize: 15,
-                    }}>
-                    Pro
-                  </Badge>
+                  {userTier !== 'premium' ? (
+                    <Badge
+                      colorScheme="danger"
+                      rounded="full"
+                      mb={-5}
+                      mr={0}
+                      zIndex={1}
+                      variant="solid"
+                      alignSelf="flex-end"
+                      _text={{
+                        fontSize: 15,
+                      }}>
+                      Pro
+                    </Badge>
+                  ) : null}
                   <VStack justifyContent="center" alignItems="center">
                     <Center h="100%">
                       <OctIcon name="verified" color="#475BD8" size={60} />

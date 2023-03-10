@@ -122,22 +122,24 @@ const Finanzas = () => {
         <>
           {finantialGoals.length < 3 ? (
             <>
-              <Badge
-                colorScheme="danger"
-                rounded="full"
-                // mb={4}
-                // mr={0}
-                position="absolute"
-                right={30}
-                bottom={135}
-                zIndex={1}
-                variant="solid"
-                alignSelf="flex-end"
-                _text={{
-                  fontSize: 15,
-                }}>
-                Pro
-              </Badge>
+              {userTier !== 'premium' ? (
+                <Badge
+                  colorScheme="danger"
+                  rounded="full"
+                  // mb={4}
+                  // mr={0}
+                  position="absolute"
+                  right={30}
+                  bottom={135}
+                  zIndex={1}
+                  variant="solid"
+                  alignSelf="flex-end"
+                  _text={{
+                    fontSize: 15,
+                  }}>
+                  Pro
+                </Badge>
+              ) : null}
               <Fab
                 position="absolute"
                 size="sm"

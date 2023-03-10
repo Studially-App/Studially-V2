@@ -260,19 +260,21 @@ const Enfoque = () => {
         <VStack space={4} justifyContent="center">
           <ScrollView w="100%" h="88%">
             <Center mt="6">
-              <Badge
-                colorScheme="danger"
-                rounded="full"
-                mb={-2}
-                mr={150}
-                zIndex={1}
-                variant="solid"
-                alignSelf="flex-end"
-                _text={{
-                  fontSize: 15,
-                }}>
-                Pro
-              </Badge>
+              {userTier !== 'premium' ? (
+                <Badge
+                  colorScheme="danger"
+                  rounded="full"
+                  mb={-2}
+                  mr={150}
+                  zIndex={1}
+                  variant="solid"
+                  alignSelf="flex-end"
+                  _text={{
+                    fontSize: 15,
+                  }}>
+                  Pro
+                </Badge>
+              ) : null}
               <Button
                 onPress={() => {
                   if (userTier !== 'premium') {

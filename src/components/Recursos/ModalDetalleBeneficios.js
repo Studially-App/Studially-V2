@@ -41,6 +41,8 @@ const ModalDetalleBeneficios = ({
     }
   };
 
+  const innerScrollViewRef = React.useRef(null);
+
   return (
     <NativeBaseProvider>
       <View w={width}>
@@ -96,8 +98,9 @@ const ModalDetalleBeneficios = ({
                   w="95%"
                   h="48"
                 />
-
-                <Text w="95%">{data.texto}</Text>
+                <ScrollView ref={innerScrollViewRef} w="95%" h="20">
+                  <Text w="95%">{data.texto}</Text>
+                </ScrollView>
 
                 <Button
                   bg="rgba(71, 91, 216, 1)"

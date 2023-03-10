@@ -40,6 +40,9 @@ const OportunidadesLista = () => {
       />
       <ScrollView w="100%" h="85%">
         <VStack space="15px" alignItems="center">
+          <Text fontSize="lg" bold>
+            Oportunidades
+          </Text>
           {oportunidades.map((item, i) => (
             <Pressable
               onPress={() => {
