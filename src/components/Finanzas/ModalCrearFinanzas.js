@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   VStack,
@@ -13,6 +13,8 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  Spinner,
+  Heading,
 } from 'native-base';
 // Modal
 import Modal from 'react-native-modal';
@@ -34,8 +36,11 @@ const ModalCrearFinanzas = ({
   setData,
   userId,
 }) => {
-  const [scrollOffset, setScrollOffset] = React.useState(null);
+  const [scrollOffset, setScrollOffset] = useState(null);
   const scrollViewReff = React.createRef();
+
+  //Spiner
+  const [spinnerModal, setSpinnerModal] = useState(false);
 
   // Screen Dimentions
   const {width} = useWindowDimensions();
@@ -49,10 +54,11 @@ const ModalCrearFinanzas = ({
     }
   };
 
-  const updateFinantialGoals = values => {
+  const updateFinantialGoals = async values => {
     data.push(values);
+    setSpinnerModal(true);
     try {
-      firestore()
+      await firestore()
         .collection('usuarios')
         .doc(userId)
         .update({
@@ -61,6 +67,7 @@ const ModalCrearFinanzas = ({
         .then(() => {
           console.log('User finantial goals updated!');
         });
+      setSpinnerModal(false);
       setModalVisibility(false);
     } catch (error) {
       console.log(error);
@@ -76,9 +83,10 @@ const ModalCrearFinanzas = ({
           nombre: '',
           semanas: 0,
         }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           console.log(values);
-          updateFinantialGoals(values);
+          setSpinnerModal(true);
+          await updateFinantialGoals(values);
           actions.resetForm();
         }}>
         {({
@@ -214,7 +222,7 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              values.semanas = values.semanas - 1;
+                              values.semanas = parseInt(values.semanas, 10) - 1;
                               setFieldValue('semanas', values.semanas);
                             }}
                           />
@@ -246,7 +254,7 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              values.semanas = values.semanas + 1;
+                              values.semanas = parseInt(values.semanas, 10) + 1;
                               setFieldValue('semanas', values.semanas);
                             }}
                           />
@@ -309,6 +317,14 @@ const ModalCrearFinanzas = ({
                             <Text fontSize="15">Por semana</Text>
                           </HStack>
                         </>
+                      ) : null}
+                      {spinnerModal ? (
+                        <Center>
+                          <Spinner color="cyan.500" size="lg" />
+                          <Heading color="cyan.500" fontSize="md">
+                            Guardando finanzas
+                          </Heading>
+                        </Center>
                       ) : null}
                       <Center>
                         <Button

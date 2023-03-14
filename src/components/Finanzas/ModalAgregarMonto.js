@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   VStack,
@@ -12,6 +12,8 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  Spinner,
+  Heading,
 } from 'native-base';
 // Modal
 import Modal from 'react-native-modal';
@@ -38,6 +40,9 @@ const ModalAgregarMonto = ({
   // Screen Dimentions
   const {width} = useWindowDimensions();
 
+  //Spiner
+  const [spinnerModal, setSpinnerModal] = useState(false);
+
   const handleOnScroll = event => {
     setScrollOffset(event.nativeEvent.contentOffset.y);
   };
@@ -47,11 +52,12 @@ const ModalAgregarMonto = ({
     }
   };
 
-  const updateAmount = values => {
+  const updateAmount = async values => {
     data[selected].montoActual =
       data[selected].montoActual * 1 + values.montoActual * 1;
+    setSpinnerModal(true);
     try {
-      firestore()
+      await firestore()
         .collection('usuarios')
         .doc(userId)
         .update({
@@ -61,6 +67,7 @@ const ModalAgregarMonto = ({
           console.log('User finantial goals updated!');
         });
       setModalVisibility(false);
+      setSpinnerModal(false);
     } catch (error) {
       console.log(error);
     }
@@ -72,9 +79,10 @@ const ModalAgregarMonto = ({
         initialValues={{
           montoActual: 0,
         }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           console.log(values);
-          updateAmount(values);
+          setSpinnerModal(true);
+          await updateAmount(values);
           actions.resetForm();
         }}>
         {({
@@ -168,7 +176,14 @@ const ModalAgregarMonto = ({
                         Puedes ingresar números negativos para representar
                         egresos
                       </Text>
-
+                      {spinnerModal ? (
+                        <Center>
+                          <Spinner color="cyan.500" size="lg" />
+                          <Heading color="cyan.500" fontSize="md">
+                            Agregando monto
+                          </Heading>
+                        </Center>
+                      ) : null}
                       <Center>
                         <Button
                           bg="#475BD8"

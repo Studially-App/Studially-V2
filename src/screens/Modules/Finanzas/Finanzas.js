@@ -13,6 +13,9 @@ import {
   Menu,
   Pressable,
   Badge,
+  Spinner,
+  Heading,
+  Center,
 } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -33,22 +36,25 @@ const Finanzas = () => {
   const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // Estado modal crear
-  const [crearModalVisibility, setCrearModalVisibility] = React.useState(false);
+  const [crearModalVisibility, setCrearModalVisibility] = useState(false);
 
   // Estado modal monto
-  const [montoModalVisibility, setMontoModalVisibility] = React.useState(false);
+  const [montoModalVisibility, setMontoModalVisibility] = useState(false);
+
+  // Estado modal eliminar
+  const [eliminarSpinnerVisibility, setEliminarSpinnerlVisibility] =
+    useState(false);
 
   // Estado modal detalle
-  const [detalleModalVisibility, setDetalleModalVisibility] =
-    React.useState(false);
+  const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
 
   // Estado de cual se modifica
-  const [metaSelected, setMetaSelected] = React.useState(0);
+  const [metaSelected, setMetaSelected] = useState(0);
   // Data detalle
-  const [dataDetalle, setDataDetalle] = React.useState({});
+  const [dataDetalle, setDataDetalle] = useState({});
 
   // index
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = useState(0);
 
   // Finanzas states
   const [finantialGoals, setFinantialGoals] = useState([]);
@@ -73,6 +79,7 @@ const Finanzas = () => {
           console.log('User finantial goals updated!');
           setFinantialGoals(deleted);
         });
+      setEliminarSpinnerlVisibility(false);
     } catch (error) {
       console.log(error);
     }
@@ -161,6 +168,14 @@ const Finanzas = () => {
               <Text textAlign="center" color="#061678" fontSize="30px">
                 Finanzas
               </Text>
+              {eliminarSpinnerVisibility ? (
+                <Center>
+                  <Spinner color="cyan.500" size="lg" />
+                  <Heading color="cyan.500" fontSize="md">
+                    Eliminando meta
+                  </Heading>
+                </Center>
+              ) : null}
 
               {finantialGoals.map((item, i) => (
                 <Box
@@ -205,7 +220,11 @@ const Finanzas = () => {
                         }}>
                         Editar
                       </Menu.Item>
-                      <Menu.Item onPress={() => deleteFinance(i)}>
+                      <Menu.Item
+                        onPress={() => {
+                          setEliminarSpinnerlVisibility(true);
+                          deleteFinance(i);
+                        }}>
                         <Text color="red.400">Eliminar</Text>
                       </Menu.Item>
                     </Menu>
