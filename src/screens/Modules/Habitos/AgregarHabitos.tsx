@@ -17,13 +17,26 @@ import {
 } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import ModalDetalleHabito from '../../../components/Habitos/ModalDetalleHabito';
 import {useUser} from '../../../context/User';
+import notifee, {
+  TriggerType,
+  RepeatFrequency,
+  TimestampTrigger,
+  AndroidNotificationSetting,
+  AndroidImportance,
+} from '@notifee/react-native';
+
+type ParamList = {
+  AgregarHabitos: {
+    onGoBack: () => void;
+  };
+};
 
 const AgregarHabitos = () => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const route = useRoute<RouteProp<ParamList, 'AgregarHabitos'>>();
   const {userTier} = useUser();
 
   // Estado modal detalle
@@ -33,7 +46,7 @@ const AgregarHabitos = () => {
   // Data detalle
   const [dataDetalle, setDataDetalle] = React.useState({});
 
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState<Array<Record<string, any>>>([]);
 
   const [spinnerModal, setSpinnerModal] = useState(true);
 
@@ -47,25 +60,25 @@ const AgregarHabitos = () => {
       .collection('habitos')
       .doc('Personas')
       .get();
-    return habitsStats._data.habitos;
+    return habitsStats!.data()!.habitos;
   };
 
   const updateHabitsStats = async () => {
     const getPreviewHabits = await firestore()
       .collection('usuarios')
-      .doc(user.uid)
+      .doc(user!.uid)
       .get();
-    const previewHabits = getPreviewHabits._data.habitos;
+    const previewHabits = getPreviewHabits!.data()!.habitos;
 
     let habitsStats = await getHabitsStats();
 
-    const previewNames = [];
-    previewHabits.map(habit => {
+    const previewNames: any[] = [];
+    previewHabits.map((habit: {selected: any; name: any}) => {
       if (habit.selected) {
         previewNames.push(habit.name);
       }
     });
-    const actualNames = [];
+    const actualNames: any[] = [];
     data.map(habito => {
       if (habito.selected) {
         actualNames.push(habito.name);
@@ -82,7 +95,7 @@ const AgregarHabitos = () => {
 
     if (restaPersonas.length > 0) {
       restaPersonas.map(habito => {
-        const index = habitsStats.findIndex(stat => {
+        const index = habitsStats.findIndex((stat: {name: any}) => {
           return stat.name === habito;
         });
         habitsStats[index].persons = habitsStats[index].persons - 1;
@@ -91,7 +104,7 @@ const AgregarHabitos = () => {
 
     if (sumaPersonas.length > 0) {
       sumaPersonas.map(habito => {
-        const index = habitsStats.findIndex(stat => {
+        const index = habitsStats.findIndex((stat: {name: any}) => {
           return stat.name === habito;
         });
         habitsStats[index].persons = habitsStats[index].persons + 1;
@@ -107,7 +120,7 @@ const AgregarHabitos = () => {
     }
   };
 
-  const getHabits = async userInfo => {
+  const getHabits = async (userInfo: {[x: string]: any}) => {
     if (Object.keys(userInfo.habitos).length !== 0) {
       const userHabits = userInfo.habitos;
       setData(userHabits);
@@ -125,26 +138,98 @@ const AgregarHabitos = () => {
     }
   }, [userInfo]);
 
-  const updateHabits = () => {
+  const createTriggerNotification = async ({
+    date,
+    body,
+  }: {
+    date: Date;
+    body: string;
+  }) => {
+    const trigger: TimestampTrigger = {
+      type: TriggerType.TIMESTAMP,
+      timestamp: date.getTime(),
+      repeatFrequency: RepeatFrequency.WEEKLY,
+      alarmManager: true,
+    };
+
+    await notifee.createTriggerNotification(
+      {
+        title: 'Recuerda marcar tus habitos',
+        body,
+        android: {
+          channelId: 'habits',
+        },
+      },
+      trigger,
+    );
+  };
+
+  const scheduleWeeklyNotifications = async () => {
+    const frequencyMap = new Map();
+    const selectedHabits = data.filter(habit => habit.selected);
+    selectedHabits.forEach(habit => {
+      habit.frecuencia.forEach((day: number, index: number) => {
+        if (day === 1) {
+          if (frequencyMap.has(index)) {
+            frequencyMap.set(index, [...frequencyMap.get(index), habit.name]);
+          } else {
+            frequencyMap.set(index, [habit.name]);
+          }
+        }
+      });
+    });
+
+    const promises: Promise<void>[] = [];
+    frequencyMap.forEach((habits: string[], day: number) => {
+      const date = new Date();
+      date.setHours(
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds() + 10,
+        0,
+      );
+      date.setDate(date.getDate() + ((day + 8 - date.getDay()) % 7));
+      const body = `Hoy te tocan ${habits.join(', ')}`;
+      console.log(`scheduled notification for ${date} with body ${body}`);
+      promises.push(createTriggerNotification({date, body}));
+    });
+
+    await Promise.all(promises);
+  };
+
+  const updateHabits = async () => {
     try {
       updateHabitsStats();
-      firestore()
-        .collection('usuarios')
-        .doc(user.uid)
-        .update({
-          habitos: data,
-        })
-        .then(() => {
-          console.log('User habits updated!');
-          navigation.goBack();
-          route.params.onGoBack();
+      await firestore().collection('usuarios').doc(user!.uid).update({
+        habitos: data,
+      });
+
+      console.log('User habits updated!');
+      console.log(data);
+      const settings = await notifee.getNotificationSettings();
+      if (settings.android.alarm === AndroidNotificationSetting.ENABLED) {
+        await notifee.createChannel({
+          id: 'habits',
+          name: 'Recordatorio de habitos',
+          lights: false,
+          vibration: true,
+          importance: AndroidImportance.DEFAULT,
         });
+        console.log('Notifications enabled');
+        const ids = await notifee.getTriggerNotificationIds();
+        ids.forEach(id => {
+          notifee.cancelTriggerNotification(id);
+        });
+        await scheduleWeeklyNotifications();
+      }
+      navigation.goBack();
+      route.params.onGoBack();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const changeSelected = index => {
+  const changeSelected = (index: number) => {
     let changeData = [...data];
     let count = habitCount;
     if (changeData[index].selected) {
@@ -173,7 +258,7 @@ const AgregarHabitos = () => {
         updateHabits={updateHabits}
       />
       <VStack alignItems="center" mt={3} mb={20}>
-        <ScrollView w="100%" h="200px">
+        <ScrollView>
           <VStack space={15} alignItems="center">
             {data.map((item, i) => (
               <Box
