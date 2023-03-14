@@ -107,7 +107,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           </Center>
           <Center>
             <VStack>
-              <Text fontSize="40" bold>
+              <Text fontSize="30" bold>
                 10<Text fontSize="16">USD</Text> / mes
               </Text>
               <Flex direction="column" alignItems="flex-start" ml="2%">
@@ -122,9 +122,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Gana premios por tu tiempo de enfoque
                 </Text>
               </Flex>
@@ -132,9 +132,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Sigue más de 2 hábitos
                 </Text>
               </Flex>
@@ -142,9 +142,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Agrega a tus amigos y ve su avance
                 </Text>
               </Flex>
@@ -152,9 +152,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Logra múltiples metas financieras
                 </Text>
               </Flex>
@@ -162,9 +162,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Accede a oportunidades increíbles
                 </Text>
               </Flex>
@@ -172,9 +172,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Aprende de diversos temas
                 </Text>
               </Flex>
@@ -182,9 +182,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Cuida tu salud mental
                 </Text>
               </Flex>
@@ -192,9 +192,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <MaterialIcon
                   name="check"
                   color="rgba(39, 44, 70, 1)"
-                  size={16}
+                  size={13}
                 />
-                <Text fontSize="15" color="rgba(71, 91, 216, 1)" ml="5%">
+                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
                   Obtén beneficios con nuestros partners
                 </Text>
               </Flex>

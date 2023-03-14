@@ -257,8 +257,8 @@ const Enfoque = () => {
         setProModalVisibility={setProModalVisibility}
       />
       <View h={height} width={width}>
-        <VStack space={4} justifyContent="center">
-          <ScrollView w="100%" h="88%">
+        <ScrollView w="100%" h="80%">
+          <VStack space={4} justifyContent="center">
             <Center mt="6">
               {userTier !== 'premium' ? (
                 <Badge
@@ -336,7 +336,7 @@ const Enfoque = () => {
                   key={timerKey}
                   updateInterval={1}
                   colors="rgba(71, 91, 216, 1)"
-                  size={240}
+                  size={200}
                   onComplete={() => {
                     restartTimer();
                     setFocusFinishedModalVisibility(true);
@@ -351,8 +351,8 @@ const Enfoque = () => {
                               placeholder={placeholder}
                               defaultValue="25"
                               variant="unstyled"
-                              fontSize={48}
-                              size="2xl"
+                              fontSize={35}
+                              size="xl"
                               maxLength={2}
                               textAlign="center"
                               keyboardType="numeric"
@@ -378,8 +378,8 @@ const Enfoque = () => {
                               variant="unstyled"
                               textAlign="center"
                               keyboardType="numeric"
-                              fontSize={48}
-                              size="2xl"
+                              fontSize={35}
+                              size="xl"
                               maxLength={2}
                               marginRight={'50%'}
                               onChangeText={text => setInputSec(text)}
@@ -581,7 +581,7 @@ const Enfoque = () => {
             </HStack>
             {breakOutActive === false ? (
               <VStack alignItems="flex-start" px="8" space={2}>
-                <Heading>Categoría</Heading>
+                <Heading fontSize={20}>Categoría</Heading>
                 <Select
                   placeholder="Categoría"
                   rounded="4"
@@ -604,8 +604,8 @@ const Enfoque = () => {
                 </Text>
               </VStack>
             )}
-          </ScrollView>
-        </VStack>
+          </VStack>
+        </ScrollView>
       </View>
     </NativeBaseProvider>
   );
