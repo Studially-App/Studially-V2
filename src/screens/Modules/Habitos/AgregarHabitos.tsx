@@ -198,7 +198,7 @@ const AgregarHabitos = () => {
         0,
       );
       date.setDate(date.getDate() + ((day + 8 - date.getDay()) % 7));
-      const body = `Hoy es un gran dpua para realizar tus hábitos: ${habits.join(
+      const body = `Hoy es un gran día para realizar tus hábitos: ${habits.join(
         ', ',
       )}`;
       console.log(`scheduled notification for ${date} with body ${body}`);
@@ -216,7 +216,7 @@ const AgregarHabitos = () => {
       });
 
       console.log('User habits updated!');
-      console.log(data);
+      //console.log(data);
       const settings = await notifee.getNotificationSettings();
       if (settings.android.alarm === AndroidNotificationSetting.ENABLED) {
         await notifee.createChannel({

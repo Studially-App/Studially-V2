@@ -515,7 +515,7 @@ const Habitos = () => {
                     />
                   }>
                   <Text fontSize="lg" color="white">
-                    Estadisticas
+                    Estadísticas
                   </Text>
                 </Button>
 
@@ -615,7 +615,7 @@ const Habitos = () => {
                           onPress={() => {
                             desmarcarHabito(i);
                           }}>
-                          <Text fontSize="lg" color="white">
+                          <Text fontSize="md" color="white">
                             Deshacer{' '}
                             <Icon size={20} color="white" name="undo" />{' '}
                             <CountdownCircleTimer

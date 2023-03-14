@@ -26,22 +26,17 @@ const ModalDetalleBeneficios = ({
   data,
   setData,
 }) => {
-  const [scrollOffset, setScrollOffset] = React.useState(null);
-  const scrollViewReff = React.createRef();
+  // const [scrollOffset, setScrollOffset] = React.useState(null);
+  //const scrollViewReff = React.createRef();
 
   // Screen Dimentions
   const {width} = useWindowDimensions();
 
-  const handleOnScroll = event => {
-    setScrollOffset(event.nativeEvent.contentOffset.y);
-  };
-  const handleScrollTo = p => {
-    if (scrollViewReff.current) {
-      scrollViewReff.current.scrollTo(p);
-    }
-  };
-
-  const innerScrollViewRef = React.useRef(null);
+  // const handleScrollTo = p => {
+  //   if (scrollViewReff.current) {
+  //     scrollViewReff.current.scrollTo(p);
+  //   }
+  // };
 
   return (
     <NativeBaseProvider>
@@ -58,37 +53,33 @@ const ModalDetalleBeneficios = ({
             setModalVisibility(false);
             setData({});
           }}
-          scrollTo={handleScrollTo}
-          scrollOffset={scrollOffset}
+          // scrollTo={handleScrollTo}
+          // scrollOffset={scrollOffset}
           hideModalContentWhileAnimating={true}
-          swipeDirection={['down']}
-          onSwipeComplete={() => {
-            setModalVisibility(false);
-            setData({});
-          }}
+          // swipeDirection={['down']}
+          // onSwipeComplete={() => {
+          //   setModalVisibility(false);
+          //   setData({});
+          // }}
           style={{
             margin: 0,
+            marginTop: 100,
           }}
           children={
-            <ScrollView
-              flex="1"
-              ref={scrollViewReff}
-              p="8"
-              onScroll={handleOnScroll}
-              scrollEventThrottle={16}>
-              <VStack space="8" alignItems="center" h="100%">
-                <Center>
-                  <Box>
-                    <MaterialIcon
-                      name="keyboard-arrow-down"
-                      size={32}
-                      color="rgba(39, 44, 70, 1)"
-                    />
-                  </Box>
-                </Center>
-                <Center>
-                  <Heading>{data.titulo}</Heading>
-                </Center>
+            <VStack space="8" alignItems="center" h="100%" p={8}>
+              <Center>
+                <Box>
+                  <MaterialIcon
+                    name="keyboard-arrow-down"
+                    size={32}
+                    color="rgba(39, 44, 70, 1)"
+                  />
+                </Box>
+              </Center>
+              <Center>
+                <Heading>{data.titulo}</Heading>
+              </Center>
+              <ScrollView w="95%" h="40">
                 <Image
                   source={{
                     uri: data.imagenURL,
@@ -98,22 +89,21 @@ const ModalDetalleBeneficios = ({
                   w="95%"
                   h="48"
                 />
-                <ScrollView ref={innerScrollViewRef} w="95%" h="20">
-                  <Text w="95%">{data.texto}</Text>
-                </ScrollView>
 
-                <Button
-                  bg="rgba(71, 91, 216, 1)"
-                  _text={{
-                    fontSize: 16,
-                  }}
-                  w="95%">
-                  <Link href={data.url} _text={{color: 'white'}}>
-                    Más información
-                  </Link>
-                </Button>
-              </VStack>
-            </ScrollView>
+                <Text w="95%">{data.texto}</Text>
+              </ScrollView>
+
+              <Button
+                bg="rgba(71, 91, 216, 1)"
+                _text={{
+                  fontSize: 16,
+                }}
+                w="95%">
+                <Link href={data.url} _text={{color: 'white'}}>
+                  Más información
+                </Link>
+              </Button>
+            </VStack>
           }
         />
       </View>
