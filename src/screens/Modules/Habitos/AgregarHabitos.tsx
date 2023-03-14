@@ -19,6 +19,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import ModalDetalleHabito from '../../../components/Habitos/ModalDetalleHabito';
+import StudiallyProModal from '../../../components/StudiallyProModal';
 import {useUser} from '../../../context/User';
 import notifee, {
   TriggerType,
@@ -38,6 +39,9 @@ const AgregarHabitos = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'AgregarHabitos'>>();
   const {userTier} = useUser();
+
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
 
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] =
@@ -121,9 +125,14 @@ const AgregarHabitos = () => {
   };
 
   const getHabits = async (userInfo: {[x: string]: any}) => {
-    if (Object.keys(userInfo.habitos).length !== 0) {
+    if (Object.keys(userInfo.habitos).length > 0) {
       const userHabits = userInfo.habitos;
       setData(userHabits);
+      let initialCount = 0;
+      for (let i = 0; i < userHabits.length; i++) {
+        if (userHabits[i].selected) initialCount++;
+      }
+      setHabitCount(initialCount);
     } else {
       const snapshot = await firestore().collection('habitosApp').get();
       const habitos = snapshot.docs.map(doc => doc.data());
@@ -189,7 +198,9 @@ const AgregarHabitos = () => {
         0,
       );
       date.setDate(date.getDate() + ((day + 8 - date.getDay()) % 7));
-      const body = `Hoy te tocan ${habits.join(', ')}`;
+      const body = `Hoy es un gran dpua para realizar tus hábitos: ${habits.join(
+        ', ',
+      )}`;
       console.log(`scheduled notification for ${date} with body ${body}`);
       promises.push(createTriggerNotification({date, body}));
     });
@@ -210,7 +221,7 @@ const AgregarHabitos = () => {
       if (settings.android.alarm === AndroidNotificationSetting.ENABLED) {
         await notifee.createChannel({
           id: 'habits',
-          name: 'Recordatorio de habitos',
+          name: 'Recordatorio',
           lights: false,
           vibration: true,
           importance: AndroidImportance.DEFAULT,
@@ -235,10 +246,13 @@ const AgregarHabitos = () => {
     if (changeData[index].selected) {
       changeData[index].frecuencia = [0, 0, 0, 0, 0, 0, 0];
       changeData[index].marcadoSemana = [];
+      count = count - 1;
+      setHabitCount(count);
+    } else {
+      count = count + 1;
+      setHabitCount(count);
     }
     changeData[index].selected = !changeData[index].selected;
-    count = count + 1;
-    setHabitCount(count);
     setData(changeData);
   };
 
@@ -257,6 +271,10 @@ const AgregarHabitos = () => {
         setData={setDataDetalle}
         updateHabits={updateHabits}
       />
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
+      />
       <VStack alignItems="center" mt={3} mb={20}>
         <ScrollView>
           <VStack space={15} alignItems="center">
@@ -271,7 +289,7 @@ const AgregarHabitos = () => {
                 justifyContent="center"
                 rounded="lg"
                 key={i}>
-                {habitCount >= 2 && !item.selected ? (
+                {habitCount >= 2 && !item.selected && userTier !== 'premium' ? (
                   <Badge
                     colorScheme="danger"
                     rounded="full"
@@ -315,9 +333,13 @@ const AgregarHabitos = () => {
                       color="#061678"
                       name="add-circle-outline"
                       onPress={() => {
-                        setDataDetalle(item);
-                        setDetalleModalVisibility(true);
-                        changeSelected(i);
+                        if (userTier !== 'premium' && habitCount >= 2) {
+                          setProModalVisibility(true);
+                        } else {
+                          setDataDetalle(item);
+                          setDetalleModalVisibility(true);
+                          changeSelected(i);
+                        }
                       }}
                     />
                   )}
