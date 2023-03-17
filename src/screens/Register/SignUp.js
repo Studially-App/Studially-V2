@@ -169,11 +169,7 @@ const SignUp = ({navigation}) => {
         since: dayjs().format('YYYY-MM-DD'),
       })
       .then(() => {
-        console.log(
-          'Google User added!',
-          dayjs().month(),
-          dayjs(new Date()).week(),
-        );
+        console.log('Google User added!');
       });
   };
 
@@ -261,11 +257,7 @@ const SignUp = ({navigation}) => {
               since: dayjs().format('YYYY-MM-DD'),
             })
             .then(() => {
-              console.log(
-                'User added!',
-                dayjs().month(),
-                dayjs(new Date()).week(),
-              );
+              console.log('User added!');
             });
           sendEmail();
         })

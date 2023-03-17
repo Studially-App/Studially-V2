@@ -10,9 +10,6 @@ import {
   Pressable,
   Spacer,
   Box,
-  Modal,
-  Spinner,
-  Heading,
   Divider,
   Menu,
   Badge,
@@ -45,8 +42,6 @@ const Habitos = () => {
   const [selectedData, setSelectedData] = React.useState([]);
 
   const [habitosTendencia, setHabitosTendencia] = React.useState([]);
-
-  const [spinnerModal, setSpinnerModal] = useState(false);
 
   const [fuegos, setFuegos] = useState({});
   const [amigos, setAmigos] = useState([]);
@@ -267,7 +262,7 @@ const Habitos = () => {
     }
   };
 
-  const getHabits = useCallback(userInfo => {
+  const getHabits = useCallback(async userInfo => {
     var userHabits = userInfo.habitos;
     setData(userHabits);
     var selectedHabits = [];
@@ -338,12 +333,6 @@ const Habitos = () => {
         proModalVisibility={proModalVisibility}
         setProModalVisibility={setProModalVisibility}
       />
-      <Modal isOpen={spinnerModal}>
-        <Spinner color="cyan.500" size="lg" />
-        <Heading color="cyan.500" fontSize="md">
-          Cargando Hábitos
-        </Heading>
-      </Modal>
       <VStack space={4} alignItems="center" mt={2}>
         <HStack space={3} justifyContent="center" maxW="90%">
           {tab === 'Mis Habitos' ? (
