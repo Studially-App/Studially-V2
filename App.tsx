@@ -43,7 +43,10 @@ import EstadisticasEnfoque from './src/screens/Modules/Enfoque/EstadisticasEnfoq
 import Mas from './src/screens/Modules/Perfil/Mas';
 import Profile from './src/screens/Modules/Perfil/Profile';
 import StudiallyPRO from './src/screens/Modules/Perfil/StudiallyPro';
-import {requestNotificationPermission} from './src/utils/notifications';
+import {
+  requestNotificationPermission,
+  subscribeToTopic,
+} from './src/utils/notifications';
 import {UserProvider, useUser} from './src/context/User';
 
 const Tabs = createBottomTabNavigator();
@@ -159,6 +162,7 @@ const App = () => {
   useEffect(() => {
     if (initialized && user) {
       requestNotificationPermission();
+      subscribeToTopic('all');
     }
   }, [initialized, user]);
 
