@@ -48,6 +48,8 @@ import DatePicker from 'react-native-date-picker';
 import {Formik} from 'formik';
 
 import dayjs from 'dayjs';
+let weekOfYear = require('dayjs/plugin/weekOfYear');
+dayjs.extend(weekOfYear);
 
 const styles = StyleSheet.create({
   email_input: {
@@ -162,12 +164,16 @@ const SignUp = ({navigation}) => {
         ],
         minutosHoy: 0,
         minutosHoyDia: '',
-        minutosMes: '',
-        minutosSemana: '',
+        minutosMes: dayjs().month(),
+        minutosSemana: dayjs(new Date()).week(),
         since: dayjs().format('YYYY-MM-DD'),
       })
       .then(() => {
-        console.log('Google User added!');
+        console.log(
+          'Google User added!',
+          dayjs().month(),
+          dayjs(new Date()).week(),
+        );
       });
   };
 
@@ -250,12 +256,16 @@ const SignUp = ({navigation}) => {
               ],
               minutosHoy: 0,
               minutosHoyDia: '',
-              minutosMes: '',
-              minutosSemana: '',
+              minutosMes: dayjs().month(),
+              minutosSemana: dayjs(new Date()).week(),
               since: dayjs().format('YYYY-MM-DD'),
             })
             .then(() => {
-              console.log('User added!');
+              console.log(
+                'User added!',
+                dayjs().month(),
+                dayjs(new Date()).week(),
+              );
             });
           sendEmail();
         })
