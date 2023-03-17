@@ -467,13 +467,7 @@ const Habitos = () => {
               Aún no tienes hábitos en la lista
               <Button
                 onPress={() => {
-                  navigation.navigate('Agregar Habitos', {
-                    onGoBack: () => {
-                      setSpinnerModal(true);
-                      getHabits(userInfo);
-                      setSpinnerModal(false);
-                    },
-                  });
+                  navigation.navigate('Agregar Habitos');
                 }}
                 bg="#475BD8">
                 <Text fontSize="xl" color="white">
@@ -492,13 +486,7 @@ const Habitos = () => {
                   underline
                   onPress={() => {
                     console.log('Editar hábitos');
-                    navigation.navigate('Agregar Habitos', {
-                      onGoBack: () => {
-                        setSpinnerModal(true);
-                        getHabits(userInfo);
-                        setSpinnerModal(false);
-                      },
-                    });
+                    navigation.navigate('Agregar Habitos');
                   }}>
                   Editar hábitos{' '}
                   <FontistoIcon name="equalizer" size={16} color="#272C46" />{' '}

@@ -17,7 +17,7 @@ import {
 } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ModalDetalleHabito from '../../../components/Habitos/ModalDetalleHabito';
 import StudiallyProModal from '../../../components/StudiallyProModal';
 import {useUser} from '../../../context/User';
@@ -29,15 +29,8 @@ import notifee, {
   AndroidImportance,
 } from '@notifee/react-native';
 
-type ParamList = {
-  AgregarHabitos: {
-    onGoBack: () => void;
-  };
-};
-
 const AgregarHabitos = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'AgregarHabitos'>>();
   const {userTier} = useUser();
 
   // Estado Pro modal
@@ -234,7 +227,6 @@ const AgregarHabitos = () => {
         await scheduleWeeklyNotifications();
       }
       navigation.goBack();
-      route.params.onGoBack();
     } catch (error) {
       console.log(error);
     }
