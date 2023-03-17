@@ -46,6 +46,7 @@ import StudiallyPRO from './src/screens/Modules/Perfil/StudiallyPro';
 import {
   requestNotificationPermission,
   subscribeToTopic,
+  unsubscribeFromTopic,
 } from './src/utils/notifications';
 import {UserProvider, useUser} from './src/context/User';
 
@@ -157,14 +158,21 @@ const EnfoqueStackScreen = () => (
 
 const App = () => {
   const [profile, setProfile] = useState(false);
-  const {user, initialized} = useUser();
+  const {user, initialized, userTier} = useUser();
 
   useEffect(() => {
     if (initialized && user) {
       requestNotificationPermission();
       subscribeToTopic('all');
+      if (userTier === 'premium') {
+        subscribeToTopic('premium');
+        unsubscribeFromTopic('free');
+      } else {
+        subscribeToTopic('free');
+        unsubscribeFromTopic('premium');
+      }
     }
-  }, [initialized, user]);
+  }, [initialized, user, userTier]);
 
   if (!initialized) {
     return null;

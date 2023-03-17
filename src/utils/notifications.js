@@ -10,17 +10,17 @@ export const requestNotificationPermission = async () => {
     const result = await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
     if (result === 'granted') {
       await getFCMToken();
-      await notifee.createChannel({
-        id: 'default',
-        name: 'Recordatorio de habitos',
-        lights: false,
-        vibration: true,
-        importance: AndroidImportance.DEFAULT,
-      });
     }
   } else {
     await getFCMToken();
   }
+  await notifee.createChannel({
+    id: 'default',
+    name: 'Recordatorio de habitos',
+    lights: false,
+    vibration: true,
+    importance: AndroidImportance.DEFAULT,
+  });
 };
 
 const getFCMToken = async () => {
@@ -43,6 +43,14 @@ const getFCMToken = async () => {
 export const subscribeToTopic = async topic => {
   try {
     await firebaseMessaging().subscribeToTopic(topic);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const unsubscribeFromTopic = async topic => {
+  try {
+    await firebaseMessaging().unsubscribeFromTopic(topic);
   } catch (error) {
     console.error(error);
   }
