@@ -3,6 +3,7 @@ import firebaseMessaging from '@react-native-firebase/messaging';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {Platform} from 'react-native';
+import notifee, {AndroidImportance} from '@notifee/react-native';
 
 export const requestNotificationPermission = async () => {
   if (Platform.constants.Release >= 13) {
@@ -13,6 +14,13 @@ export const requestNotificationPermission = async () => {
   } else {
     await getFCMToken();
   }
+  await notifee.createChannel({
+    id: 'default',
+    name: 'Recordatorio de habitos',
+    lights: false,
+    vibration: true,
+    importance: AndroidImportance.DEFAULT,
+  });
 };
 
 const getFCMToken = async () => {
@@ -27,6 +35,22 @@ const getFCMToken = async () => {
       .update({
         fcmTokens: firestore.FieldValue.arrayUnion(fcmToken),
       });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const subscribeToTopic = async topic => {
+  try {
+    await firebaseMessaging().subscribeToTopic(topic);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const unsubscribeFromTopic = async topic => {
+  try {
+    await firebaseMessaging().unsubscribeFromTopic(topic);
   } catch (error) {
     console.error(error);
   }
