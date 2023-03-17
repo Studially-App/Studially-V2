@@ -267,7 +267,7 @@ const Habitos = () => {
     }
   };
 
-  const getHabits = useCallback(userInfo => {
+  const getHabits = useCallback(async userInfo => {
     var userHabits = userInfo.habitos;
     setData(userHabits);
     var selectedHabits = [];
@@ -309,7 +309,8 @@ const Habitos = () => {
 
   useEffect(() => {
     if (userInfo) {
-      getHabits(userInfo);
+      setSpinnerModal(true);
+      getHabits(userInfo).then(() => setSpinnerModal(false));
     }
   }, [getHabits, userInfo]);
 
@@ -338,6 +339,7 @@ const Habitos = () => {
         proModalVisibility={proModalVisibility}
         setProModalVisibility={setProModalVisibility}
       />
+
       <Modal isOpen={spinnerModal}>
         <Spinner color="cyan.500" size="lg" />
         <Heading color="cyan.500" fontSize="md">
@@ -468,10 +470,9 @@ const Habitos = () => {
               <Button
                 onPress={() => {
                   navigation.navigate('Agregar Habitos', {
-                    onGoBack: () => {
+                    onGoBack: async () => {
                       setSpinnerModal(true);
-                      getHabits(userInfo);
-                      setSpinnerModal(false);
+                      await getHabits(userInfo);
                     },
                   });
                 }}
@@ -494,9 +495,7 @@ const Habitos = () => {
                     console.log('Editar hábitos');
                     navigation.navigate('Agregar Habitos', {
                       onGoBack: () => {
-                        setSpinnerModal(true);
                         getHabits(userInfo);
-                        setSpinnerModal(false);
                       },
                     });
                   }}>

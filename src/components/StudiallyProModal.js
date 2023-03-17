@@ -95,14 +95,24 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           w="90%"
           h="80%"
           bg="rgba(255, 255, 255, 1)"
-          mb={16}
+          mb={5}
           shadow="9"
           rounded="12">
           <Center>
             <Box justifyContent="center" w="90%">
-              <Center h="16%">
+              <Flex
+                direction="row"
+                alignItems="center"
+                justifyContent="space-around"
+                mt={5}>
                 <Image source={StudiallyPROIcon} alt="StudiallyPROIcon" />
-              </Center>
+                <MaterialIcon
+                  name="close"
+                  color="rgba(39, 44, 70, 1)"
+                  size={18}
+                  onPress={() => setProModalVisibility(false)}
+                />
+              </Flex>
             </Box>
           </Center>
           <Center>

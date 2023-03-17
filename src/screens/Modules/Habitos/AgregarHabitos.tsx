@@ -54,6 +54,8 @@ const AgregarHabitos = () => {
 
   const [spinnerModal, setSpinnerModal] = useState(true);
 
+  const [spinnerModalGuardar, setSpinnerModalGuardar] = useState(false);
+
   const [habitCount, setHabitCount] = useState(0);
 
   // Set an initializing state whilst Firebase connects
@@ -233,6 +235,7 @@ const AgregarHabitos = () => {
         });
         await scheduleWeeklyNotifications();
       }
+      setSpinnerModalGuardar(false);
       navigation.goBack();
       route.params.onGoBack();
     } catch (error) {
@@ -262,6 +265,12 @@ const AgregarHabitos = () => {
         <Spinner color="cyan.500" size="lg" />
         <Heading color="cyan.500" fontSize="md">
           Cargando Hábitos
+        </Heading>
+      </Modal>
+      <Modal isOpen={spinnerModalGuardar}>
+        <Spinner color="cyan.500" size="lg" />
+        <Heading color="cyan.500" fontSize="md">
+          Guardando Hábitos
         </Heading>
       </Modal>
       <ModalDetalleHabito
@@ -347,7 +356,12 @@ const AgregarHabitos = () => {
               </Box>
             ))}
 
-            <Button onPress={() => updateHabits()} bg="#475BD8">
+            <Button
+              onPress={async () => {
+                setSpinnerModalGuardar(true);
+                await updateHabits();
+              }}
+              bg="#475BD8">
               <Text fontSize="lg" color="white">
                 Guardar cambios
               </Text>

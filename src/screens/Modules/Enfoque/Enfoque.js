@@ -256,233 +256,286 @@ const Enfoque = () => {
         proModalVisibility={proModalVisibility}
         setProModalVisibility={setProModalVisibility}
       />
-      <View h={height} width={width}>
-        <ScrollView w="100%" h="80%">
-          <VStack space={4} justifyContent="center">
-            <Center mt="6">
-              {userTier !== 'premium' ? (
-                <Badge
-                  colorScheme="danger"
-                  rounded="full"
-                  mb={-2}
-                  mr={150}
-                  zIndex={1}
-                  variant="solid"
-                  alignSelf="flex-end"
-                  _text={{
-                    fontSize: 15,
-                  }}>
-                  Pro
-                </Badge>
-              ) : null}
+      {/* <View h={height} width={width}> */}
+      <ScrollView w={width} h={height}>
+        <VStack space={4} justifyContent="center">
+          <Center mt="6">
+            {userTier !== 'premium' ? (
+              <Badge
+                colorScheme="danger"
+                rounded="full"
+                mb={-2}
+                mr={150}
+                zIndex={1}
+                variant="solid"
+                alignSelf="flex-end"
+                _text={{
+                  fontSize: 15,
+                }}>
+                Pro
+              </Badge>
+            ) : null}
+            <Button
+              onPress={() => {
+                if (userTier !== 'premium') {
+                  setProModalVisibility(true);
+                } else {
+                  navigation.navigate('Estadisticas', {
+                    minutes: minutesStats,
+                  });
+                }
+              }}
+              bg="rgba(71, 91, 216, 1)"
+              mb={2}
+              rightIcon={
+                <MaterialIcon
+                  name="show-chart"
+                  size={16}
+                  color="rgba(255, 255, 255, 1.0)"
+                />
+              }>
+              Estadísticas
+            </Button>
+            <HStack
+              justifyContent="space-around"
+              w="100%"
+              alignItems="center"
+              mb={2}>
               <Button
                 onPress={() => {
-                  if (userTier !== 'premium') {
-                    setProModalVisibility(true);
-                  } else {
-                    navigation.navigate('Estadisticas', {
-                      minutes: minutesStats,
-                    });
+                  navigation.navigate('Rewards', {
+                    stars: studiallyStars,
+                    userTier,
+                  });
+                }}
+                borderColor="rgba(71, 91, 216, 1)"
+                bg={'white'}
+                borderWidth={1}>
+                <Text fontSize={16} color="rgba(71, 91, 216, 1)">
+                  Redimir puntos
+                </Text>
+              </Button>
+              <Text fontSize={20} fontWeight="bold">
+                {studiallyStars}
+                <MaterialIcon
+                  name="star-outline"
+                  size={20}
+                  color="rgba(71, 91, 216, 1)"
+                />
+              </Text>
+            </HStack>
+            <Text fontSize={18} fontWeight="bold">
+              Edita tu tiempo de enfoque
+            </Text>
+          </Center>
+          <Center>
+            {breakOutActive === false ? (
+              <CountdownCircleTimer
+                isPlaying={timerOn}
+                duration={timerInput}
+                key={timerKey}
+                updateInterval={1}
+                colors="rgba(71, 91, 216, 1)"
+                size={200}
+                onComplete={() => {
+                  restartTimer();
+                  setFocusFinishedModalVisibility(true);
+                  countMinutes();
+                }}
+                children={({remainingTime}) => {
+                  if (remainingTime === 0) {
+                    return (
+                      <HStack alignItems="center">
+                        <Center w={'150'}>
+                          <Input
+                            placeholder={placeholder}
+                            defaultValue="25"
+                            variant="unstyled"
+                            fontSize={35}
+                            size="xl"
+                            maxLength={2}
+                            textAlign="center"
+                            keyboardType="numeric"
+                            marginLeft={'50%'}
+                            onChangeText={text => setInputMin(text)}
+                          />
+                          <Text
+                            fontSize="10"
+                            marginLeft={'50%'}
+                            color={timerStart === true ? 'black' : '#a3a3a3'}>
+                            min
+                          </Text>
+                        </Center>
+                        <Text
+                          fontSize="48"
+                          color={timerStart === true ? 'black' : '#a3a3a3'}>
+                          :
+                        </Text>
+                        <Center w={'150'}>
+                          <Input
+                            placeholder={placeholder}
+                            defaultValue="00"
+                            variant="unstyled"
+                            textAlign="center"
+                            keyboardType="numeric"
+                            fontSize={35}
+                            size="xl"
+                            maxLength={2}
+                            marginRight={'50%'}
+                            onChangeText={text => setInputSec(text)}
+                          />
+                          <Text
+                            fontSize="10"
+                            marginRight={'50%'}
+                            color={timerStart === true ? 'black' : '#a3a3a3'}>
+                            seg
+                          </Text>
+                        </Center>
+                      </HStack>
+                    );
+                  }
+                  if (timerStart === true) {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    return seconds < 10 && minutes >= 10 ? (
+                      <Text fontSize="48">
+                        {minutes}:0{seconds}
+                      </Text>
+                    ) : seconds < 10 && minutes < 10 ? (
+                      <Text fontSize="48">
+                        0{minutes}:0{seconds}
+                      </Text>
+                    ) : seconds >= 10 && minutes < 10 ? (
+                      <Text fontSize="48">
+                        0{minutes}:{seconds}
+                      </Text>
+                    ) : (
+                      <Text fontSize="48">
+                        {minutes}:{seconds}
+                      </Text>
+                    );
+                  }
+                  // return <Input />;
+                }}
+              />
+            ) : (
+              <CountdownCircleTimer
+                isPlaying={breakOutOn}
+                duration={breakOutTime}
+                key={breakOutKey}
+                updateInterval={1}
+                colors="rgba(71, 91, 216, 1)"
+                size={240}
+                onComplete={() => {
+                  setBreakOutActive(false);
+                }}
+                children={({remainingTime}) => {
+                  if (breakOutOn === true) {
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    return seconds < 10 && minutes >= 10 ? (
+                      <Text fontSize="48">
+                        {minutes}:0{seconds}
+                      </Text>
+                    ) : seconds < 10 && minutes < 10 ? (
+                      <Text fontSize="48">
+                        0{minutes}:0{seconds}
+                      </Text>
+                    ) : seconds >= 10 && minutes < 10 ? (
+                      <Text fontSize="48">
+                        0{minutes}:{seconds}
+                      </Text>
+                    ) : (
+                      <Text fontSize="48">
+                        {minutes}:{seconds}
+                      </Text>
+                    );
                   }
                 }}
-                bg="rgba(71, 91, 216, 1)"
-                mb={2}
-                rightIcon={
-                  <MaterialIcon
-                    name="show-chart"
-                    size={16}
-                    color="rgba(255, 255, 255, 1.0)"
-                  />
-                }>
-                Estadísticas
-              </Button>
-              <HStack
-                justifyContent="space-around"
-                w="100%"
-                alignItems="center"
-                mb={2}>
-                <Button
-                  onPress={() => {
-                    navigation.navigate('Rewards', {
-                      stars: studiallyStars,
-                      userTier,
-                    });
-                  }}
-                  borderColor="rgba(71, 91, 216, 1)"
-                  bg={'white'}
-                  borderWidth={1}>
-                  <Text fontSize={16} color="rgba(71, 91, 216, 1)">
-                    Redimir puntos
-                  </Text>
-                </Button>
-                <Text fontSize={20} fontWeight="bold">
-                  {studiallyStars}
-                  <MaterialIcon
-                    name="star-outline"
-                    size={20}
-                    color="rgba(71, 91, 216, 1)"
-                  />
-                </Text>
-              </HStack>
-              <Text fontSize={18} fontWeight="bold">
-                Edita tu tiempo de enfoque
-              </Text>
-            </Center>
+              />
+            )}
+          </Center>
+          <HStack justifyContent="center" space="2">
             <Center>
-              {breakOutActive === false ? (
-                <CountdownCircleTimer
-                  isPlaying={timerOn}
-                  duration={timerInput}
-                  key={timerKey}
-                  updateInterval={1}
-                  colors="rgba(71, 91, 216, 1)"
-                  size={200}
-                  onComplete={() => {
-                    restartTimer();
-                    setFocusFinishedModalVisibility(true);
-                    countMinutes();
-                  }}
-                  children={({remainingTime}) => {
-                    if (remainingTime === 0) {
-                      return (
-                        <HStack alignItems="center">
-                          <Center w={'150'}>
-                            <Input
-                              placeholder={placeholder}
-                              defaultValue="25"
-                              variant="unstyled"
-                              fontSize={35}
-                              size="xl"
-                              maxLength={2}
-                              textAlign="center"
-                              keyboardType="numeric"
-                              marginLeft={'50%'}
-                              onChangeText={text => setInputMin(text)}
-                            />
-                            <Text
-                              fontSize="10"
-                              marginLeft={'50%'}
-                              color={timerStart === true ? 'black' : '#a3a3a3'}>
-                              min
-                            </Text>
-                          </Center>
-                          <Text
-                            fontSize="48"
-                            color={timerStart === true ? 'black' : '#a3a3a3'}>
-                            :
-                          </Text>
-                          <Center w={'150'}>
-                            <Input
-                              placeholder={placeholder}
-                              defaultValue="00"
-                              variant="unstyled"
-                              textAlign="center"
-                              keyboardType="numeric"
-                              fontSize={35}
-                              size="xl"
-                              maxLength={2}
-                              marginRight={'50%'}
-                              onChangeText={text => setInputSec(text)}
-                            />
-                            <Text
-                              fontSize="10"
-                              marginRight={'50%'}
-                              color={timerStart === true ? 'black' : '#a3a3a3'}>
-                              seg
-                            </Text>
-                          </Center>
-                        </HStack>
-                      );
-                    }
-                    if (timerStart === true) {
-                      const minutes = Math.floor(remainingTime / 60);
-                      const seconds = remainingTime % 60;
-                      return seconds < 10 && minutes >= 10 ? (
-                        <Text fontSize="48">
-                          {minutes}:0{seconds}
-                        </Text>
-                      ) : seconds < 10 && minutes < 10 ? (
-                        <Text fontSize="48">
-                          0{minutes}:0{seconds}
-                        </Text>
-                      ) : seconds >= 10 && minutes < 10 ? (
-                        <Text fontSize="48">
-                          0{minutes}:{seconds}
-                        </Text>
-                      ) : (
-                        <Text fontSize="48">
-                          {minutes}:{seconds}
-                        </Text>
-                      );
-                    }
-                    // return <Input />;
-                  }}
-                />
-              ) : (
-                <CountdownCircleTimer
-                  isPlaying={breakOutOn}
-                  duration={breakOutTime}
-                  key={breakOutKey}
-                  updateInterval={1}
-                  colors="rgba(71, 91, 216, 1)"
-                  size={240}
-                  onComplete={() => {
-                    setBreakOutActive(false);
-                  }}
-                  children={({remainingTime}) => {
-                    if (breakOutOn === true) {
-                      const minutes = Math.floor(remainingTime / 60);
-                      const seconds = remainingTime % 60;
-                      return seconds < 10 && minutes >= 10 ? (
-                        <Text fontSize="48">
-                          {minutes}:0{seconds}
-                        </Text>
-                      ) : seconds < 10 && minutes < 10 ? (
-                        <Text fontSize="48">
-                          0{minutes}:0{seconds}
-                        </Text>
-                      ) : seconds >= 10 && minutes < 10 ? (
-                        <Text fontSize="48">
-                          0{minutes}:{seconds}
-                        </Text>
-                      ) : (
-                        <Text fontSize="48">
-                          {minutes}:{seconds}
-                        </Text>
-                      );
-                    }
-                  }}
-                />
-              )}
-            </Center>
-            <HStack justifyContent="center" space="2">
-              <Center>
-                {breakOutActive === false &&
-                timerOn === false &&
-                timerStart === false ? (
+              {breakOutActive === false &&
+              timerOn === false &&
+              timerStart === false ? (
+                <Center>
+                  <Pressable
+                    onPress={() => {
+                      if (
+                        category.length !== 0 &&
+                        (inputMin !== 0 || inputSec !== 0)
+                      ) {
+                        setTimer();
+                      }
+                      if (inputMin === 0 && inputSec === 0) {
+                        return toast.show({
+                          description: 'Elija la duración',
+                          duration: 1500,
+                          placement: 'top',
+                        });
+                      }
+                      if (category.length === 0) {
+                        toast.show({
+                          description: 'Seleccione una categoría',
+                          duration: 1500,
+                          placement: 'top',
+                        });
+                      }
+                    }}>
+                    <Circle size="48px" bg="rgba(71, 91, 216, 1)">
+                      <MaterialIcon
+                        name="play-arrow"
+                        size={32}
+                        color="rgba(255, 255, 255, 1.0)"
+                      />
+                    </Circle>
+                  </Pressable>
+                </Center>
+              ) : breakOutActive === false &&
+                timerOn === true &&
+                timerStart === true ? (
+                <HStack space="2">
                   <Center>
                     <Pressable
                       onPress={() => {
-                        if (
-                          category.length !== 0 &&
-                          (inputMin !== 0 || inputSec !== 0)
-                        ) {
-                          setTimer();
-                        }
-                        if (inputMin === 0 && inputSec === 0) {
-                          return toast.show({
-                            description: 'Elija la duración',
-                            duration: 1500,
-                            placement: 'top',
-                          });
-                        }
-                        if (category.length === 0) {
-                          toast.show({
-                            description: 'Seleccione una categoría',
-                            duration: 1500,
-                            placement: 'top',
-                          });
-                        }
+                        setTimerOn(false);
+                      }}>
+                      <Circle size="48px" bg="rgba(71, 91, 216, 1)">
+                        <Ionicons
+                          name="pause"
+                          size={26}
+                          color="rgba(255, 255, 255, 1.0)"
+                        />
+                      </Circle>
+                    </Pressable>
+                  </Center>
+                  <Center>
+                    <Pressable
+                      onPress={() => {
+                        // setTimerOn(false);
+                        // restartTimer();
+                        setStopModalVisibility(true);
+                      }}>
+                      <Circle size="48px" bg="rgba(71, 91, 216, 1)">
+                        <Ionicons
+                          name="stop"
+                          size={26}
+                          color="rgba(255, 255, 255, 1.0)"
+                        />
+                      </Circle>
+                    </Pressable>
+                  </Center>
+                </HStack>
+              ) : breakOutActive === false &&
+                timerOn === false &&
+                timerStart === true ? (
+                <HStack space="2">
+                  <Center>
+                    <Pressable
+                      onPress={() => {
+                        setTimerOn(true);
                       }}>
                       <Circle size="48px" bg="rgba(71, 91, 216, 1)">
                         <MaterialIcon
@@ -493,120 +546,67 @@ const Enfoque = () => {
                       </Circle>
                     </Pressable>
                   </Center>
-                ) : breakOutActive === false &&
-                  timerOn === true &&
-                  timerStart === true ? (
-                  <HStack space="2">
-                    <Center>
-                      <Pressable
-                        onPress={() => {
-                          setTimerOn(false);
-                        }}>
-                        <Circle size="48px" bg="rgba(71, 91, 216, 1)">
-                          <Ionicons
-                            name="pause"
-                            size={26}
-                            color="rgba(255, 255, 255, 1.0)"
-                          />
-                        </Circle>
-                      </Pressable>
-                    </Center>
-                    <Center>
-                      <Pressable
-                        onPress={() => {
-                          // setTimerOn(false);
-                          // restartTimer();
-                          setStopModalVisibility(true);
-                        }}>
-                        <Circle size="48px" bg="rgba(71, 91, 216, 1)">
-                          <Ionicons
-                            name="stop"
-                            size={26}
-                            color="rgba(255, 255, 255, 1.0)"
-                          />
-                        </Circle>
-                      </Pressable>
-                    </Center>
-                  </HStack>
-                ) : breakOutActive === false &&
-                  timerOn === false &&
-                  timerStart === true ? (
-                  <HStack space="2">
-                    <Center>
-                      <Pressable
-                        onPress={() => {
-                          setTimerOn(true);
-                        }}>
-                        <Circle size="48px" bg="rgba(71, 91, 216, 1)">
-                          <MaterialIcon
-                            name="play-arrow"
-                            size={32}
-                            color="rgba(255, 255, 255, 1.0)"
-                          />
-                        </Circle>
-                      </Pressable>
-                    </Center>
-                    <Center>
-                      <Pressable
-                        onPress={() => {
-                          // setTimerOn(false);
-                          setStopModalVisibility(true);
-                        }}>
-                        <Circle size="48px" bg="rgba(71, 91, 216, 1)">
-                          <Ionicons
-                            name="stop"
-                            size={26}
-                            color="rgba(255, 255, 255, 1.0)"
-                          />
-                        </Circle>
-                      </Pressable>
-                    </Center>
-                  </HStack>
-                ) : breakOutActive === true ? (
-                  <Pressable
-                    onPress={() => {
-                      // setTimerOn(false);
-                      setStopModalVisibility(true);
-                    }}>
-                    <Circle size="48px" bg="rgba(71, 91, 216, 1)">
-                      <Ionicons
-                        name="stop"
-                        size={26}
-                        color="rgba(255, 255, 255, 1.0)"
-                      />
-                    </Circle>
-                  </Pressable>
-                ) : null}
-              </Center>
-            </HStack>
-            {breakOutActive === false ? (
-              <VStack alignItems="flex-start" px="8" space={2}>
-                <Heading fontSize={20}>Categoría</Heading>
-                <Select
-                  placeholder="Categoría"
-                  rounded="4"
-                  size="lg"
-                  w={200}
-                  onValueChange={itemValue => setCategory(itemValue)}
-                  selectedValue={category}>
-                  <Select.Item value="Académico" label="Académico" />
-                  <Select.Item value="Proyectos" label="Proyectos" />
-                  <Select.Item value="Personal" label="Personal" />
-                  <Select.Item value="Trabajo" label="Trabajo" />
-                  <Select.Item value="Aprendizaje" label="Aprendizaje" />
-                </Select>
-              </VStack>
-            ) : (
-              <VStack alignItems="flex-start" px="8" space={2}>
-                <Text noOfLines={3}>
-                  Después del tiempo de descanso podrás iniciar un tiempo de
-                  enfoque nuevamente.
-                </Text>
-              </VStack>
-            )}
-          </VStack>
-        </ScrollView>
-      </View>
+                  <Center>
+                    <Pressable
+                      onPress={() => {
+                        // setTimerOn(false);
+                        setStopModalVisibility(true);
+                      }}>
+                      <Circle size="48px" bg="rgba(71, 91, 216, 1)">
+                        <Ionicons
+                          name="stop"
+                          size={26}
+                          color="rgba(255, 255, 255, 1.0)"
+                        />
+                      </Circle>
+                    </Pressable>
+                  </Center>
+                </HStack>
+              ) : breakOutActive === true ? (
+                <Pressable
+                  onPress={() => {
+                    // setTimerOn(false);
+                    setStopModalVisibility(true);
+                  }}>
+                  <Circle size="48px" bg="rgba(71, 91, 216, 1)">
+                    <Ionicons
+                      name="stop"
+                      size={26}
+                      color="rgba(255, 255, 255, 1.0)"
+                    />
+                  </Circle>
+                </Pressable>
+              ) : null}
+            </Center>
+          </HStack>
+          {breakOutActive === false ? (
+            <VStack alignItems="flex-start" px="8" space={2}>
+              <Heading fontSize={20}>Categoría</Heading>
+              <Select
+                placeholder="Categoría"
+                rounded="4"
+                size="lg"
+                w={200}
+                onValueChange={itemValue => setCategory(itemValue)}
+                selectedValue={category}>
+                <Select.Item value="Académico" label="Académico" />
+                <Select.Item value="Proyectos" label="Proyectos" />
+                <Select.Item value="Personal" label="Personal" />
+                <Select.Item value="Trabajo" label="Trabajo" />
+                <Select.Item value="Aprendizaje" label="Aprendizaje" />
+              </Select>
+            </VStack>
+          ) : (
+            <VStack alignItems="flex-start" px="8" space={2}>
+              <Text noOfLines={3}>
+                Después del tiempo de descanso podrás iniciar un tiempo de
+                enfoque nuevamente.
+              </Text>
+            </VStack>
+          )}
+        </VStack>
+      </ScrollView>
+      {/* </View> */}
     </NativeBaseProvider>
   );
 };

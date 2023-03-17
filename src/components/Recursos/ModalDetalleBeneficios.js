@@ -73,6 +73,7 @@ const ModalDetalleBeneficios = ({
                     name="keyboard-arrow-down"
                     size={32}
                     color="rgba(39, 44, 70, 1)"
+                    onPress={() => setModalVisibility(false)}
                   />
                 </Box>
               </Center>
