@@ -73,7 +73,13 @@ const Habitos = () => {
   const {user, userInfo, userTier} = useUser();
 
   const marcarHabito = (i, accion, name) => {
+    console.log('Que es i', i);
+    console.log('name',name);
+    console.log('accion', accion);
     let marcado = [...todayData];
+    marcado[i].marked = true;
+    marcado[i].dayMarked = dayjs().date();
+
     let markedData = [...data];
     let storedHabits = [...selectedData];
     let index = data.findIndex(object => {
@@ -82,22 +88,26 @@ const Habitos = () => {
     let selectedIndex = storedHabits.findIndex(object => {
       return object.name === name;
     });
+    console.log(selectedIndex)
+    console.log('Aquí se guarda el fuego',storedHabits[selectedIndex]);
     if (accion === 'Completado') {
       marcado[i].completed = true;
       markedData[index].marcadoSemana.push(1);
       markedData[index].marcadoMes.push(1);
       storedHabits[selectedIndex].dias++;
+      console.log('Aquí ya está guardado el fuego',storedHabits[selectedIndex]);
       if (
         storedHabits[selectedIndex].dias === storedHabits[selectedIndex].veces
       ) {
-        updateFireList(storedHabits[selectedIndex].name);
-        updateFire();
+        try {
+          updateFire();
+        } catch (error) {
+          console.log('error en catch', error);
+        }
       }
       setSelectedData(storedHabits);
       setData(markedData);
     }
-    marcado[i].marked = true;
-    marcado[i].dayMarked = dayjs().date();
     setTodayData(marcado);
   };
 
@@ -123,6 +133,7 @@ const Habitos = () => {
   const saveMarkedHabits = i => {
     let popHabits = [...todayData];
     popHabits[i].finalMarked = true;
+    console.log('Hábito a marcar',popHabits[i]);
     try {
       firestore()
         .collection('usuarios')
@@ -136,6 +147,7 @@ const Habitos = () => {
           getHabits(userInfo);
         });
     } catch (error) {
+      console.log('cae en error en marcar hábitos')
       console.log(error);
     }
   };
@@ -196,25 +208,6 @@ const Habitos = () => {
         })
         .then(() => {
           console.log('Fires updated!');
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const updateFireList = async habitName => {
-    const fireHabits = [...fireList];
-    fireHabits.push(habitName);
-    try {
-      firestore()
-        .collection('usuarios')
-        .doc(user.uid)
-        .update({
-          fireHabits: fireHabits,
-        })
-        .then(() => {
-          console.log('Fire list updated!');
-          setFireList(fireHabits);
         });
     } catch (error) {
       console.log(error);
@@ -559,7 +552,7 @@ const Habitos = () => {
             <VStack space={15} alignItems="center">
               {todayData.map((item, i) =>
                 item.marked === true ? (
-                  item.finalMarked ? null : (
+                  item.finalMarked === true ? null : (
                     <Box
                       width="95%"
                       height="70px"

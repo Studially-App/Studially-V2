@@ -109,13 +109,12 @@ const ModalFiltroCategoriaComunidad = ({
                         onChange={setCategories}
                         value={categories}
                         accessibilityLabel="choose category"
-                        justifyContent="center"
-                        alignContent="center"
-                        alignItems="center">
+                        >
+                        <VStack space="2" ml="15%">
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Salud y Bienestar</Text>
                           <Checkbox
                             value="Salud y Bienestar"
@@ -126,7 +125,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Alimenticio</Text>
                           <Checkbox
                             value="Alimenticio"
@@ -137,7 +136,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Educación y Pedagogía</Text>
                           <Checkbox
                             value="Educación y Pedagogía"
@@ -148,7 +147,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Diseño y Construcción</Text>
                           <Checkbox
                             value="Diseño y Construcción"
@@ -159,7 +158,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Consultoría</Text>
                           <Checkbox
                             value="Consultoría"
@@ -170,7 +169,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Belleza y Moda</Text>
                           <Checkbox
                             value="Belleza y Moda"
@@ -181,7 +180,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Sustentabilidad</Text>
                           <Checkbox
                             value="Sustentabilidad"
@@ -192,7 +191,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Desarrollo e Investigación</Text>
                           <Checkbox
                             value="Desarrollo e Investigación"
@@ -203,7 +202,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Accesorios</Text>
                           <Checkbox
                             value="Accesorios"
@@ -214,7 +213,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Electrónicos</Text>
                           <Checkbox
                             value="Electrónicos"
@@ -225,7 +224,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Entretenimiento</Text>
                           <Checkbox
                             value="Entretenimiento"
@@ -236,7 +235,7 @@ const ModalFiltroCategoriaComunidad = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
+                          w="85%">
                           <Text fontSize="18">Otros</Text>
                           <Checkbox
                             value="Otros"
@@ -244,6 +243,7 @@ const ModalFiltroCategoriaComunidad = ({
                             name="checked"
                           />
                         </HStack>
+                        </VStack>
                       </Checkbox.Group>
                       <Button
                         bg="#475BD8"

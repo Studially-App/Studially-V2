@@ -102,7 +102,7 @@ const ComunidadLista = () => {
 
   useEffect(() => {
     getComunidad();
-  });
+  }, []);
 
   return (
     <VStack space={2} alignItems="center">
@@ -112,6 +112,9 @@ const ComunidadLista = () => {
         data={dataDetalle}
         setData={setDataDetalle}
       />
+      <Text fontSize="lg" bold>
+        Comunidad
+      </Text>
       <ModalFiltroCategoriaComunidad
         modalVisibility={categoriaModalVisibility}
         setModalVisibility={setCategoriaModalVisibility}

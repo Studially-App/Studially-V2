@@ -112,6 +112,7 @@ const ModalFiltroUniversidad = ({
                         justifyContent="center"
                         alignContent="center"
                         alignItems="center">
+                        <VStack ml="15%">
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
@@ -252,6 +253,7 @@ const ModalFiltroUniversidad = ({
                             accessibilityLabel="Tepeyac checkbox"
                           />
                         </HStack>
+                        </VStack>
                       </Checkbox.Group>
                       <Button
                         bg="#475BD8"

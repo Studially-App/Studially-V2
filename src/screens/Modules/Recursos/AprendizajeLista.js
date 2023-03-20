@@ -34,11 +34,11 @@ const AprendizajeLista = () => {
   const [aprendizajeFiltrado, setAprendizajeFiltrado] = useState([]);
 
   const [categories, setCategories] = useState([
-    'Ciencia',
-    'Productividad',
-    'Artes',
-    'Economía',
-    'Tecnología',
+    'Ciencia y Tecnología',
+    'Salud y Bienestar',
+    'Arte y Cultura',
+    'Negocios y Economía',
+    'Tendencia y Recomendaciones',
   ]);
 
   const getAprendizaje = async () => {
@@ -69,12 +69,16 @@ const AprendizajeLista = () => {
 
   return (
     <VStack space={2} alignItems="center">
+      
       <ModalDetalleBeneficios
         modalVisibility={detalleModalVisibility}
         setModalVisibility={setDetalleModalVisibility}
         data={dataDetalle}
         setData={setDataDetalle}
       />
+      <Text fontSize="lg" bold>
+        Aprendizaje
+      </Text>
       <ModalFiltroCategoria
         modalVisibility={categoriaModalVisibility}
         setModalVisibility={setCategoriaModalVisibility}

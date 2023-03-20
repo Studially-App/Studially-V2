@@ -105,20 +105,20 @@ const ModalFiltroCategoria = ({
                         textAlign="center">
                         Filtrar por
                       </Text>
+
                       <Checkbox.Group
                         onChange={setCategories}
                         value={categories}
                         accessibilityLabel="choose category"
-                        justifyContent="center"
-                        alignContent="center"
-                        alignItems="center">
+                        >
+                        <VStack space="2" ml={10}>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
-                          <Text fontSize="18">Artes</Text>
+                          w="85%">
+                          <Text fontSize="18">Arte y Cultura</Text>
                           <Checkbox
-                            value="Artes"
+                            value="Arte y Cultura"
                             accessibilityLabel="Artes checkbox"
                             name="checked"
                           />
@@ -126,48 +126,50 @@ const ModalFiltroCategoria = ({
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
-                          <Text fontSize="18">Ciencia</Text>
+                          w="85%">
+                          <Text fontSize="18">Ciencia y Tecnología</Text>
                           <Checkbox
-                            value="Ciencia"
-                            accessibilityLabel="Artes checkbox"
+                            value="Ciencia y Tecnología"
+                            accessibilityLabel="Ciencia checkbox"
                             name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
-                          <Text fontSize="18">Economía</Text>
+                          w="85%">
+                          <Text fontSize="18">Negocios y Economía</Text>
                           <Checkbox
-                            value="Economía"
-                            accessibilityLabel="Artes checkbox"
+                            value="Negocios y Economía"
+                            accessibilityLabel="Negocios checkbox"
                             name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
-                          <Text fontSize="18">Productividad</Text>
+                          w="85%">
+                          <Text fontSize="18">Salud y Bienestar</Text>
                           <Checkbox
-                            value="Productividad"
-                            accessibilityLabel="Artes checkbox"
+                            value="Salud y Bienestar"
+                            accessibilityLabel="Salud checkbox"
                             name="checked"
                           />
                         </HStack>
                         <HStack
                           justifyContent="space-between"
                           alignItems="center"
-                          w="80%">
-                          <Text fontSize="18">Tecnología</Text>
+                          w="85%">
+                          <Text fontSize="18">Tendencia</Text>
                           <Checkbox
-                            value="Tecnología"
-                            accessibilityLabel="Artes checkbox"
+                            value="Tendencia y Recomendaciones"
+                            accessibilityLabel="Tendencia checkbox"
                             name="checked"
                           />
                         </HStack>
+                        </VStack>
                       </Checkbox.Group>
+
                       <Button
                         bg="#475BD8"
                         _text={{
