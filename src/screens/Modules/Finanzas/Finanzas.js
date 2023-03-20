@@ -25,6 +25,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import ModalCrearFinanzas from '../../../components/Finanzas/ModalCrearFinanzas';
 import ModalAgregarMonto from '../../../components/Finanzas/ModalAgregarMonto';
 import ModalDetalleFinanzas from '../../../components/Finanzas/ModalDetalleFinanzas';
+import ModalMetaFinalizada from '../../../components/Finanzas/ModalMetaFinalizada';
 import StudiallyProModal from '../../../components/StudiallyProModal';
 import {useUser} from '../../../context/User';
 
@@ -48,6 +49,9 @@ const Finanzas = () => {
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
 
+  // Estado modal final
+  const [congratsVisibility, setCongratsVisibility] = useState(false);
+
   // Estado de cual se modifica
   const [metaSelected, setMetaSelected] = useState(0);
   // Data detalle
@@ -59,10 +63,15 @@ const Finanzas = () => {
   // Finanzas states
   const [finantialGoals, setFinantialGoals] = useState([]);
 
-  //Funcion para sacar los hábitos
+  // Metas cumplidas
+  const [done, setDone] = useState(0);
+
+  //Funcion para sacar las finanzas
   const getFinance = userInfo => {
     const userFinantialGoals = userInfo.finanzas;
+    const doneGoals = userInfo.metasCumplidas
     setFinantialGoals(userFinantialGoals);
+    setDone(doneGoals);
   };
 
   const deleteFinance = id => {
@@ -133,8 +142,6 @@ const Finanzas = () => {
                 <Badge
                   colorScheme="danger"
                   rounded="full"
-                  // mb={4}
-                  // mr={0}
                   position="absolute"
                   right={30}
                   bottom={135}
@@ -167,6 +174,9 @@ const Finanzas = () => {
             <VStack space={4} alignItems="center">
               <Text textAlign="center" color="#061678" fontSize="30px">
                 Finanzas
+              </Text>
+              <Text textAlign="center" color="#061678" fontSize="15px">
+                Cumplidas: {done}
               </Text>
               {eliminarSpinnerVisibility ? (
                 <Center>
@@ -285,16 +295,17 @@ const Finanzas = () => {
         userId={user.uid}
         data={finantialGoals}
         userInfo={userInfo}
-        //reloadGoals={reloadGoals}
       />
       <ModalAgregarMonto
         modalVisibility={montoModalVisibility}
         setModalVisibility={setMontoModalVisibility}
+        setCongratsModalVisibility={setCongratsVisibility}
         setData={setDataDetalle}
         selected={metaSelected}
         userId={user.uid}
         data={finantialGoals}
-        userInfo={userInfo}
+        setFinantialGoals={setFinantialGoals}
+        done={done}
       />
       <ModalDetalleFinanzas
         modalVisibility={detalleModalVisibility}
@@ -304,6 +315,10 @@ const Finanzas = () => {
         userId={user.uid}
         data={finantialGoals}
         index={index}
+      />
+      <ModalMetaFinalizada
+        congratsModalVisibility={congratsVisibility}
+        setCongratsModalVisibility={setCongratsVisibility}
       />
       <StudiallyProModal
         proModalVisibility={proModalVisibility}

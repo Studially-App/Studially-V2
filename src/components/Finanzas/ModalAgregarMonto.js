@@ -29,10 +29,13 @@ import firestore from '@react-native-firebase/firestore';
 const ModalAgregarMonto = ({
   modalVisibility,
   setModalVisibility,
+  setCongratsModalVisibility,
   selected,
   data,
   setData,
+  setFinantialGoals,
   userId,
+  done
 }) => {
   const [scrollOffset, setScrollOffset] = React.useState(null);
   const scrollViewReff = React.createRef();
@@ -52,6 +55,26 @@ const ModalAgregarMonto = ({
     }
   };
 
+  const deleteFinance = id => {
+    const deleted = [...data];
+    deleted.splice(id, 1);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(userId)
+        .update({
+          finanzas: deleted,
+          metasCumplidas: done+1
+        })
+        .then(() => {
+          console.log('User finantial goals updated!');
+          setFinantialGoals(deleted);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateAmount = async values => {
     data[selected].montoActual =
       data[selected].montoActual * 1 + values.montoActual * 1;
@@ -68,6 +91,10 @@ const ModalAgregarMonto = ({
         });
       setModalVisibility(false);
       setSpinnerModal(false);
+      if (data[selected].montoActual >= data[selected].montoFinal) {
+        setCongratsModalVisibility(true);
+        deleteFinance(selected);
+      }
     } catch (error) {
       console.log(error);
     }

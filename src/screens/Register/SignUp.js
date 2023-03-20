@@ -133,6 +133,7 @@ const SignUp = ({navigation}) => {
         fuegos: 0,
         listaAmigos: [],
         finanzas: [],
+        metasCumplidas: 0,
         estrellas: 0,
         minutosTotales: 0,
         minutos: [
@@ -221,6 +222,7 @@ const SignUp = ({navigation}) => {
               fuegos: 0,
               listaAmigos: [],
               finanzas: [],
+              metasCumplidas: 0,
               estrellas: 0,
               minutosTotales: 0,
               minutos: [
