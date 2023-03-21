@@ -12,6 +12,7 @@ import {
   Input,
   Modal,
   Image,
+  useToast,
 } from 'native-base';
 import StudiallyLogo from '../../assets/images/Studially-logo.png';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -20,6 +21,7 @@ import {StyleSheet} from 'react-native';
 // Formik
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import auth from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
   email_input: {
@@ -33,6 +35,28 @@ const ResetPasswordSchema = Yup.object({
 
 const ResetPassword = ({navigation}) => {
   const [modal, setModal] = React.useState(false);
+  const toast = useToast();
+
+  const handlePasswordReset = async (correo) => {
+    try {
+      await auth().sendPasswordResetEmail(correo);
+
+      console.log(
+        'Success',
+        'A password reset email has been sent to your email address.'
+      );
+      setModal(true)
+    } catch (error) {
+      console.log('Error', error.message);
+      if (error.code === 'auth/user-not-found') {
+        toast.show({
+          description: 'No existe una cuenta con ese correo electrónico',
+          placement: 'top',
+          duration: 2000,
+        });
+      }
+    }
+  };
 
   return (
     <NativeBaseProvider>
@@ -43,6 +67,7 @@ const ResetPassword = ({navigation}) => {
         validationSchema={ResetPasswordSchema}
         onSubmit={(values, actions) => {
           console.log(values);
+          handlePasswordReset(values.correo);
         }}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <View>
