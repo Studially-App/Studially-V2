@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 // Native Base Components
 import {
@@ -14,12 +14,13 @@ import {
   HStack,
   useToast,
 } from 'native-base';
+import {launchImageLibrary} from 'react-native-image-picker';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // React Native
-import {useWindowDimensions, StyleSheet, Linking} from 'react-native';
+import {useWindowDimensions, StyleSheet, Linking, PermissionsAndroid, Platform } from 'react-native';
 
 // DateTime Picker
 import DatePicker from 'react-native-date-picker';
@@ -29,6 +30,7 @@ import {useUser} from '../../../context/User';
 import functions from '@react-native-firebase/functions';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -66,6 +68,9 @@ const Profile = ({navigation}) => {
   const [name, setName] = useState(userInfo ? userInfo.nombres : 'Nombre');
   const [lastName, setLastName] = useState(userInfo ? userInfo.apellidos : 'Apellido');
   const [school, setSchool] = useState(userInfo ? userInfo.institucion : 'Institución');
+  const [profilePictureUrl, setProfilePictureUrl] = useState(userInfo ? userInfo.profilePic : 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370');
+  // initialize Firebase Storage
+  const storageRef = storage().ref();
 
   // State for password change
   const [currentPass, setCurrentPass] = useState('');
@@ -127,9 +132,88 @@ const Profile = ({navigation}) => {
         console.log('Error', error.message);
       }
     }
-    
     setEditPassword(false);
   }
+
+
+
+  
+
+  const requestCameraRollPermission = async () => {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: 'Permission to access photo library',
+          message: 'This app needs permission to access your photo library.',
+        },
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } else {
+      return true;
+    }
+  };
+
+  const handleChoosePicture = async () => {
+    console.log("Cambiar foto");
+    const granted = await requestCameraRollPermission();
+    if (!granted) {
+      return;
+    }
+
+    let options = {
+      mediaType: 'photo',
+      maxWidth: 200,
+      maxHeight: 200,
+    };
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        uploadImage(response.assets[0].uri)
+          .then(() => {
+            console.log('Image uploaded successfully');
+          })
+          .catch((error) => {
+            console.log('Error uploading image: ', error);
+          });
+      }
+    });
+  };
+
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    // Create a reference to the image file in Firebase Storage
+    const ref = storageRef.child(`profile-images/${user.uid}/profile.jpg`);
+
+    // Upload the image to Firebase Storage
+    const uploadTaskSnapshot = await ref.put(blob);
+
+    // Get the download URL of the image
+    const downloadURL = await ref.getDownloadURL();
+
+    setProfilePictureUrl(downloadURL);
+
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .update({
+          profilePic: downloadURL
+        })
+        .then(() => {
+          console.log('User photo updated!');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const openSubscriptionPage = async () => {
     const result = await functions().httpsCallable('customerPortal')({
@@ -146,10 +230,18 @@ const Profile = ({navigation}) => {
             bg="green.500"
             size="xl"
             source={{
-              uri: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+              uri: profilePictureUrl,
             }}>
-            PP
           </Avatar>
+          <HStack alignItems="center" >
+                <Text color="rgba(5, 24, 139, 0.5)" onPress={() => handleChoosePicture()}>Editar foto de perfil</Text>
+                <MaterialCommunityIcon
+                  name="account-edit-outline"
+                  size={32}
+                  color="rgba(5, 24, 139, 0.5)"
+                  onPress={() => handleChoosePicture()}
+                />
+              </HStack>
         </Center>
         <HStack justifyContent="center">
           {tab === 'Personal' ? (

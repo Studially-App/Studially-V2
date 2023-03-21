@@ -31,6 +31,8 @@ const Mas = ({navigation}) => {
 
   const {user, userInfo} = useUser();
 
+  const profilePictureUrl = userInfo ? userInfo.profilePic : 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370';
+
   const signOut = () => {
     auth()
       .signOut()
@@ -55,7 +57,7 @@ const Mas = ({navigation}) => {
                   bg="green.500"
                   size="lg"
                   source={{
-                    uri: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+                    uri: profilePictureUrl,
                   }}
                 />
                 <Heading size="lg" color="#272C46" mt={2}>
