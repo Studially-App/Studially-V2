@@ -172,9 +172,11 @@ const Mas = ({navigation}) => {
                             color="rgba(6, 22, 120, 1)"
                           />
                         </Box>
+                        <Link href="https://www.studially.com/">
                         <Text fontSize={18} ml={4}>
                           Califícanos
                         </Text>
+                        </Link>
                       </Flex>
                       <MaterialIcon
                         name="keyboard-arrow-right"

@@ -26,6 +26,7 @@ import DatePicker from 'react-native-date-picker';
 import dayjs from 'dayjs';
 import {useUser} from '../../../context/User';
 import functions from '@react-native-firebase/functions';
+import firestore from '@react-native-firebase/firestore';
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -39,6 +40,9 @@ const styles = StyleSheet.create({
 });
 
 const Profile = ({navigation}) => {
+
+  const {user, userInfo, userTier} = useUser();
+
   //Screen dimensionts
   const {width, height} = useWindowDimensions();
   const [tab, setTab] = React.useState('Personal');
@@ -47,7 +51,33 @@ const Profile = ({navigation}) => {
   const [openDate, setOpenDate] = useState(false);
   const [firstDate, setFirstDate] = useState(true);
 
-  const {user, userInfo, userTier} = useUser();
+  // State edit
+  const [edit, setEdit] = useState(true);
+
+  // State information to edit
+  const [name, setName] = useState(userInfo ? userInfo.nombres : 'Nombre');
+  const [lastName, setLastName] = useState(userInfo ? userInfo.apellidos : 'Apellido');
+  const [school, setSchool] = useState(userInfo ? userInfo.institucion : 'Institución');
+  
+  const saveInfo = () => {
+    console.log('Name & lastName & date & school', name, lastName, dayjs(date).format('DD-MM-YYYY'), school);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .update({
+          nombres: name,
+          apellidos: lastName,
+          institucion: school,
+          fechaNacimiento: dayjs(date).format('DD-MM-YYYY')
+        })
+        .then(() => {
+          console.log('User Information updated!');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const openSubscriptionPage = async () => {
     const result = await functions().httpsCallable('customerPortal')({
@@ -100,27 +130,33 @@ const Profile = ({navigation}) => {
         </HStack>
         <VStack>
           {tab === 'Personal' ? (
-            <VStack space={3} alignItems="center" mt={6}>
+            <VStack space={3} alignItems="flex-start" mt={6} ml={10}>
+              <HStack alignItems="center" style={{alignSelf:"flex-end", marginRight:"10%"}} >
+                <Text color="rgba(5, 24, 139, 0.5)" onPress={() => setEdit(false)}>Editar información</Text>
+                <MaterialCommunityIcon
+                  name="account-edit-outline"
+                  size={32}
+                  color="rgba(5, 24, 139, 0.5)"
+                  onPress={() => setEdit(false)}
+                />
+              </HStack>
+              
               <Input
                 placeholder="Nombres"
                 defaultValue={userInfo ? userInfo.nombres : 'Nombre de usuario'}
-                isDisabled
-                // onChangeText={handleChange('nombres')}
+                isDisabled={edit}
+                onChangeText={text => setName(text)}
                 placeholderTextColor="rgba(39, 44, 70, 0.5)"
                 w="90%"
                 borderColor="rgba(71, 91, 216, 1)"
                 rounded="4"
-                // value={values.nombres}
                 _focus={{
                   borderColor: '#475BD8',
                 }}
-                // mb={2}
                 size="xl"
-                // onBlur={handleBlur('nombres')}
                 InputLeftElement={
                   <Ionicons
                     name="person-outline"
-                    // style={styles.email_input}
                     size={32}
                     color="rgba(5, 24, 139, 0.5)"
                     style={styles.iconInput}
@@ -132,52 +168,26 @@ const Profile = ({navigation}) => {
                 defaultValue={
                   userInfo ? userInfo.apellidos : 'Apellido de usuario'
                 }
-                isDisabled
-                // onChangeText={handleChange('nombres')}
+                isDisabled={edit}
+                onChangeText={text => setLastName(text)}
                 placeholderTextColor="rgba(39, 44, 70, 0.5)"
                 w="90%"
                 borderColor="rgba(71, 91, 216, 1)"
                 rounded="4"
-                // value={values.nombres}
                 _focus={{
                   borderColor: '#475BD8',
                 }}
-                // mb={2}
                 size="xl"
-                // onBlur={handleBlur('nombres')}
                 InputLeftElement={
                   <Ionicons
                     name="person-outline"
-                    // style={styles.email_input}
                     size={32}
                     color="rgba(5, 24, 139, 0.5)"
                     style={styles.iconInput}
                   />
                 }
               />
-              <Button
-                justifyContent="flex-start"
-                bgColor="white"
-                borderWidth="1"
-                w="90%"
-                onPress={() => {
-                  setOpenDate(true);
-                }}
-                borderColor="#475BD8"
-                // _text={{color: 'rgba(39, 44, 70, 0.5)'}}
-                leftIcon={
-                  <MaterialIcon
-                    name="date-range"
-                    color="rgba(5, 24, 139, 0.5)"
-                    size={32}
-                  />
-                }>
-                <Text fontSize="lg" color="rgba(39, 44, 70, 0.5)" ml="4">
-                  {userInfo && firstDate
-                    ? dayjs(userInfo.fechaNacimiento).format('DD-MM-YYYY')
-                    : dayjs(date).format('DD-MM-YYYY')}
-                </Text>
-              </Button>
+              
               <DatePicker
                 modal
                 open={openDate}
@@ -193,14 +203,41 @@ const Profile = ({navigation}) => {
                   setOpenDate(false);
                 }}
               />
+              <Text textAlign="left">Fecha de Nacimiento</Text>
+              <Button
+                justifyContent="flex-start"
+                bgColor="white"
+                borderWidth="1"
+                w="90%"
+                isDisabled={edit}
+                onPress={() => {
+                  setOpenDate(true);
+                }}
+                borderColor="#475BD8"
+                leftIcon={
+                  <MaterialIcon
+                    name="date-range"
+                    color="rgba(5, 24, 139, 0.5)"
+                    size={32}
+                  />
+                }>
+                <Text fontSize="lg" color="rgba(39, 44, 70, 0.5)" ml="4">
+                  {userInfo && firstDate
+                    ? dayjs(userInfo.fechaNacimiento).format('DD-MM-YYYY')
+                    : dayjs(date).format('DD-MM-YYYY')}
+                </Text>
+              </Button>
+              
               <Select
                 rounder="4"
                 w="90%"
                 size="xl"
+                isDisabled={edit}
                 defaultValue={userInfo ? userInfo.institucion : 'Institución'}
                 borderColor="#475BD8"
                 style={styles.selectFont}
                 placeholder={userInfo ? userInfo.institucion : 'Institución'}
+                onValueChange={itemValue => setSchool(itemValue)}
                 InputLeftElement={
                   <Ionicons
                     name="school-outline"
@@ -226,6 +263,26 @@ const Profile = ({navigation}) => {
                 />
                 <Select.Item label="UVM" value="UVM" />
               </Select>
+              {edit === false ? 
+              <Button
+                bg="rgba(71, 91, 216, 1)"
+                w="90%"
+                onPress={() =>{
+                  saveInfo();
+                  setEdit(true);
+                }
+                }
+                _pressed={{
+                  backgroundColor: 'rgba(5, 24, 139, 0.7)',
+                }}
+                _text={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}>
+                Guardar
+              </Button>
+              : null
+              }
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
@@ -245,6 +302,7 @@ const Profile = ({navigation}) => {
                   ? 'Cámbiate a Studially PRO'
                   : 'Administrar subscripción'}
               </Button>
+              
             </VStack>
           ) : (
             <VStack space={3} alignItems="center" mt={6}>
@@ -253,8 +311,6 @@ const Profile = ({navigation}) => {
                 placeholderTextColor="rgba(39, 44, 70, 0.5)"
                 defaultValue={user.email}
                 isDisabled
-                // onChangeText={handleChange('email')}
-                // value={values.email}
                 w="90%"
                 size="2xl"
                 borderColor="#475BD8"
@@ -268,22 +324,18 @@ const Profile = ({navigation}) => {
                     style={styles.iconInput}
                     size={32}
                     color="rgba(5, 24, 139, 0.5)"
-                    margin="0 0 0 1rem"
                   />
                 }
               />
               <Input
                 placeholder="Contraseña"
                 placeholderTextColor="rgba(39, 44, 70, 0.5)"
-                // onChangeText={handleChange('password')}
                 w="90%"
-                // value={values.password}
                 _focus={{
                   borderColor: '#475BD8',
                 }}
                 type="password"
                 size="2xl"
-                // onBlur={handleBlur('password')}
                 borderColor="#475BD8"
                 rounded="4"
                 InputLeftElement={

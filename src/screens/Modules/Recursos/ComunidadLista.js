@@ -80,8 +80,10 @@ const ComunidadLista = () => {
     let filtro = [];
     comunidad.map(com => {
       categories.map(cat => {
-        if (com.categoria === cat) {
-          filtro.push(com);
+        for(uni of universities){
+          if (com.categoria === cat && com.universidad === uni) {
+            filtro.push(com);
+          }
         }
       });
     });
@@ -92,8 +94,10 @@ const ComunidadLista = () => {
     let filtro = [];
     comunidad.map(com => {
       universities.map(uni => {
-        if (com.universidad === uni) {
-          filtro.push(com);
+        for(cat of categories){
+          if (com.universidad === uni && com.categoria === cat) {
+            filtro.push(com);
+          }
         }
       });
     });
@@ -121,13 +125,6 @@ const ComunidadLista = () => {
         categories={categories}
         setCategories={setCategories}
         getComunidadFilter={getComunidadFilter}
-      />
-      <ModalFiltroUniversidad
-        modalVisibility={universidadModalVisibility}
-        setModalVisibility={setUniversidadModalVisibility}
-        universities={universities}
-        setUniversities={setUniversities}
-        getUniversidadFilter={getUniversidadFilter}
       />
       <ScrollView w="100%" h="75%">
         <VStack space="15px" alignItems="center">
@@ -181,6 +178,13 @@ const ComunidadLista = () => {
           ))}
         </VStack>
       </ScrollView>
+      <ModalFiltroUniversidad
+        modalVisibility={universidadModalVisibility}
+        setModalVisibility={setUniversidadModalVisibility}
+        universities={universities}
+        setUniversities={setUniversities}
+        getUniversidadFilter={getUniversidadFilter}
+      />
     </VStack>
   );
 };
