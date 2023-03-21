@@ -95,42 +95,26 @@ const ResetPassword = ({navigation}) => {
                     tu cuenta Studially
                   </Text>
                 </Flex>
-                {/* <Formik
-              initialValues={{
-                correo: '',
-              }}
-              validationSchema={ResetPasswordSchema}
-              onSubmit={(values, actions) => {
-                console.log(values);
-              }}>
-              {({
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                setFieldValue,
-                values,
-                errors,
-                touched,
-              }) => (
-                <> */}
+
                 <Input
                   placeholder="Correo electrónico"
-                  w="75%"
-                  mb={6}
-                  mt={8}
-                  borderColor="#475BD8"
-                  rounded="4"
+                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
                   onChangeText={handleChange('correo')}
                   value={values.correo}
                   onBlur={handleBlur('correo')}
+                  w="90%"
+                  borderColor="rgba(71, 91, 216, 1)"
+                  _focus={{
+                    borderColor: '#475BD8',
+                  }}
+                  type="email"
                   size="xl"
                   InputLeftElement={
                     <MaterialCommunityIcon
                       name="email-outline"
                       style={styles.email_input}
                       size={28}
-                      color="#05188B"
-                      margin="0 0 0 1rem"
+                      color="rgba(5, 24, 139, 0.5)"
                     />
                   }
                 />
@@ -150,8 +134,6 @@ const ResetPassword = ({navigation}) => {
                   }}>
                   Enviar correo
                 </Button>
-                {/* </>
-              )} */}
 
                 <Modal
                   isOpen={modal}
@@ -190,12 +172,11 @@ const ResetPassword = ({navigation}) => {
                     </Center>
                   </Modal.Content>
                 </Modal>
-              </Flex>
+                </Flex>
             </Box>
           </View>
         )}
-      </Formik>
-      {/* </Formik> */}
+      </Formik> 
     </NativeBaseProvider>
   );
 };

@@ -238,7 +238,10 @@ const SignIn = ({navigation}) => {
                 <Flex direction="column" align="center">
                   <Link
                     mb={2}
-                    onPress={() => navigation.navigate('ResetPassword')}
+                    onPress={() => {
+                      console.log("Reset");
+                      navigation.navigate('ResetPassword')
+                    }}
                     _text={{
                       fontSize: 18,
                       color: '#272C46',

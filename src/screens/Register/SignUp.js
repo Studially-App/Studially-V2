@@ -60,8 +60,6 @@ const styles = StyleSheet.create({
   },
 });
 
-//'((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).{7,}\\w+',
-
 const SignUp = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
@@ -69,14 +67,13 @@ const SignUp = ({navigation}) => {
   const [typePassword, setTypePassword] = useState(true);
   const [typeConfirmPassword, setTypeConfirmPassword] = useState(true);
   const [TerAndCondState, setTerAndCondState] = useState(false);
-  const passwordRegex =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*-_().:;/]{8,}$/;
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
   const toast = useToast();
 
   const sendEmail = async () => {
     await auth().currentUser.sendEmailVerification({
       handleCodeInApp: true,
-      url: 'https://studially-2790e.firebaseapp.com',
+      url: 'https://studially.com',
     });
   };
 
@@ -264,12 +261,23 @@ const SignUp = ({navigation}) => {
           sendEmail();
         })
         .catch(error => {
+
           if (error.code === 'auth/email-already-in-use') {
             console.log('That email address is already in use!');
+            toast.show({
+              description: 'Ya existe una cuenta con este correo electrónico',
+              placement: 'top',
+              duration: 2000,
+            });
           }
 
           if (error.code === 'auth/invalid-email') {
             console.log('That email address is invalid!');
+            toast.show({
+              description: 'Correo inválido',
+              placement: 'top',
+              duration: 2000,
+            });
           }
 
           console.error(error);
@@ -372,6 +380,21 @@ const SignUp = ({navigation}) => {
                       {touched.apellidos && errors.apellidos}
                     </Text>
                   ) : null}
+                  <DatePicker
+                    modal
+                    open={openDate}
+                    date={date}
+                    mode="date"
+                    locale="es"
+                    onConfirm={dateSelected => {
+                      setOpenDate(false);
+                      setDate(dateSelected);
+                    }}
+                    onCancel={() => {
+                      setOpenDate(false);
+                    }}
+                  />
+                  <Text>Fecha de Nacimiento</Text>
                   <Button
                     justifyContent="flex-start"
                     bgColor="#FFF"
@@ -390,20 +413,7 @@ const SignUp = ({navigation}) => {
                     }>
                     {dayjs(date).format('DD-MM-YYYY')}
                   </Button>
-                  <DatePicker
-                    modal
-                    open={openDate}
-                    date={date}
-                    mode="date"
-                    locale="es"
-                    onConfirm={dateSelected => {
-                      setOpenDate(false);
-                      setDate(dateSelected);
-                    }}
-                    onCancel={() => {
-                      setOpenDate(false);
-                    }}
-                  />
+                  
                   <Select
                     placeholder="Institución educativa"
                     placeholderTextColor="rgba(39, 44, 70, 0.5)"
