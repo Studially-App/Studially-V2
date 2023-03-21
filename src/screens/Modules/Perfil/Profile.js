@@ -12,6 +12,7 @@ import {
   Center,
   Text,
   HStack,
+  useToast,
 } from 'native-base';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -27,6 +28,7 @@ import dayjs from 'dayjs';
 import {useUser} from '../../../context/User';
 import functions from '@react-native-firebase/functions';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -42,6 +44,9 @@ const styles = StyleSheet.create({
 const Profile = ({navigation}) => {
 
   const {user, userInfo, userTier} = useUser();
+  const toast = useToast();
+
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
 
   //Screen dimensionts
   const {width, height} = useWindowDimensions();
@@ -51,13 +56,20 @@ const Profile = ({navigation}) => {
   const [openDate, setOpenDate] = useState(false);
   const [firstDate, setFirstDate] = useState(true);
 
-  // State edit
+  // State edit Info
   const [edit, setEdit] = useState(true);
+
+  // State edit Password
+  const [editPassword, setEditPassword] = useState(false);
 
   // State information to edit
   const [name, setName] = useState(userInfo ? userInfo.nombres : 'Nombre');
   const [lastName, setLastName] = useState(userInfo ? userInfo.apellidos : 'Apellido');
   const [school, setSchool] = useState(userInfo ? userInfo.institucion : 'Institución');
+
+  // State for password change
+  const [currentPass, setCurrentPass] = useState('');
+  const [newPass, setNewPass] = useState('');
   
   const saveInfo = () => {
     console.log('Name & lastName & date & school', name, lastName, dayjs(date).format('DD-MM-YYYY'), school);
@@ -77,6 +89,46 @@ const Profile = ({navigation}) => {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  const changePass = async () => {
+    if (passwordRegex.test(newPass) === false) {
+      console.log('Test Regex', passwordRegex.test(newPass));
+      toast.show({
+        description: 'La nueva contraseña no cumple con los parámetros',
+        placement: 'top',
+        duration: 2000,
+      });
+    }
+    else{
+      try {
+        const user = auth().currentUser;
+        const credential = auth.EmailAuthProvider.credential(user.email, currentPass);
+  
+        // Reauthenticate the user with their current password
+        await user.reauthenticateWithCredential(credential);
+  
+        // Change the user's password
+        await user.updatePassword(newPass);
+  
+        toast.show({
+          description: 'Tu contraseña se cambió exitosamente',
+          placement: 'top',
+          duration: 1000,
+        });
+      } catch (error) {
+        if (error.code === 'auth/wrong-password') {
+          toast.show({
+            description: 'Contraseña actual incorrecta',
+            placement: 'top',
+            duration: 2000,
+          });
+        }
+        console.log('Error', error.message);
+      }
+    }
+    
+    setEditPassword(false);
   }
 
   const openSubscriptionPage = async () => {
@@ -327,26 +379,82 @@ const Profile = ({navigation}) => {
                   />
                 }
               />
-              <Input
-                placeholder="Contraseña"
-                placeholderTextColor="rgba(39, 44, 70, 0.5)"
-                w="90%"
-                _focus={{
-                  borderColor: '#475BD8',
-                }}
-                type="password"
-                size="2xl"
-                borderColor="#475BD8"
-                rounded="4"
-                InputLeftElement={
-                  <MaterialIcon
-                    name="lock-outline"
-                    style={styles.iconInput}
-                    size={32}
-                    color="rgba(5, 24, 139, 0.5)"
-                  />
-                }
-              />
+              <HStack alignItems="center" >
+                <Text color="rgba(5, 24, 139, 0.5)" onPress={() => setEditPassword(true)}>Cambiar contraseña</Text>
+                <MaterialCommunityIcon
+                  name="account-edit-outline"
+                  size={32}
+                  color="rgba(5, 24, 139, 0.5)"
+                  onPress={() => setEditPassword(true)}
+                />
+              </HStack>
+
+              {editPassword === true ? 
+              <>
+                <Input
+                  placeholder="Contraseña actual"
+                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                  onChangeText={text => setCurrentPass(text)}
+                  w="80%"
+                  _focus={{
+                    borderColor: '#475BD8',
+                  }}
+                  type={'password'}
+                  size="xl"
+                  borderColor="#475BD8"
+                  rounded="4"
+                  InputLeftElement={
+                    <MaterialIcon
+                      name="lock-outline"
+                      size={32}
+                      color="rgba(5, 24, 139, 0.5)"
+                    />
+                  }
+                />
+
+                <Input
+                  placeholder="Contraseña nueva"
+                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                  onChangeText={text => setNewPass(text)}
+                  w="80%"
+                  _focus={{
+                    borderColor: '#475BD8',
+                  }}
+                  type={'password'}
+                  size="xl"
+                  borderColor="#475BD8"
+                  rounded="4"
+                  InputLeftElement={
+                    <MaterialIcon
+                      name="lock-outline"
+                      size={32}
+                      color="rgba(5, 24, 139, 0.5)"
+                    />
+                  }
+                />
+
+                <Button
+                  bg="rgba(71, 91, 216, 1)"
+                  w="80%"
+                  onPress={() =>{
+                    changePass();
+                  }
+                  }
+                  _pressed={{
+                    backgroundColor: 'rgba(5, 24, 139, 0.7)',
+                  }}
+                  _text={{
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  }}>
+                  Cambiar contraseña
+                </Button>
+              </>
+              : null
+              }
+
+              
+
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
