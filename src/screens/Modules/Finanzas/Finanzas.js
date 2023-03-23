@@ -69,7 +69,7 @@ const Finanzas = () => {
   //Funcion para sacar las finanzas
   const getFinance = userInfo => {
     const userFinantialGoals = userInfo.finanzas;
-    const doneGoals = userInfo.metasCumplidas
+    const doneGoals = userInfo.metasCumplidas;
     setFinantialGoals(userFinantialGoals);
     setDone(doneGoals);
   };

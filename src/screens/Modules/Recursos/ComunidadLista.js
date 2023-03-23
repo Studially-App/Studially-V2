@@ -15,10 +15,14 @@ import {
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 import ModalFiltroCategoriaComunidad from '../../../components/Recursos/ModalFiltroCategoriaComunidad';
 import ModalFiltroUniversidad from '../../../components/Recursos/ModalFiltroUniversidad';
+import { useUser } from '../../../context/User';
 import firestore from '@react-native-firebase/firestore';
 import Ficon from 'react-native-vector-icons/Fontisto';
 
 const ComunidadLista = () => {
+  // get user data
+  const {userInfo, user} = useUser();
+
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
   // Data detalle
@@ -73,10 +77,11 @@ const ComunidadLista = () => {
     const snapshot = await firestore().collection('comunidad').get();
     const com = snapshot.docs.map(doc => doc.data());
     setComunidad(com);
-    setComunidadFiltrado(com);
+    setCategories(userInfo.comunidadCategoriaFiltro);
+    setUniversities(userInfo.comunidadUniversidadFiltro);
   };
 
-  const getComunidadFilter = () => {
+  const getComunidadFilter = async () => {
     let filtro = [];
     comunidad.map(com => {
       categories.map(cat => {
@@ -88,9 +93,22 @@ const ComunidadLista = () => {
       });
     });
     setComunidadFiltrado(filtro);
+    try {
+      await firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .update({
+          comunidadCategoriaFiltro: categories,
+        })
+        .then(() => {
+          console.log('Community category filter updated!');
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getUniversidadFilter = () => {
+  const getUniversidadFilter = async () => {
     let filtro = [];
     comunidad.map(com => {
       universities.map(uni => {
@@ -102,11 +120,30 @@ const ComunidadLista = () => {
       });
     });
     setComunidadFiltrado(filtro);
+    try {
+      await firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .update({
+          comunidadUniversidadFiltro: universities,
+        })
+        .then(() => {
+          console.log('Community university filter updated!');
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     getComunidad();
   }, []);
+
+  useEffect(() => {
+    if(comunidad.length > 0 && categories.length > 0 && universities.length > 0){
+      getComunidadFilter();
+    }
+  },[comunidad, categories, universities]);
 
   return (
     <VStack space={2} alignItems="center">

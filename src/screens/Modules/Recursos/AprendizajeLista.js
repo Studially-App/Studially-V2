@@ -14,12 +14,16 @@ import {
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 import firestore from '@react-native-firebase/firestore';
+import { useUser } from '../../../context/User';
 
 import ModalFiltroCategoria from '../../../components/Recursos/ModalFiltroCategoria';
 
 import Ficon from 'react-native-vector-icons/Fontisto';
 
 const AprendizajeLista = () => {
+  // get user data
+  const {userInfo, user} = useUser();
+
   // Estado modal detalle
   const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
   // Data detalle
@@ -48,10 +52,9 @@ const AprendizajeLista = () => {
       .get();
     const ap = snapshot.docs.map(doc => doc.data());
     setAprendizaje(ap);
-    setAprendizajeFiltrado(ap);
   };
 
-  const getAprendizajeFilter = () => {
+  const getAprendizajeFilter = async () => {
     let filtro = [];
     aprendizaje.map(ap => {
       categories.map(cat => {
@@ -61,11 +64,30 @@ const AprendizajeLista = () => {
       });
     });
     setAprendizajeFiltrado(filtro);
+    try {
+      await firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .update({
+          aprendizajeCategoriaFiltro: categories,
+        })
+        .then(() => {
+          console.log('Aprendizaje categories filter updated!');
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     getAprendizaje();
   }, []);
+
+  useEffect(() => {
+    if(aprendizaje.length > 0 && categories.length > 0){
+      getAprendizajeFilter();
+    }
+  },[aprendizaje, categories])
 
   return (
     <VStack space={2} alignItems="center">
