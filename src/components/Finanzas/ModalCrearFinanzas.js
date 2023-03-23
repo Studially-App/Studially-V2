@@ -143,7 +143,7 @@ const ModalCrearFinanzas = ({
                     </Center>
                     <VStack space="4" h="100%">
                       <Text fontSize="15" fontWeight="bold" mb="0" mt="0">
-                        ¿Cuál es la meta?
+                        ¿Cuál es la meta de ahorro?
                       </Text>
                       <InputGroup
                         w={{
@@ -168,6 +168,7 @@ const ModalCrearFinanzas = ({
                           placeholder="Nombre de meta"
                           w="100%"
                           h="40px"
+                          maxLength={30}
                           value={values.nombre}
                           onChangeText={handleChange('nombre')}
                         />
@@ -206,7 +207,7 @@ const ModalCrearFinanzas = ({
                       </InputGroup>
 
                       <Text fontSize="15" fontWeight="bold" mb="0">
-                        ¿En cuantas semanas quieres cumplirla?
+                        ¿En cuántas semanas deseas cumplirla?
                       </Text>
                       <HStack alignItems="center">
                         <Box

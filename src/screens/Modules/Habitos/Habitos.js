@@ -614,14 +614,14 @@ const Habitos = () => {
                     rounded="lg"
                     key={i}>
                     <HStack space={2} justifyContent="space-around">
-                      <Icon size={40} color="#061678" name={item.icono} />
+                      <Icon size={33} color="#061678" name={item.icono} />
                       <Spacer />
-                      <Text fontSize="2xl" color="#061678" textAlign="center">
+                      <Text fontSize="xl" color="#061678" textAlign="center">
                         {item.name}
                       </Text>
                       <Spacer />
                       <MCIcon
-                        size={35}
+                        size={33}
                         color="#D26908"
                         name="close-circle"
                         onPress={() => {
@@ -629,7 +629,7 @@ const Habitos = () => {
                         }}
                       />
                       <Icon
-                        size={35}
+                        size={33}
                         color="#23C820"
                         name="check-circle"
                         onPress={() => {

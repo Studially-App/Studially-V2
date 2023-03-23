@@ -76,7 +76,7 @@ const ModalFiltroCategoriaComunidad = ({
                 marginBottom: 0,
                 marginLeft: 0,
                 marginRight: 0,
-                marginTop: 150,
+                marginTop: 20,
                 borderTopLeftRadius: 30,
                 borderTopRightRadius: 30,
               }}

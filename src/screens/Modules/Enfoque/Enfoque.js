@@ -257,7 +257,7 @@ const Enfoque = () => {
         setProModalVisibility={setProModalVisibility}
       />
       {/* <View h={height} width={width}> */}
-      <ScrollView w={width} h={height}>
+      <ScrollView w={width} h={height-20}>
         <VStack space={4} justifyContent="center">
           <Center mt="6">
             {userTier !== 'premium' ? (
@@ -357,7 +357,7 @@ const Enfoque = () => {
                             textAlign="center"
                             keyboardType="numeric"
                             marginLeft={'50%'}
-                            onChangeText={text => setInputMin(text)}
+                            onChangeText={text => text ? setInputMin(text):setInputMin(0)}
                           />
                           <Text
                             fontSize="10"
@@ -382,7 +382,7 @@ const Enfoque = () => {
                             size="xl"
                             maxLength={2}
                             marginRight={'50%'}
-                            onChangeText={text => setInputSec(text)}
+                            onChangeText={text => text ? setInputSec(text):setInputSec(0)}
                           />
                           <Text
                             fontSize="10"

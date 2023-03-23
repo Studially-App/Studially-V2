@@ -13,6 +13,7 @@ import {
   Text,
   HStack,
   useToast,
+  Modal
 } from 'native-base';
 import {launchImageLibrary} from 'react-native-image-picker';
 // Icons
@@ -24,6 +25,8 @@ import {useWindowDimensions, StyleSheet, Linking, PermissionsAndroid, Platform }
 
 // DateTime Picker
 import DatePicker from 'react-native-date-picker';
+
+import StudiallyProModal from '../../../components/StudiallyProModal';
 
 import dayjs from 'dayjs';
 import {useUser} from '../../../context/User';
@@ -54,7 +57,7 @@ const Profile = ({navigation}) => {
   const {width, height} = useWindowDimensions();
   const [tab, setTab] = React.useState('Personal');
   // Date states
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(userInfo ? new Date(userInfo.fechaNacimiento) : new Date());
   const [openDate, setOpenDate] = useState(false);
   const [firstDate, setFirstDate] = useState(true);
 
@@ -75,6 +78,10 @@ const Profile = ({navigation}) => {
   // State for password change
   const [currentPass, setCurrentPass] = useState('');
   const [newPass, setNewPass] = useState('');
+
+  const [openPassword, setOpenPassword] = useState(false);
+  // Estado Pro modal
+  const [proModalVisibility, setProModalVisibility] = useState(false);
   
   const saveInfo = () => {
     console.log('Name & lastName & date & school', name, lastName, dayjs(date).format('DD-MM-YYYY'), school);
@@ -503,27 +510,36 @@ const Profile = ({navigation}) => {
                     />
                   }
                 />
-
-                <Input
-                  placeholder="Contraseña nueva"
-                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
-                  onChangeText={text => setNewPass(text)}
-                  w="80%"
-                  _focus={{
-                    borderColor: '#475BD8',
-                  }}
-                  type={'password'}
-                  size="xl"
-                  borderColor="#475BD8"
-                  rounded="4"
-                  InputLeftElement={
-                    <MaterialIcon
-                      name="lock-outline"
-                      size={32}
-                      color="rgba(5, 24, 139, 0.5)"
-                    />
-                  }
-                />
+                
+                <HStack alignItems="center">
+                  <Input
+                    placeholder="Contraseña nueva"
+                    placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                    onChangeText={text => setNewPass(text)}
+                    w="80%"
+                    _focus={{
+                      borderColor: '#475BD8',
+                    }}
+                    type={'password'}
+                    size="xl"
+                    borderColor="#475BD8"
+                    rounded="4"
+                    InputLeftElement={
+                      <MaterialIcon
+                        name="lock-outline"
+                        size={32}
+                        color="rgba(5, 24, 139, 0.5)"
+                      />
+                    }
+                  />
+                  <MaterialCommunityIcon
+                    name="information-outline"
+                    style={styles.email_input}
+                    size={32}
+                    color="rgba(5, 24, 139, 0.5)"
+                    onPress={() => setOpenPassword(true)}
+                  />
+                </HStack>
 
                 <Button
                   bg="rgba(71, 91, 216, 1)"
@@ -545,14 +561,12 @@ const Profile = ({navigation}) => {
               : null
               }
 
-              
-
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
                 onPress={() =>
                   userTier !== 'premium'
-                    ? navigation.navigate('Studially Pro')
+                    ? setProModalVisibility(true)
                     : openSubscriptionPage()
                 }
                 _pressed={{
@@ -570,6 +584,26 @@ const Profile = ({navigation}) => {
           )}
         </VStack>
       </ScrollView>
+      <StudiallyProModal
+        proModalVisibility={proModalVisibility}
+        setProModalVisibility={setProModalVisibility}
+      />
+      <Modal isOpen={openPassword} onClose={() => setOpenPassword(false)}>
+        <Modal.Content maxH="212">
+          <Modal.CloseButton />
+          <Modal.Header>Parámetros de contraseña</Modal.Header>
+          <Modal.Body>
+            <ScrollView>
+              <Text>- Al menos 8 caracteres</Text>
+              <Text>- Al menos 1 Mayúscula</Text>
+              <Text>- Al menos 1 Minúscula</Text>
+              <Text>- Al menos 1 Número</Text>
+              <Text>- Al menos 1 Caracter Especial</Text>
+              <Text>!@#$%^&*-_().:;/</Text>
+            </ScrollView>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </NativeBaseProvider>
   );
 };

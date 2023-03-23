@@ -321,10 +321,10 @@ const App = () => {
                   w={'10%'}>
                   <IconButton
                     onPress={() => {
-                      console.log('Abrir mas');
+                      console.log('Ir a home');
                       setProfile(false);
                     }}
-                    icon={<MatComIcon name="menu" color="blue" size={24} />}
+                    icon={<MatComIcon name="home" color="blue" size={24} />}
                   />
                 </HStack>
                 <HStack

@@ -30,7 +30,7 @@ const ModalMetaFinalizada = ({
         <VStack space="3" alignItems="center">
           <Heading>¡Felicidades!</Heading>
           <Text fontSize="18" noOfLines={3}>
-            Lograste completar tu meta, que venga la siguiente
+            Lograste completar tu meta, estas mejorando tu habilidad para ahorrar. ¡Tú puedes!
           </Text>
           <HStack space="3">
             <Button
