@@ -72,7 +72,7 @@ const Habitos = () => {
   // Set an initializing state whilst Firebase connects
   const {user, userInfo, userTier} = useUser();
 
-  const marcarHabito = (i, accion, name) => {
+  const marcarHabito = async (i, accion, name) => {
     console.log('Que es i', i);
     console.log('name',name);
     console.log('accion', accion);
@@ -89,24 +89,31 @@ const Habitos = () => {
       return object.name === name;
     });
     console.log(selectedIndex)
-    console.log('Aquí se guarda el fuego',storedHabits[selectedIndex]);
+    console.log('Aquí se guarda el fuego',storedHabits[selectedIndex].name);
+    console.log('Dias antes de marcarse',storedHabits[selectedIndex].dias);
     if (accion === 'Completado') {
       marcado[i].completed = true;
       markedData[index].marcadoSemana.push(1);
       markedData[index].marcadoMes.push(1);
       storedHabits[selectedIndex].dias++;
-      console.log('Aquí ya está guardado el fuego',storedHabits[selectedIndex]);
+      console.log('Aquí ya está guardado el fuego',storedHabits[selectedIndex].name);
+      console.log('Dias después de marcarse',storedHabits[selectedIndex].dias);
+      setSelectedData(storedHabits);
+      setData(markedData);
+      
       if (
         storedHabits[selectedIndex].dias === storedHabits[selectedIndex].veces
       ) {
-        try {
-          updateFire();
-        } catch (error) {
-          console.log('error en catch', error);
-        }
+        console.log('se cumple la condición');
+        const fires = {...fuegos};
+        fires.fuegos = fires.fuegos + 1;
+        setFuegos(fires);
+        // try {
+        //   await updateFire();
+        // } catch (error) {
+        //   console.log('error en catch', error);
+        // }
       }
-      setSelectedData(storedHabits);
-      setData(markedData);
     }
     setTodayData(marcado);
   };
@@ -133,7 +140,6 @@ const Habitos = () => {
   const saveMarkedHabits = i => {
     let popHabits = [...todayData];
     popHabits[i].finalMarked = true;
-    console.log('Hábito a marcar',popHabits[i]);
     try {
       firestore()
         .collection('usuarios')
@@ -255,6 +261,25 @@ const Habitos = () => {
     }
   };
 
+  const deleteFriend = id => {
+    const deleted = [...amigos];
+    deleted.splice(id, 1);
+    try {
+      firestore()
+        .collection('usuarios')
+        .doc(user.uid)
+        .update({
+          listaAmigos: deleted,
+        })
+        .then(() => {
+          console.log('User friends updated!');
+          setAmigos(deleted);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getHabits = useCallback(async userInfo => {
     var userHabits = userInfo.habitos;
     setData(userHabits);
@@ -299,26 +324,7 @@ const Habitos = () => {
     if (userInfo) {
       getHabits(userInfo);
     }
-  }, [getHabits, userInfo]);
-
-  const deleteFriend = id => {
-    const deleted = [...amigos];
-    deleted.splice(id, 1);
-    try {
-      firestore()
-        .collection('usuarios')
-        .doc(user.uid)
-        .update({
-          listaAmigos: deleted,
-        })
-        .then(() => {
-          console.log('User friends updated!');
-          setAmigos(deleted);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [userInfo]);
 
   return (
     <NativeBaseProvider>

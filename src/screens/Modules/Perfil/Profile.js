@@ -57,9 +57,8 @@ const Profile = ({navigation}) => {
   const {width, height} = useWindowDimensions();
   const [tab, setTab] = React.useState('Personal');
   // Date states
-  const [date, setDate] = useState(userInfo ? new Date(userInfo.fechaNacimiento) : new Date());
+  const [date, setDate] = useState(userInfo ? new Date(userInfo.fechaNacimiento.split('-').reverse().join('-')) : new Date());
   const [openDate, setOpenDate] = useState(false);
-  const [firstDate, setFirstDate] = useState(true);
 
   // State edit Info
   const [edit, setEdit] = useState(true);
@@ -348,7 +347,6 @@ const Profile = ({navigation}) => {
                 onConfirm={dateSelected => {
                   setOpenDate(false);
                   setDate(dateSelected);
-                  setFirstDate(false);
                 }}
                 onCancel={() => {
                   setOpenDate(false);
@@ -373,9 +371,9 @@ const Profile = ({navigation}) => {
                   />
                 }>
                 <Text fontSize="lg" color="rgba(39, 44, 70, 0.5)" ml="4">
-                  {userInfo && firstDate
-                    ? dayjs(userInfo.fechaNacimiento).format('DD-MM-YYYY')
-                    : dayjs(date).format('DD-MM-YYYY')}
+                  {
+                    dayjs(date).format('DD-MM-YYYY')
+                  }
                 </Text>
               </Button>
               

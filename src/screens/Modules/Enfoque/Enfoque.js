@@ -256,8 +256,7 @@ const Enfoque = () => {
         proModalVisibility={proModalVisibility}
         setProModalVisibility={setProModalVisibility}
       />
-      {/* <View h={height} width={width}> */}
-      <ScrollView w={width} h={height-20}>
+      <ScrollView w={width} h={"70%"} mb={"50%"}>
         <VStack space={4} justifyContent="center">
           <Center mt="6">
             {userTier !== 'premium' ? (
@@ -336,7 +335,7 @@ const Enfoque = () => {
                 key={timerKey}
                 updateInterval={1}
                 colors="rgba(71, 91, 216, 1)"
-                size={200}
+                size={170}
                 onComplete={() => {
                   restartTimer();
                   setFocusFinishedModalVisibility(true);
@@ -351,8 +350,8 @@ const Enfoque = () => {
                             placeholder={placeholder}
                             defaultValue="25"
                             variant="unstyled"
-                            fontSize={35}
-                            size="xl"
+                            fontSize={30}
+                            size="lg"
                             maxLength={2}
                             textAlign="center"
                             keyboardType="numeric"
@@ -367,7 +366,7 @@ const Enfoque = () => {
                           </Text>
                         </Center>
                         <Text
-                          fontSize="48"
+                          fontSize="25"
                           color={timerStart === true ? 'black' : '#a3a3a3'}>
                           :
                         </Text>
@@ -378,8 +377,8 @@ const Enfoque = () => {
                             variant="unstyled"
                             textAlign="center"
                             keyboardType="numeric"
-                            fontSize={35}
-                            size="xl"
+                            fontSize={30}
+                            size="lg"
                             maxLength={2}
                             marginRight={'50%'}
                             onChangeText={text => text ? setInputSec(text):setInputSec(0)}
@@ -398,24 +397,23 @@ const Enfoque = () => {
                     const minutes = Math.floor(remainingTime / 60);
                     const seconds = remainingTime % 60;
                     return seconds < 10 && minutes >= 10 ? (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         {minutes}:0{seconds}
                       </Text>
                     ) : seconds < 10 && minutes < 10 ? (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         0{minutes}:0{seconds}
                       </Text>
                     ) : seconds >= 10 && minutes < 10 ? (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         0{minutes}:{seconds}
                       </Text>
                     ) : (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         {minutes}:{seconds}
                       </Text>
                     );
                   }
-                  // return <Input />;
                 }}
               />
             ) : (
@@ -425,7 +423,7 @@ const Enfoque = () => {
                 key={breakOutKey}
                 updateInterval={1}
                 colors="rgba(71, 91, 216, 1)"
-                size={240}
+                size={170}
                 onComplete={() => {
                   setBreakOutActive(false);
                 }}
@@ -434,19 +432,19 @@ const Enfoque = () => {
                     const minutes = Math.floor(remainingTime / 60);
                     const seconds = remainingTime % 60;
                     return seconds < 10 && minutes >= 10 ? (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         {minutes}:0{seconds}
                       </Text>
                     ) : seconds < 10 && minutes < 10 ? (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         0{minutes}:0{seconds}
                       </Text>
                     ) : seconds >= 10 && minutes < 10 ? (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         0{minutes}:{seconds}
                       </Text>
                     ) : (
-                      <Text fontSize="48">
+                      <Text fontSize="30">
                         {minutes}:{seconds}
                       </Text>
                     );
@@ -514,8 +512,6 @@ const Enfoque = () => {
                   <Center>
                     <Pressable
                       onPress={() => {
-                        // setTimerOn(false);
-                        // restartTimer();
                         setStopModalVisibility(true);
                       }}>
                       <Circle size="48px" bg="rgba(71, 91, 216, 1)">

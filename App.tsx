@@ -203,7 +203,7 @@ const App = () => {
                       console.log('Abrir mas');
                       setProfile(true);
                     }}
-                    icon={<MatComIcon name="menu" color="blue" size={24} />}
+                    icon={<MatComIcon name="menu" color="blue" size={20} />}
                   />
                 </HStack>
                 <HStack
@@ -324,7 +324,7 @@ const App = () => {
                       console.log('Ir a home');
                       setProfile(false);
                     }}
-                    icon={<MatComIcon name="home" color="blue" size={24} />}
+                    icon={<MatComIcon name="home" color="blue" size={20} />}
                   />
                 </HStack>
                 <HStack
