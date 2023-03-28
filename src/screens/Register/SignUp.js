@@ -3,6 +3,7 @@ import {useState} from 'react';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { firebase } from '@react-native-firebase/app';
 
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 
@@ -78,14 +79,20 @@ const SignUp = ({navigation}) => {
   };
 
   const onGoogleButtonPress = async () => {
-    // Get the users ID token
-    const {idToken} = await GoogleSignin.signIn();
+    try {
+      // Get the users ID token
+      const {idToken} = await GoogleSignin.signIn();
 
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // Authenticate with Firebase using the Google ID token
+      const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+      const userCredential = await auth().signInWithCredential(credential);
 
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
+      if(userCredential.additionalUserInfo.isNewUser){
+        createUserGoogle(auth().currentUser);
+      }
+    }catch(error){
+      console.log(error);
+    }
   };
 
   async function onFacebookButtonPress() {
@@ -203,11 +210,12 @@ const SignUp = ({navigation}) => {
         minutosMes: dayjs().month(),
         minutosSemana: dayjs(new Date()).week(),
         since: dayjs().format('YYYY-MM-DD'),
-        profilePic: 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370'
+        profilePic: user.photoURL
       })
       .then(() => {
         console.log('Google User added!');
       });
+    sendEmail()
   };
 
   const createUser = values => {
@@ -739,9 +747,7 @@ const SignUp = ({navigation}) => {
                       try {
                         console.log('Registro con google');
                         onGoogleButtonPress().then(() => {
-                          console.log('Signed in with Google!');
-                          const user = auth().currentUser;
-                          createUserGoogle(user);
+                          console.log('registered with google');                  
                         });
                       } catch (error) {
                         toast.show({
