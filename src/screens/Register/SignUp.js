@@ -5,7 +5,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { firebase } from '@react-native-firebase/app';
 
-import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import {LoginButton, AccessToken, GraphRequest, Settings, GraphRequestManager} from 'react-native-fbsdk-next';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
@@ -70,6 +70,7 @@ const SignUp = ({navigation}) => {
   const [TerAndCondState, setTerAndCondState] = useState(false);
   const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
   const toast = useToast();
+  Settings.initializeSDK();
 
   const sendEmail = async () => {
     await auth().currentUser.sendEmailVerification({
@@ -95,32 +96,52 @@ const SignUp = ({navigation}) => {
     }
   };
 
-  async function onFacebookButtonPress() {
-    // Attempt login with permissions
-    const result = await LoginManager.logInWithPermissions([
-      'public_profile',
-      'email',
-    ]);
-
-    if (result.isCancelled) {
-      throw 'User cancelled the login process';
+  const handleFacebookLogin = async () => {
+    console.log('Empieza facebook login')
+    try {
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      if (result.isCancelled) {
+        setError('User cancelled the login process');
+      } else {
+        const data = await AccessToken.getCurrentAccessToken();
+        if (!data) {
+          setError('Something went wrong obtaining access token');
+        } else {
+          const facebookCredential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+          await firebase.auth().signInWithCredential(facebookCredential);
+        }
+      }
+    } catch (e) {
+      setError(e.message);
     }
+  };
 
-    // Once signed in, get the users AccesToken
-    const data = await AccessToken.getCurrentAccessToken();
+  // async function onFacebookButtonPress() {
+  //   // Attempt login with permissions
+  //   const result = await LoginManager.logInWithPermissions([
+  //     'public_profile',
+  //     'email',
+  //   ]);
 
-    if (!data) {
-      throw 'Something went wrong obtaining access token';
-    }
+  //   if (result.isCancelled) {
+  //     throw 'User cancelled the login process';
+  //   }
 
-    // Create a Firebase credential with the AccessToken
-    const facebookCredential = auth.FacebookAuthProvider.credential(
-      data.accessToken,
-    );
+  //   // Once signed in, get the users AccesToken
+  //   const data = await AccessToken.getCurrentAccessToken();
 
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(facebookCredential);
-  }
+  //   if (!data) {
+  //     throw 'Something went wrong obtaining access token';
+  //   }
+
+  //   // Create a Firebase credential with the AccessToken
+  //   const facebookCredential = auth.FacebookAuthProvider.credential(
+  //     data.accessToken,
+  //   );
+
+  //   // Sign-in the user with the credential
+  //   return auth().signInWithCredential(facebookCredential);
+  // }
 
   const createUserGoogle = async user => {
     const currentUser = await GoogleSignin.getCurrentUser();
@@ -775,11 +796,54 @@ const SignUp = ({navigation}) => {
                       <FontistoIcon name="facebook" color="#FFFF" size={30} />
                     }
                     onPress={() =>
-                      onFacebookButtonPress().then(() =>
-                        console.log('Signed in with Facebook!'),
-                      )
+                      // onFacebookButtonPress().then(() =>
+                      //   console.log('Signed in with Facebook!'),
+                      // )
+                      console.log('Signed in with Facebook!')
                     }
                   />
+                  <LoginButton
+                    onLoginFinished={
+                      (error, result) => {
+                        if (error) {
+                          alert("login has error: " + result.error);
+                        } else if (result.isCancelled) {
+                          alert("login is cancelled.");
+                        } else {
+                          AccessToken.getCurrentAccessToken().then(
+                            (data) => {
+                              let accessToken = data.accessToken
+                              alert(accessToken.toString())
+
+                              const responseInfoCallback = (error, result) => {
+                                if (error) {
+                                  console.log(error)
+                                  alert('Error fetching data: ' + error.toString());
+                                } else {
+                                  console.log(result)
+                                  alert('Success fetching data: ' + result.toString());
+                                }
+                              }
+                              const infoRequest = new GraphRequest(
+                                '/me',
+                                {
+                                  accessToken: accessToken,
+                                  parameters: {
+                                    fields: {
+                                      string: 'email,name,first_name,middle_name,last_name'
+                                    }
+                                  }
+                                },
+                                responseInfoCallback
+                              );
+                              // Start the graph request.
+                              new GraphRequestManager().addRequest(infoRequest).start()
+                            }
+                          )
+                        }
+                      }
+                    }
+                    onLogoutFinished={() => alert("logout.")}/>
                 </Stack>
                 <Flex direction="column" align="center">
                   <Text fontSize={18}>¿Ya tienes una cuenta?</Text>

@@ -256,7 +256,7 @@ const Enfoque = () => {
         proModalVisibility={proModalVisibility}
         setProModalVisibility={setProModalVisibility}
       />
-      <ScrollView w={width} h={"70%"} mb={"50%"}>
+      <ScrollView w={width} h={"70%"} mb={"20%"} position="absolute">
         <VStack space={4} justifyContent="center">
           <Center mt="6">
             {userTier !== 'premium' ? (

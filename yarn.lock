@@ -2168,7 +2168,7 @@
   resolved "https://registry.npmjs.org/@react-native-community/eslint-plugin/-/eslint-plugin-1.3.0.tgz"
   integrity sha512-+zDZ20NUnSWghj7Ku5aFphMzuM9JulqCW+aPXT6IfIXFbb8tzYTTOSeRFOtuekJ99ibW2fUCSsjuKNlwDIbHFg==
 
-"@react-native-firebase/app@^17.3.2", "@react-native-firebase/app@17.3.2":
+"@react-native-firebase/app@^17.3.1", "@react-native-firebase/app@17.3.2":
   version "17.3.2"
   resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-17.3.2.tgz"
   integrity sha512-JPA9PuD3il2/FERnsW5bC/PbXdcBcVMtk4V0vL8YgLh+jQg+E3qQTQmeWn9eOWTYJb6BYOiiNHTdTglvqoo5Cg==
@@ -2177,7 +2177,7 @@
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/auth@^17.3.2":
+"@react-native-firebase/auth@^17.3.1":
   version "17.3.2"
   resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-17.3.2.tgz"
   integrity sha512-YvVvKTwpMMWnDThKh4btgAh6XYo7ie1hwwrTOGNd8Vpsr+nGmiPPB0COdiVaQu8KWX1CzPbOuxJdPwWaz9lW/w==
@@ -2185,17 +2185,17 @@
     "@expo/config-plugins" "^5.0.4"
     plist "^3.0.5"
 
-"@react-native-firebase/firestore@^17.3.2":
+"@react-native-firebase/firestore@^17.3.1":
   version "17.3.2"
   resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-17.3.2.tgz"
   integrity sha512-ZqdtYcZExAdfFXIntfy5/hTRK8jAyZnQCbpCyvC3O8f1m4C2pDo57xLzTdukORtJjiBGkxBpcULLBrSbOJ/SXw==
 
-"@react-native-firebase/functions@^17.3.2":
+"@react-native-firebase/functions@^17.3.1":
   version "17.3.2"
   resolved "https://registry.npmjs.org/@react-native-firebase/functions/-/functions-17.3.2.tgz"
   integrity sha512-J/koy5YuPItDHtyKYtMBBqj2aAlh6T17aH+OmK0ums9jW9WM2di8N2nqjwNnGXnjtWfMqqUQWYdvhmYGbKPMvg==
 
-"@react-native-firebase/messaging@^17.3.2":
+"@react-native-firebase/messaging@^17.3.1":
   version "17.3.2"
   resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-17.3.2.tgz"
   integrity sha512-7IO12OjNdjtvtxHXY/8qJ9a0RLTg4cUddnE1sNxj3RciDz+Sx7SRJX0fsyX19i1m7dcPh73p9NzrrtnvNnILfw==
@@ -7563,10 +7563,10 @@ react-native-date-picker@^4.2.9:
   dependencies:
     prop-types "^15.8.1"
 
-react-native-fbsdk-next@^11.1.0:
-  version "11.1.0"
-  resolved "https://registry.npmjs.org/react-native-fbsdk-next/-/react-native-fbsdk-next-11.1.0.tgz"
-  integrity sha512-fLKaR1OWPufX81Ks7uuWX0+7jUw4mXKKQ4J3gWYXmAjXYk/Fp10UqZBOqkQ4TE78EP7baB2Qw8ZIcl2dvyQS2Q==
+react-native-fbsdk-next@^11.2.0:
+  version "11.2.0"
+  resolved "https://registry.npmjs.org/react-native-fbsdk-next/-/react-native-fbsdk-next-11.2.0.tgz"
+  integrity sha512-8voUtL7xtMn7JD7PC2PKKLHWeTeUu/w0vtUSMX5o3FXPBTy7G1dkQIHUTlI+CZwEBLISh9iQfPmghREWxIwyzg==
   dependencies:
     "@expo/config-plugins" "^5.0.1"
     xml2js "^0.4.23"
