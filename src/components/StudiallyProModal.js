@@ -118,7 +118,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           <Center>
             <VStack>
               <Text fontSize="30" bold>
-                10<Text fontSize="16">USD</Text> / mes
+                90<Text fontSize="16">MXN</Text> / mes
               </Text>
               <Flex direction="column" alignItems="flex-start" ml="2%">
                 <Text fontSize="18">Primer mes gratis</Text>

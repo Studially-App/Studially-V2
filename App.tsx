@@ -159,6 +159,7 @@ const EnfoqueStackScreen = () => (
 const App = () => {
   const [profile, setProfile] = useState(false);
   const {user, initialized, userTier} = useUser();
+  //console.log(user.providerData);
 
   useEffect(() => {
     if (initialized && user) {
@@ -203,7 +204,7 @@ const App = () => {
                       console.log('Abrir mas');
                       setProfile(true);
                     }}
-                    icon={<MatComIcon name="menu" color="blue" size={20} />}
+                    icon={<MatComIcon name="menu" color="blue" size={18} />}
                   />
                 </HStack>
                 <HStack
@@ -324,7 +325,7 @@ const App = () => {
                       console.log('Ir a home');
                       setProfile(false);
                     }}
-                    icon={<MatComIcon name="home" color="blue" size={20} />}
+                    icon={<MatComIcon name="home" color="blue" size={18} />}
                   />
                 </HStack>
                 <HStack

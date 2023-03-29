@@ -52,6 +52,7 @@ const AprendizajeLista = () => {
       .get();
     const ap = snapshot.docs.map(doc => doc.data());
     setAprendizaje(ap);
+    setCategories(userInfo.aprendizajeCategoriaFiltro);
   };
 
   const getAprendizajeFilter = async () => {
