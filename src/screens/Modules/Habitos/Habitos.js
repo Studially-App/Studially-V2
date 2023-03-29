@@ -73,9 +73,9 @@ const Habitos = () => {
   const {user, userInfo, userTier} = useUser();
 
   const marcarHabito = async (i, accion, name) => {
-    console.log('Que es i', i);
-    console.log('name',name);
-    console.log('accion', accion);
+    // console.log('Que es i', i);
+    // console.log('name',name);
+    // console.log('accion', accion);
     let marcado = [...todayData];
     marcado[i].marked = true;
     marcado[i].dayMarked = dayjs().date();
@@ -89,31 +89,31 @@ const Habitos = () => {
       return object.name === name;
     });
     console.log(selectedIndex)
-    console.log('Aquí se guarda el fuego',storedHabits[selectedIndex].name);
-    console.log('Dias antes de marcarse',storedHabits[selectedIndex].dias);
+    // console.log('Aquí se guarda el fuego',storedHabits[selectedIndex].name);
+    // console.log('Dias antes de marcarse',storedHabits[selectedIndex].dias);
     if (accion === 'Completado') {
       marcado[i].completed = true;
       markedData[index].marcadoSemana.push(1);
       markedData[index].marcadoMes.push(1);
       storedHabits[selectedIndex].dias++;
-      console.log('Aquí ya está guardado el fuego',storedHabits[selectedIndex].name);
-      console.log('Dias después de marcarse',storedHabits[selectedIndex].dias);
+      // console.log('Aquí ya está guardado el fuego',storedHabits[selectedIndex].name);
+      // console.log('Dias después de marcarse',storedHabits[selectedIndex].dias);
       setSelectedData(storedHabits);
       setData(markedData);
       
-      if (
-        storedHabits[selectedIndex].dias === storedHabits[selectedIndex].veces
-      ) {
-        console.log('se cumple la condición');
-        const fires = {...fuegos};
-        fires.fuegos = fires.fuegos + 1;
-        setFuegos(fires);
-        // try {
-        //   await updateFire();
-        // } catch (error) {
-        //   console.log('error en catch', error);
-        // }
-      }
+      // if (
+      //   storedHabits[selectedIndex].dias === storedHabits[selectedIndex].veces
+      // ) {
+      //   console.log('se cumple la condición');
+      //   const fires = {...fuegos};
+      //   fires.fuegos = fires.fuegos + 1;
+      //   setFuegos(fires);
+      //   // try {
+      //   //   await updateFire();
+      //   // } catch (error) {
+      //   //   console.log('error en catch', error);
+      //   // }
+      // }
     }
     setTodayData(marcado);
   };
@@ -137,9 +137,15 @@ const Habitos = () => {
     }
   };
 
-  const saveMarkedHabits = i => {
+  const saveMarkedHabits = async i => {
     let popHabits = [...todayData];
     popHabits[i].finalMarked = true;
+    console.log('Hábito marcado',popHabits[i]);
+    if (popHabits[i].dias === popHabits[i].veces) 
+    {
+      console.log('se cumple la condición');
+      await updateFire();
+     }
     try {
       firestore()
         .collection('usuarios')
@@ -205,6 +211,7 @@ const Habitos = () => {
     const fires = {...fuegos};
     fires.fuegos = fires.fuegos + 1;
     setFuegos(fires);
+    console.log(fuegos);
     try {
       firestore()
         .collection('usuarios')
