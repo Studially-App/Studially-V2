@@ -787,7 +787,7 @@ const SignUp = ({navigation}) => {
                       />
                     }
                   />
-                  <Button
+                  {/* <Button
                     bg="#4267B2"
                     h={'60px'}
                     w={'60px'}
@@ -801,8 +801,8 @@ const SignUp = ({navigation}) => {
                       // )
                       console.log('Signed in with Facebook!')
                     }
-                  />
-                  <LoginButton
+                  /> */}
+                  {/* <LoginButton
                     onLoginFinished={
                       (error, result) => {
                         if (error) {
@@ -843,7 +843,7 @@ const SignUp = ({navigation}) => {
                         }
                       }
                     }
-                    onLogoutFinished={() => alert("logout.")}/>
+                    onLogoutFinished={() => alert("logout.")}/> */}
                 </Stack>
                 <Flex direction="column" align="center">
                   <Text fontSize={18}>¿Ya tienes una cuenta?</Text>

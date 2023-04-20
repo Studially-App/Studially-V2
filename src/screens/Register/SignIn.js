@@ -225,7 +225,7 @@ const SignIn = ({navigation}) => {
                       />
                     }
                   />
-                  <Button
+                  {/* <Button
                     bg="#4267B2"
                     h={'60px'}
                     w={'60px'}
@@ -233,7 +233,7 @@ const SignIn = ({navigation}) => {
                     leftIcon={
                       <FontistoIcon name="facebook" color="#FFFF" size={30} />
                     }
-                  />
+                  /> */}
                 </Stack>
                 <Flex direction="column" align="center">
                   <Link
