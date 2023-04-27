@@ -115,13 +115,13 @@ const SignIn = ({navigation}) => {
               </Center>
               <Flex direction="row" justify="center" bg="#FAFAFA" pb={6}>
                 <Heading size="2xl" color="#272C46">
-                  Iniciar sesión
+                  Log In
                 </Heading>
               </Flex>
               <VStack space={2} alignItems="center">
                 <Input
                   placeholder="Correo electrónico"
-                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                  placeholderTextColor="rgba(39, 44, 70, 0.8)"
                   onChangeText={handleChange('email')}
                   value={values.email}
                   onBlur={handleBlur('email')}
@@ -131,13 +131,13 @@ const SignIn = ({navigation}) => {
                     borderColor: '#475BD8',
                   }}
                   type="email"
-                  size="xl"
+                  size="2xl"
                   InputLeftElement={
                     <MaterialCommunityIcon
                       name="email-outline"
                       style={styles.email_input}
                       size={28}
-                      color="rgba(5, 24, 139, 0.5)"
+                      color="rgba(5, 24, 139, 0.8)"
                     />
                   }
                 />
@@ -148,7 +148,7 @@ const SignIn = ({navigation}) => {
                 ) : null}
                 <Input
                   placeholder="Contraseña"
-                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                  placeholderTextColor="rgba(39, 44, 70, 0.8)"
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
                   value={values.password}
@@ -158,13 +158,13 @@ const SignIn = ({navigation}) => {
                   }}
                   type="password"
                   borderColor="rgba(71, 91, 216, 1)"
-                  size="xl"
+                  size="2xl"
                   InputLeftElement={
                     <MaterialIcon
                       name="lock-outline"
                       style={styles.email_input}
                       size={28}
-                      color="rgba(5, 24, 139, 0.5)"
+                      color="rgba(5, 24, 139, 0.8)"
                     />
                   }
                 />
@@ -239,11 +239,11 @@ const SignIn = ({navigation}) => {
                   <Link
                     mb={2}
                     onPress={() => {
-                      console.log("Reset");
-                      navigation.navigate('ResetPassword')
+                      console.log('Reset');
+                      navigation.navigate('ResetPassword');
                     }}
                     _text={{
-                      fontSize: 18,
+                      fontSize: 22,
                       color: '#272C46',
                     }}>
                     Olvidé mi contraseña
@@ -251,7 +251,7 @@ const SignIn = ({navigation}) => {
                   <Link
                     onPress={() => navigation.navigate('SignUp')}
                     _text={{
-                      fontSize: 18,
+                      fontSize: 22,
                       color: '#272C46',
                     }}>
                     Crear cuenta

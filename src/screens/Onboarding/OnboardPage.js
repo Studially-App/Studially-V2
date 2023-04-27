@@ -30,6 +30,7 @@ export default function OnboardPage({item, scrollX, navigation}) {
       <Center>
         <Paginator data={DataOnboard} scrollX={scrollX} id={item.id} />
         <Button
+          size={'2xl'}
           bg="#FAFAFA"
           px="40%"
           mb={4}

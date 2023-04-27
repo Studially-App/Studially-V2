@@ -37,15 +37,15 @@ const ResetPassword = ({navigation}) => {
   const [modal, setModal] = React.useState(false);
   const toast = useToast();
 
-  const handlePasswordReset = async (correo) => {
+  const handlePasswordReset = async correo => {
     try {
       await auth().sendPasswordResetEmail(correo);
 
       console.log(
         'Success',
-        'A password reset email has been sent to your email address.'
+        'A password reset email has been sent to your email address.',
       );
-      setModal(true)
+      setModal(true);
     } catch (error) {
       console.log('Error', error.message);
       if (error.code === 'auth/user-not-found') {
@@ -123,7 +123,7 @@ const ResetPassword = ({navigation}) => {
 
                 <Input
                   placeholder="Correo electrónico"
-                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                  placeholderTextColor="rgba(39, 44, 70, 0.8)"
                   onChangeText={handleChange('correo')}
                   value={values.correo}
                   onBlur={handleBlur('correo')}
@@ -133,13 +133,13 @@ const ResetPassword = ({navigation}) => {
                     borderColor: '#475BD8',
                   }}
                   type="email"
-                  size="xl"
+                  size="2xl"
                   InputLeftElement={
                     <MaterialCommunityIcon
                       name="email-outline"
                       style={styles.email_input}
                       size={28}
-                      color="rgba(5, 24, 139, 0.5)"
+                      color="rgba(5, 24, 139, 0.8)"
                     />
                   }
                 />
@@ -197,11 +197,11 @@ const ResetPassword = ({navigation}) => {
                     </Center>
                   </Modal.Content>
                 </Modal>
-                </Flex>
+              </Flex>
             </Box>
           </View>
         )}
-      </Formik> 
+      </Formik>
     </NativeBaseProvider>
   );
 };

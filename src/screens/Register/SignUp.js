@@ -3,9 +3,15 @@ import {useState} from 'react';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { firebase } from '@react-native-firebase/app';
+import {firebase} from '@react-native-firebase/app';
 
-import {LoginButton, AccessToken, GraphRequest, Settings, GraphRequestManager} from 'react-native-fbsdk-next';
+import {
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  Settings,
+  GraphRequestManager,
+} from 'react-native-fbsdk-next';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
@@ -64,11 +70,13 @@ const styles = StyleSheet.create({
 const SignUp = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
   const [typePassword, setTypePassword] = useState(true);
   const [typeConfirmPassword, setTypeConfirmPassword] = useState(true);
   const [TerAndCondState, setTerAndCondState] = useState(false);
-  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
   const toast = useToast();
   Settings.initializeSDK();
 
@@ -88,18 +96,21 @@ const SignUp = ({navigation}) => {
       const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
       const userCredential = await auth().signInWithCredential(credential);
 
-      if(userCredential.additionalUserInfo.isNewUser){
+      if (userCredential.additionalUserInfo.isNewUser) {
         createUserGoogle(auth().currentUser);
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   };
 
   const handleFacebookLogin = async () => {
-    console.log('Empieza facebook login')
+    console.log('Empieza facebook login');
     try {
-      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
       if (result.isCancelled) {
         setError('User cancelled the login process');
       } else {
@@ -107,7 +118,8 @@ const SignUp = ({navigation}) => {
         if (!data) {
           setError('Something went wrong obtaining access token');
         } else {
-          const facebookCredential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+          const facebookCredential =
+            firebase.auth.FacebookAuthProvider.credential(data.accessToken);
           await firebase.auth().signInWithCredential(facebookCredential);
         }
       }
@@ -151,14 +163,14 @@ const SignUp = ({navigation}) => {
       .set({
         nombres: currentUser.user.givenName,
         apellidos: currentUser.user.familyName,
-        aprendizajeCategoriaFiltro:[
+        aprendizajeCategoriaFiltro: [
           'Ciencia y Tecnología',
           'Salud y Bienestar',
           'Arte y Cultura',
           'Negocios y Economía',
           'Tendencia y Recomendaciones',
         ],
-        comunidadCategoriaFiltro:[
+        comunidadCategoriaFiltro: [
           'Salud y Bienestar',
           'Alimenticio',
           'Educación y Pedagogía',
@@ -173,7 +185,7 @@ const SignUp = ({navigation}) => {
           'Entretenimiento',
           'Otros',
         ],
-        comunidadUniversidadFiltro:[
+        comunidadUniversidadFiltro: [
           'Anahuac',
           'EBC',
           'Ibero',
@@ -231,12 +243,12 @@ const SignUp = ({navigation}) => {
         minutosMes: dayjs().month(),
         minutosSemana: dayjs(new Date()).week(),
         since: dayjs().format('YYYY-MM-DD'),
-        profilePic: user.photoURL
+        profilePic: user.photoURL,
       })
       .then(() => {
         console.log('Google User added!');
       });
-    sendEmail()
+    sendEmail();
   };
 
   const createUser = values => {
@@ -280,14 +292,14 @@ const SignUp = ({navigation}) => {
             .set({
               nombres: values.nombres,
               apellidos: values.apellidos,
-              aprendizajeCategoriaFiltro:[
+              aprendizajeCategoriaFiltro: [
                 'Ciencia y Tecnología',
                 'Salud y Bienestar',
                 'Arte y Cultura',
                 'Negocios y Economía',
                 'Tendencia y Recomendaciones',
               ],
-              comunidadCategoriaFiltro:[
+              comunidadCategoriaFiltro: [
                 'Salud y Bienestar',
                 'Alimenticio',
                 'Educación y Pedagogía',
@@ -302,7 +314,7 @@ const SignUp = ({navigation}) => {
                 'Entretenimiento',
                 'Otros',
               ],
-              comunidadUniversidadFiltro:[
+              comunidadUniversidadFiltro: [
                 'Anahuac',
                 'EBC',
                 'Ibero',
@@ -360,7 +372,8 @@ const SignUp = ({navigation}) => {
               minutosMes: dayjs().month(),
               minutosSemana: dayjs(new Date()).week(),
               since: dayjs().format('YYYY-MM-DD'),
-              profilePic: 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370'
+              profilePic:
+                'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370',
             })
             .then(() => {
               console.log('User added!');
@@ -368,7 +381,6 @@ const SignUp = ({navigation}) => {
           sendEmail();
         })
         .catch(error => {
-
           if (error.code === 'auth/email-already-in-use') {
             console.log('That email address is already in use!');
             toast.show({
@@ -434,7 +446,7 @@ const SignUp = ({navigation}) => {
                   <Input
                     placeholder="Nombres"
                     onChangeText={handleChange('nombres')}
-                    placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                    placeholderTextColor="rgba(39, 44, 70, 0.8)"
                     w="90%"
                     borderColor="rgba(71, 91, 216, 1)"
                     rounded="4"
@@ -443,14 +455,14 @@ const SignUp = ({navigation}) => {
                       borderColor: '#475BD8',
                     }}
                     // mb={2}
-                    size="xl"
+                    size="2xl"
                     onBlur={handleBlur('nombres')}
                     InputLeftElement={
                       <Ionicons
                         name="person-outline"
                         style={styles.email_input}
                         size={32}
-                        color="rgba(5, 24, 139, 0.5)"
+                        color="rgba(5, 24, 139, 0.8)"
                       />
                     }
                   />
@@ -461,7 +473,7 @@ const SignUp = ({navigation}) => {
                   ) : null}
                   <Input
                     placeholder="Apellidos"
-                    placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                    placeholderTextColor="rgba(39, 44, 70, 0.8)"
                     onChangeText={handleChange('apellidos')}
                     value={values.apellidos}
                     onBlur={handleBlur('apellidos')}
@@ -469,7 +481,7 @@ const SignUp = ({navigation}) => {
                     // mb={2}
                     borderColor="#475BD8"
                     rounded="4"
-                    size="xl"
+                    size="2xl"
                     _focus={{
                       borderColor: '#475BD8',
                     }}
@@ -478,7 +490,7 @@ const SignUp = ({navigation}) => {
                         name="person-outline"
                         style={styles.email_input}
                         size={32}
-                        color="rgba(5, 24, 139, 0.5)"
+                        color="rgba(5, 24, 139, 0.8)"
                       />
                     }
                   />
@@ -510,29 +522,29 @@ const SignUp = ({navigation}) => {
                       setOpenDate(true);
                     }}
                     borderColor="#475BD8"
-                    _text={{color: 'rgba(39, 44, 70, 0.5)', fontSize: 'lg'}}
+                    _text={{color: 'rgba(39, 44, 70, 0.8)', fontSize: 'lg'}}
                     leftIcon={
                       <MaterialIcon
                         name="date-range"
-                        color="rgba(5, 24, 139, 0.5)"
+                        color="rgba(5, 24, 139, 0.8)"
                         size={32}
                       />
                     }>
                     {dayjs(date).format('DD-MM-YYYY')}
                   </Button>
-                  
+
                   <Select
                     placeholder="Institución educativa"
-                    placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                    placeholderTextColor="rgba(39, 44, 70, 0.8)"
                     borderColor="#475BD8"
                     rounded="4"
                     value={values.institucion}
                     onValueChange={handleChange('institucion')}
-                    size={'xl'}
+                    size={'2xl'}
                     InputLeftElement={
                       <Ionicons
                         name="school-outline"
-                        color="rgba(5, 24, 139, 0.5)"
+                        color="rgba(5, 24, 139, 0.8)"
                         size={36}
                         style={styles.email_input}
                       />
@@ -575,11 +587,11 @@ const SignUp = ({navigation}) => {
                   alignItems="center">
                   <Input
                     placeholder="Correo electrónico"
-                    placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                    placeholderTextColor="rgba(39, 44, 70, 0.8)"
                     onChangeText={handleChange('email')}
                     value={values.email}
                     w="90%"
-                    size="xl"
+                    size="2xl"
                     borderColor="#475BD8"
                     rounded="4"
                     _focus={{
@@ -590,7 +602,7 @@ const SignUp = ({navigation}) => {
                         name="email-outline"
                         style={styles.email_input}
                         size={32}
-                        color="rgba(5, 24, 139, 0.5)"
+                        color="rgba(5, 24, 139, 0.8)"
                       />
                     }
                   />
@@ -605,7 +617,7 @@ const SignUp = ({navigation}) => {
                     alignItems="center">
                     <Input
                       placeholder="Contraseña"
-                      placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                      placeholderTextColor="rgba(39, 44, 70, 0.8)"
                       onChangeText={handleChange('password')}
                       w="80%"
                       value={values.password}
@@ -613,7 +625,7 @@ const SignUp = ({navigation}) => {
                         borderColor: '#475BD8',
                       }}
                       type={typePassword ? 'password' : 'text'}
-                      size="xl"
+                      size="2xl"
                       onBlur={handleBlur('password')}
                       borderColor="#475BD8"
                       rounded="4"
@@ -622,7 +634,7 @@ const SignUp = ({navigation}) => {
                           name="lock-outline"
                           style={styles.email_input}
                           size={32}
-                          color="rgba(5, 24, 139, 0.5)"
+                          color="rgba(5, 24, 139, 0.8)"
                         />
                       }
                       InputRightElement={
@@ -630,7 +642,7 @@ const SignUp = ({navigation}) => {
                           name="eye"
                           style={styles.email_input}
                           size={25}
-                          color="rgba(5, 24, 139, 0.5)"
+                          color="rgba(5, 24, 139, 0.8)"
                           onPress={() => setTypePassword(!typePassword)}
                         />
                       }
@@ -639,7 +651,7 @@ const SignUp = ({navigation}) => {
                       name="information-outline"
                       style={styles.email_input}
                       size={32}
-                      color="rgba(5, 24, 139, 0.5)"
+                      color="rgba(5, 24, 139, 0.8)"
                       onPress={() => setOpenPassword(true)}
                     />
                   </HStack>
@@ -650,7 +662,7 @@ const SignUp = ({navigation}) => {
                   ) : null}
                   <Input
                     placeholder="Confirmar contraseña"
-                    placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                    placeholderTextColor="rgba(39, 44, 70, 0.8)"
                     onChangeText={handleChange('confirm_password')}
                     w="90%"
                     value={values.confirm_password}
@@ -658,7 +670,7 @@ const SignUp = ({navigation}) => {
                       borderColor: '#475BD8',
                     }}
                     type={typeConfirmPassword ? 'password' : 'text'}
-                    size="xl"
+                    size="2xl"
                     onBlur={handleBlur('confirm_password')}
                     borderColor="#475BD8"
                     rounded="4"
@@ -667,7 +679,7 @@ const SignUp = ({navigation}) => {
                         name="lock-outline"
                         style={styles.email_input}
                         size={32}
-                        color="rgba(5, 24, 139, 0.5)"
+                        color="rgba(5, 24, 139, 0.8)"
                       />
                     }
                     InputRightElement={
@@ -675,7 +687,7 @@ const SignUp = ({navigation}) => {
                         name="eye"
                         style={styles.email_input}
                         size={25}
-                        color="rgba(5, 24, 139, 0.5)"
+                        color="rgba(5, 24, 139, 0.8)"
                         onPress={() =>
                           setTypeConfirmPassword(!typeConfirmPassword)
                         }
@@ -692,16 +704,14 @@ const SignUp = ({navigation}) => {
                 <Stack direction="row" alignItems="center" ml={4}>
                   <Checkbox
                     value="true"
-                    size="sm"
+                    size="lg"
                     colorScheme="info"
                     accessibilityLabel="This is a dummy checkbox"
                     mb={2}
-                    onChange={isSelected => {
-                      handleChange('termsAndConditions');
-                    }}
+                    onChange={setTermsAccepted(!termsAccepted)}
                   />
                   {/* <Field name="termsAndConditions" as="checkbox" /> */}
-                  <Stack
+                  <VStack
                     direction="row"
                     justify="flex-start"
                     w="56%"
@@ -711,26 +721,26 @@ const SignUp = ({navigation}) => {
                     <Link
                       ml={2}
                       _text={{
-                        fontSize: 14,
+                        fontSize: 18,
                         color: '#272C46',
                       }}
                       // w="50%"
                     >
                       Acepto términos & condiciones
                     </Link>
-                    <Text fontSize={16} ml={2}>
+                    <Text fontSize={18} ml={2}>
                       y
                     </Text>
                     <Link
                       ml={2}
                       w="50%"
                       _text={{
-                        fontSize: 14,
+                        fontSize: 18,
                         color: '#272C46',
                       }}>
                       Aviso de Privacidad
                     </Link>
-                  </Stack>
+                  </VStack>
                 </Stack>
                 {touched.termsAndConditions &&
                 errors.termsAndConditions &&
@@ -768,7 +778,7 @@ const SignUp = ({navigation}) => {
                       try {
                         console.log('Registro con google');
                         onGoogleButtonPress().then(() => {
-                          console.log('registered with google');                  
+                          console.log('registered with google');
                         });
                       } catch (error) {
                         toast.show({
@@ -851,7 +861,7 @@ const SignUp = ({navigation}) => {
                     onPress={() => navigation.navigate('SignIn')}
                     mb={5}
                     _text={{
-                      fontSize: 18,
+                      fontSize: 22,
                       color: '#272C46',
                     }}>
                     Inicia sesión
