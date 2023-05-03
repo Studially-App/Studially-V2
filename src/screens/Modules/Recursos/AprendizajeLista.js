@@ -14,7 +14,7 @@ import {
 
 import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 import firestore from '@react-native-firebase/firestore';
-import { useUser } from '../../../context/User';
+import {useUser} from '../../../context/User';
 
 import ModalFiltroCategoria from '../../../components/Recursos/ModalFiltroCategoria';
 
@@ -43,6 +43,7 @@ const AprendizajeLista = () => {
     'Arte y Cultura',
     'Negocios y Economía',
     'Tendencia y Recomendaciones',
+    'Soft-Skills',
   ]);
 
   const getAprendizaje = async () => {
@@ -85,14 +86,13 @@ const AprendizajeLista = () => {
   }, []);
 
   useEffect(() => {
-    if(aprendizaje.length > 0 && categories.length > 0){
+    if (aprendizaje.length > 0 && categories.length > 0) {
       getAprendizajeFilter();
     }
-  },[aprendizaje, categories])
+  }, [aprendizaje, categories]);
 
   return (
     <VStack space={2} alignItems="center">
-      
       <ModalDetalleBeneficios
         modalVisibility={detalleModalVisibility}
         setModalVisibility={setDetalleModalVisibility}

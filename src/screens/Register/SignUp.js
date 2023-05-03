@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
 const SignUp = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
   const [typePassword, setTypePassword] = useState(true);
   const [typeConfirmPassword, setTypeConfirmPassword] = useState(true);
@@ -708,7 +707,9 @@ const SignUp = ({navigation}) => {
                     colorScheme="info"
                     accessibilityLabel="This is a dummy checkbox"
                     mb={2}
-                    onChange={setTermsAccepted(!termsAccepted)}
+                    onChange={isSelected => {
+                      handleChange('termsAndConditions');
+                    }}
                   />
                   {/* <Field name="termsAndConditions" as="checkbox" /> */}
                   <VStack

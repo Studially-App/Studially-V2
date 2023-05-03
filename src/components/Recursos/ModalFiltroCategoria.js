@@ -109,64 +109,74 @@ const ModalFiltroCategoria = ({
                       <Checkbox.Group
                         onChange={setCategories}
                         value={categories}
-                        accessibilityLabel="choose category"
-                        >
+                        accessibilityLabel="choose category">
                         <VStack space="2" ml={10}>
-                        <HStack
-                          justifyContent="space-between"
-                          alignItems="center"
-                          w="85%">
-                          <Text fontSize="18">Arte y Cultura</Text>
-                          <Checkbox
-                            value="Arte y Cultura"
-                            accessibilityLabel="Artes checkbox"
-                            name="checked"
-                          />
-                        </HStack>
-                        <HStack
-                          justifyContent="space-between"
-                          alignItems="center"
-                          w="85%">
-                          <Text fontSize="18">Ciencia y Tecnología</Text>
-                          <Checkbox
-                            value="Ciencia y Tecnología"
-                            accessibilityLabel="Ciencia checkbox"
-                            name="checked"
-                          />
-                        </HStack>
-                        <HStack
-                          justifyContent="space-between"
-                          alignItems="center"
-                          w="85%">
-                          <Text fontSize="18">Negocios y Economía</Text>
-                          <Checkbox
-                            value="Negocios y Economía"
-                            accessibilityLabel="Negocios checkbox"
-                            name="checked"
-                          />
-                        </HStack>
-                        <HStack
-                          justifyContent="space-between"
-                          alignItems="center"
-                          w="85%">
-                          <Text fontSize="18">Salud y Bienestar</Text>
-                          <Checkbox
-                            value="Salud y Bienestar"
-                            accessibilityLabel="Salud checkbox"
-                            name="checked"
-                          />
-                        </HStack>
-                        <HStack
-                          justifyContent="space-between"
-                          alignItems="center"
-                          w="85%">
-                          <Text fontSize="18">Tendencia</Text>
-                          <Checkbox
-                            value="Tendencia y Recomendaciones"
-                            accessibilityLabel="Tendencia checkbox"
-                            name="checked"
-                          />
-                        </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Arte y Cultura</Text>
+                            <Checkbox
+                              value="Arte y Cultura"
+                              accessibilityLabel="Artes checkbox"
+                              name="checked"
+                            />
+                          </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Ciencia y Tecnología</Text>
+                            <Checkbox
+                              value="Ciencia y Tecnología"
+                              accessibilityLabel="Ciencia checkbox"
+                              name="checked"
+                            />
+                          </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Negocios y Economía</Text>
+                            <Checkbox
+                              value="Negocios y Economía"
+                              accessibilityLabel="Negocios checkbox"
+                              name="checked"
+                            />
+                          </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Salud y Bienestar</Text>
+                            <Checkbox
+                              value="Salud y Bienestar"
+                              accessibilityLabel="Salud checkbox"
+                              name="checked"
+                            />
+                          </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Tendencia</Text>
+                            <Checkbox
+                              value="Tendencia y Recomendaciones"
+                              accessibilityLabel="Tendencia checkbox"
+                              name="checked"
+                            />
+                          </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Soft-Skills</Text>
+                            <Checkbox
+                              value="Soft-Skills"
+                              accessibilityLabel="Soft-Skills checkbox"
+                              name="checked"
+                            />
+                          </HStack>
                         </VStack>
                       </Checkbox.Group>
 

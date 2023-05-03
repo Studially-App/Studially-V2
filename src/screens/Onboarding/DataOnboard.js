@@ -1,20 +1,20 @@
 export default [
   {
     id: '1',
-    title: 'Potencializamos tu futuro',
+    title: 'Trazando mi futuro',
     imgURL:
-      'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2FStudially_1.png?alt=media&token=2a9b8f20-1395-45bd-9d05-74687d299efb',
+      'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2FTrazando%20mi%20futuro.jpeg?alt=media&token=bc59b4e9-0a56-45c1-8318-ef58afcd3f78',
   },
   {
     id: '2',
-    title: 'Empoderando jóvenes',
+    title: 'Desbloqueando mi potencial',
     imgURL:
-      'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2FStudially_2.png?alt=media&token=c8075c79-ced3-405c-9186-b5108c4e5571',
+      'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2FDesbloqueando%20mi%20potencial.PNG?alt=media&token=5975c091-3b1b-4912-a0a2-a1670ea47de9',
   },
   {
     id: '3',
-    title: 'Somos tu aliado para fomentar una vida integral',
+    title: 'Construyendo mi mejor versión',
     imgURL:
-      'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2FStudially_3.png?alt=media&token=ed5ef38a-658b-4ccd-b8f5-75415e2449ea',
+      'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2FConstruyendo%20mi%20mejor%20versi%C3%B3n.jpg?alt=media&token=6fd81809-48c2-445e-945f-41d510839db6',
   },
 ];
