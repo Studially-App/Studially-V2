@@ -13,7 +13,7 @@ import {
   Text,
   HStack,
   useToast,
-  Modal
+  Modal,
 } from 'native-base';
 import {launchImageLibrary} from 'react-native-image-picker';
 // Icons
@@ -21,7 +21,13 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // React Native
-import {useWindowDimensions, StyleSheet, Linking, PermissionsAndroid, Platform } from 'react-native';
+import {
+  useWindowDimensions,
+  StyleSheet,
+  Linking,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 
 // DateTime Picker
 import DatePicker from 'react-native-date-picker';
@@ -47,17 +53,21 @@ const styles = StyleSheet.create({
 });
 
 const Profile = ({navigation}) => {
-
   const {user, userInfo, userTier} = useUser();
   const toast = useToast();
 
-  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
 
   //Screen dimensionts
   const {width, height} = useWindowDimensions();
   const [tab, setTab] = React.useState('Personal');
   // Date states
-  const [date, setDate] = useState(userInfo ? new Date(userInfo.fechaNacimiento.split('-').reverse().join('-')) : new Date());
+  const [date, setDate] = useState(
+    userInfo
+      ? new Date(userInfo.fechaNacimiento.split('-').reverse().join('-'))
+      : new Date(),
+  );
   const [openDate, setOpenDate] = useState(false);
 
   // State edit Info
@@ -68,9 +78,17 @@ const Profile = ({navigation}) => {
 
   // State information to edit
   const [name, setName] = useState(userInfo ? userInfo.nombres : 'Nombre');
-  const [lastName, setLastName] = useState(userInfo ? userInfo.apellidos : 'Apellido');
-  const [school, setSchool] = useState(userInfo ? userInfo.institucion : 'Institución');
-  const [profilePictureUrl, setProfilePictureUrl] = useState(userInfo ? userInfo.profilePic : 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370');
+  const [lastName, setLastName] = useState(
+    userInfo ? userInfo.apellidos : 'Apellido',
+  );
+  const [school, setSchool] = useState(
+    userInfo ? userInfo.institucion : 'Institución',
+  );
+  const [profilePictureUrl, setProfilePictureUrl] = useState(
+    userInfo
+      ? userInfo.profilePic
+      : 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370',
+  );
   // initialize Firebase Storage
   const storageRef = storage().ref();
 
@@ -81,9 +99,15 @@ const Profile = ({navigation}) => {
   const [openPassword, setOpenPassword] = useState(false);
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
-  
+
   const saveInfo = () => {
-    console.log('Name & lastName & date & school', name, lastName, dayjs(date).format('DD-MM-YYYY'), school);
+    console.log(
+      'Name & lastName & date & school',
+      name,
+      lastName,
+      dayjs(date).format('DD-MM-YYYY'),
+      school,
+    );
     try {
       firestore()
         .collection('usuarios')
@@ -92,7 +116,7 @@ const Profile = ({navigation}) => {
           nombres: name,
           apellidos: lastName,
           institucion: school,
-          fechaNacimiento: dayjs(date).format('DD-MM-YYYY')
+          fechaNacimiento: dayjs(date).format('DD-MM-YYYY'),
         })
         .then(() => {
           console.log('User Information updated!');
@@ -100,7 +124,7 @@ const Profile = ({navigation}) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const changePass = async () => {
     if (passwordRegex.test(newPass) === false) {
@@ -110,18 +134,20 @@ const Profile = ({navigation}) => {
         placement: 'top',
         duration: 2000,
       });
-    }
-    else{
+    } else {
       try {
         const user = auth().currentUser;
-        const credential = auth.EmailAuthProvider.credential(user.email, currentPass);
-  
+        const credential = auth.EmailAuthProvider.credential(
+          user.email,
+          currentPass,
+        );
+
         // Reauthenticate the user with their current password
         await user.reauthenticateWithCredential(credential);
-  
+
         // Change the user's password
         await user.updatePassword(newPass);
-  
+
         toast.show({
           description: 'Tu contraseña se cambió exitosamente',
           placement: 'top',
@@ -139,11 +165,7 @@ const Profile = ({navigation}) => {
       }
     }
     setEditPassword(false);
-  }
-
-
-
-  
+  };
 
   const requestCameraRollPermission = async () => {
     if (Platform.OS === 'android') {
@@ -161,7 +183,7 @@ const Profile = ({navigation}) => {
   };
 
   const handleChoosePicture = async () => {
-    console.log("Cambiar foto");
+    console.log('Cambiar foto');
     const granted = await requestCameraRollPermission();
     if (!granted) {
       return;
@@ -172,7 +194,7 @@ const Profile = ({navigation}) => {
       maxWidth: 200,
       maxHeight: 200,
     };
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -184,14 +206,14 @@ const Profile = ({navigation}) => {
           .then(() => {
             console.log('Image uploaded successfully');
           })
-          .catch((error) => {
+          .catch(error => {
             console.log('Error uploading image: ', error);
           });
       }
     });
   };
 
-  const uploadImage = async (uri) => {
+  const uploadImage = async uri => {
     const response = await fetch(uri);
     const blob = await response.blob();
 
@@ -211,7 +233,7 @@ const Profile = ({navigation}) => {
         .collection('usuarios')
         .doc(user.uid)
         .update({
-          profilePic: downloadURL
+          profilePic: downloadURL,
         })
         .then(() => {
           console.log('User photo updated!');
@@ -237,17 +259,20 @@ const Profile = ({navigation}) => {
             size="xl"
             source={{
               uri: profilePictureUrl,
-            }}>
-          </Avatar>
-          <HStack alignItems="center" >
-                <Text color="rgba(5, 24, 139, 0.5)" onPress={() => handleChoosePicture()}>Editar foto de perfil</Text>
-                <MaterialCommunityIcon
-                  name="account-edit-outline"
-                  size={32}
-                  color="rgba(5, 24, 139, 0.5)"
-                  onPress={() => handleChoosePicture()}
-                />
-              </HStack>
+            }}></Avatar>
+          <HStack alignItems="center">
+            <Text
+              color="rgba(5, 24, 139, 0.5)"
+              onPress={() => handleChoosePicture()}>
+              Editar foto de perfil
+            </Text>
+            <MaterialCommunityIcon
+              name="account-edit-outline"
+              size={32}
+              color="rgba(5, 24, 139, 0.5)"
+              onPress={() => handleChoosePicture()}
+            />
+          </HStack>
         </Center>
         <HStack justifyContent="center">
           {tab === 'Personal' ? (
@@ -281,8 +306,14 @@ const Profile = ({navigation}) => {
         <VStack>
           {tab === 'Personal' ? (
             <VStack space={3} alignItems="flex-start" mt={6} ml={10}>
-              <HStack alignItems="center" style={{alignSelf:"flex-end", marginRight:"10%"}} >
-                <Text color="rgba(5, 24, 139, 0.5)" onPress={() => setEdit(false)}>Editar información</Text>
+              <HStack
+                alignItems="center"
+                style={{alignSelf: 'flex-end', marginRight: '10%'}}>
+                <Text
+                  color="rgba(5, 24, 139, 0.5)"
+                  onPress={() => setEdit(false)}>
+                  Editar información
+                </Text>
                 <MaterialCommunityIcon
                   name="account-edit-outline"
                   size={32}
@@ -290,7 +321,7 @@ const Profile = ({navigation}) => {
                   onPress={() => setEdit(false)}
                 />
               </HStack>
-              
+
               <Input
                 placeholder="Nombres"
                 defaultValue={userInfo ? userInfo.nombres : 'Nombre de usuario'}
@@ -337,7 +368,7 @@ const Profile = ({navigation}) => {
                   />
                 }
               />
-              
+
               <DatePicker
                 modal
                 open={openDate}
@@ -371,12 +402,10 @@ const Profile = ({navigation}) => {
                   />
                 }>
                 <Text fontSize="lg" color="rgba(39, 44, 70, 0.5)" ml="4">
-                  {
-                    dayjs(date).format('DD-MM-YYYY')
-                  }
+                  {dayjs(date).format('DD-MM-YYYY')}
                 </Text>
               </Button>
-              
+
               <Select
                 rounder="4"
                 w="90%"
@@ -412,32 +441,30 @@ const Profile = ({navigation}) => {
                 />
                 <Select.Item label="UVM" value="UVM" />
               </Select>
-              {edit === false ? 
-              <Button
-                bg="rgba(71, 91, 216, 1)"
-                w="90%"
-                onPress={() =>{
-                  saveInfo();
-                  setEdit(true);
-                }
-                }
-                _pressed={{
-                  backgroundColor: 'rgba(5, 24, 139, 0.7)',
-                }}
-                _text={{
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                }}>
-                Guardar
-              </Button>
-              : null
-              }
+              {edit === false ? (
+                <Button
+                  bg="rgba(71, 91, 216, 1)"
+                  w="90%"
+                  onPress={() => {
+                    saveInfo();
+                    setEdit(true);
+                  }}
+                  _pressed={{
+                    backgroundColor: 'rgba(5, 24, 139, 0.7)',
+                  }}
+                  _text={{
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  }}>
+                  Guardar
+                </Button>
+              ) : null}
               <Button
                 bg="rgba(71, 91, 216, 1)"
                 w="90%"
                 onPress={() =>
                   userTier !== 'premium'
-                    ? navigation.navigate('Studially Pro')
+                    ? setProModalVisibility(true)
                     : openSubscriptionPage()
                 }
                 _pressed={{
@@ -451,7 +478,6 @@ const Profile = ({navigation}) => {
                   ? 'Cámbiate a Studially PRO'
                   : 'Administrar subscripción'}
               </Button>
-              
             </VStack>
           ) : (
             <VStack space={3} alignItems="center" mt={6}>
@@ -476,8 +502,12 @@ const Profile = ({navigation}) => {
                   />
                 }
               />
-              <HStack alignItems="center" >
-                <Text color="rgba(5, 24, 139, 0.5)" onPress={() => setEditPassword(true)}>Cambiar contraseña</Text>
+              <HStack alignItems="center">
+                <Text
+                  color="rgba(5, 24, 139, 0.5)"
+                  onPress={() => setEditPassword(true)}>
+                  Cambiar contraseña
+                </Text>
                 <MaterialCommunityIcon
                   name="account-edit-outline"
                   size={32}
@@ -486,34 +516,12 @@ const Profile = ({navigation}) => {
                 />
               </HStack>
 
-              {editPassword === true ? 
-              <>
-                <Input
-                  placeholder="Contraseña actual"
-                  placeholderTextColor="rgba(39, 44, 70, 0.5)"
-                  onChangeText={text => setCurrentPass(text)}
-                  w="80%"
-                  _focus={{
-                    borderColor: '#475BD8',
-                  }}
-                  type={'password'}
-                  size="xl"
-                  borderColor="#475BD8"
-                  rounded="4"
-                  InputLeftElement={
-                    <MaterialIcon
-                      name="lock-outline"
-                      size={32}
-                      color="rgba(5, 24, 139, 0.5)"
-                    />
-                  }
-                />
-                
-                <HStack alignItems="center">
+              {editPassword === true ? (
+                <>
                   <Input
-                    placeholder="Contraseña nueva"
+                    placeholder="Contraseña actual"
                     placeholderTextColor="rgba(39, 44, 70, 0.5)"
-                    onChangeText={text => setNewPass(text)}
+                    onChangeText={text => setCurrentPass(text)}
                     w="80%"
                     _focus={{
                       borderColor: '#475BD8',
@@ -530,34 +538,54 @@ const Profile = ({navigation}) => {
                       />
                     }
                   />
-                  <MaterialCommunityIcon
-                    name="information-outline"
-                    style={styles.email_input}
-                    size={32}
-                    color="rgba(5, 24, 139, 0.5)"
-                    onPress={() => setOpenPassword(true)}
-                  />
-                </HStack>
 
-                <Button
-                  bg="rgba(71, 91, 216, 1)"
-                  w="80%"
-                  onPress={() =>{
-                    changePass();
-                  }
-                  }
-                  _pressed={{
-                    backgroundColor: 'rgba(5, 24, 139, 0.7)',
-                  }}
-                  _text={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                  }}>
-                  Cambiar contraseña
-                </Button>
-              </>
-              : null
-              }
+                  <HStack alignItems="center">
+                    <Input
+                      placeholder="Contraseña nueva"
+                      placeholderTextColor="rgba(39, 44, 70, 0.5)"
+                      onChangeText={text => setNewPass(text)}
+                      w="80%"
+                      _focus={{
+                        borderColor: '#475BD8',
+                      }}
+                      type={'password'}
+                      size="xl"
+                      borderColor="#475BD8"
+                      rounded="4"
+                      InputLeftElement={
+                        <MaterialIcon
+                          name="lock-outline"
+                          size={32}
+                          color="rgba(5, 24, 139, 0.5)"
+                        />
+                      }
+                    />
+                    <MaterialCommunityIcon
+                      name="information-outline"
+                      style={styles.email_input}
+                      size={32}
+                      color="rgba(5, 24, 139, 0.5)"
+                      onPress={() => setOpenPassword(true)}
+                    />
+                  </HStack>
+
+                  <Button
+                    bg="rgba(71, 91, 216, 1)"
+                    w="80%"
+                    onPress={() => {
+                      changePass();
+                    }}
+                    _pressed={{
+                      backgroundColor: 'rgba(5, 24, 139, 0.7)',
+                    }}
+                    _text={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                    }}>
+                    Cambiar contraseña
+                  </Button>
+                </>
+              ) : null}
 
               <Button
                 bg="rgba(71, 91, 216, 1)"

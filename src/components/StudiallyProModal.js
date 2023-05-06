@@ -29,7 +29,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
       setLoading(true);
       const fetchPaymentSheetParams = async () => {
         const response = await functions().httpsCallable('createSubscription')({
-          priceId: 'price_1Mh2lnAX9PxeRGsUGz8oQQjs',
+          priceId: 'price_1N4nnLAX9PxeRGsU7wc6aLCl',
         });
         const {clientSecret, ephemeralKey, customer} = response.data;
 
