@@ -238,6 +238,7 @@ const ModalCrearFinanzas = ({
                           id="semanas"
                           name="semanas"
                           keyboardType="numeric"
+                          min="0"
                           onChangeText={handleChange('semanas')}
                           h="40px"
                         />
