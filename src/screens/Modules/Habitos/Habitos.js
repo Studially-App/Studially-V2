@@ -88,7 +88,7 @@ const Habitos = () => {
     let selectedIndex = storedHabits.findIndex(object => {
       return object.name === name;
     });
-    console.log(selectedIndex)
+    console.log(selectedIndex);
     // console.log('Aquí se guarda el fuego',storedHabits[selectedIndex].name);
     // console.log('Dias antes de marcarse',storedHabits[selectedIndex].dias);
     if (accion === 'Completado') {
@@ -100,7 +100,7 @@ const Habitos = () => {
       // console.log('Dias después de marcarse',storedHabits[selectedIndex].dias);
       setSelectedData(storedHabits);
       setData(markedData);
-      
+
       // if (
       //   storedHabits[selectedIndex].dias === storedHabits[selectedIndex].veces
       // ) {
@@ -140,18 +140,18 @@ const Habitos = () => {
   const saveMarkedHabits = async i => {
     let popHabits = [...todayData];
     popHabits[i].finalMarked = true;
-    console.log('Hábito marcado',popHabits[i]);
-    if (popHabits[i].dias === popHabits[i].veces) 
-    {
+    console.log('Hábito marcado', popHabits[i]);
+    if (popHabits[i].dias === popHabits[i].veces) {
       console.log('se cumple la condición');
       await updateFire();
-     }
+    }
     try {
       firestore()
         .collection('usuarios')
         .doc(user.uid)
         .update({
           habitos: data,
+          estadisticasMesHabitos: dayjs().month(),
         })
         .then(() => {
           console.log('User habits marked updated!');
@@ -159,7 +159,7 @@ const Habitos = () => {
           getHabits(userInfo);
         });
     } catch (error) {
-      console.log('cae en error en marcar hábitos')
+      console.log('cae en error en marcar hábitos');
       console.log(error);
     }
   };

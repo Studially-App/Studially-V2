@@ -169,6 +169,7 @@ const Enfoque = () => {
       minutesDB.map(cat => {
         cat.minutos = 0;
       });
+      minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
     }
 
     if (dayjs(new Date()).week() === userInfo.minutosSemana) {
@@ -179,6 +180,8 @@ const Enfoque = () => {
       minutesDB.map(cat => {
         cat.minutosSemana = 0;
       });
+      minutesDB[index].minutosSemana =
+        minutesDB[index].minutosSemana + calculatedMinutes;
     }
 
     const newData = await firestore()
@@ -256,7 +259,7 @@ const Enfoque = () => {
         proModalVisibility={proModalVisibility}
         setProModalVisibility={setProModalVisibility}
       />
-      <ScrollView w={width} h={"80%"} mb={20} position="absolute">
+      <ScrollView w={width} h={'80%'} mb={20} position="absolute">
         <VStack space={4} justifyContent="center">
           <Center mt="6">
             {userTier !== 'premium' ? (
@@ -356,7 +359,9 @@ const Enfoque = () => {
                             textAlign="center"
                             keyboardType="numeric"
                             marginLeft={'50%'}
-                            onChangeText={text => text ? setInputMin(text):setInputMin(0)}
+                            onChangeText={text =>
+                              text ? setInputMin(text) : setInputMin(0)
+                            }
                           />
                           <Text
                             fontSize="10"
@@ -381,7 +386,9 @@ const Enfoque = () => {
                             size="lg"
                             maxLength={2}
                             marginRight={'50%'}
-                            onChangeText={text => text ? setInputSec(text):setInputSec(0)}
+                            onChangeText={text =>
+                              text ? setInputSec(text) : setInputSec(0)
+                            }
                           />
                           <Text
                             fontSize="10"

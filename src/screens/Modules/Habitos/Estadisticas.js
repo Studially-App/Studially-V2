@@ -31,7 +31,9 @@ const Estadisticas = () => {
         item.selected ? selectedHabits.push(item) : null,
       );
       selectedHabits.map(item => {
-        if (dayjs().date(1) === 1) {
+        //dayjs().month()
+        //if (dayjs().month() === 1) {
+        if (dayjs().month() !== userInfo.estadisticasMesHabitos) {
           item.marcadoMes = [];
         }
         var dias = item.marcadoMes.reduce(function (a, b) {

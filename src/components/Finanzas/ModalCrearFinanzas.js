@@ -223,8 +223,12 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              values.semanas = parseInt(values.semanas, 10) - 1;
-                              setFieldValue('semanas', values.semanas);
+                              if (parseInt(values.semanas, 10) > 0) {
+                                console.log('no es menor a 0');
+                                values.semanas =
+                                  parseInt(values.semanas, 10) - 1;
+                                setFieldValue('semanas', values.semanas);
+                              }
                             }}
                           />
                         </Box>
@@ -238,8 +242,11 @@ const ModalCrearFinanzas = ({
                           id="semanas"
                           name="semanas"
                           keyboardType="numeric"
-                          min="0"
-                          onChangeText={handleChange('semanas')}
+                          onChangeText={
+                            parseInt(values.semanas, 10) >= 0
+                              ? handleChange('semanas')
+                              : (values.semanas = 0)
+                          }
                           h="40px"
                         />
 
@@ -256,8 +263,11 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              values.semanas = parseInt(values.semanas, 10) + 1;
-                              setFieldValue('semanas', values.semanas);
+                              if (parseInt(values.semanas, 10) >= 0) {
+                                values.semanas =
+                                  parseInt(values.semanas, 10) + 1;
+                                setFieldValue('semanas', values.semanas);
+                              }
                             }}
                           />
                         </Box>
