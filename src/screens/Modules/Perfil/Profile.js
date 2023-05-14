@@ -403,6 +403,7 @@ const Profile = ({navigation}) => {
                 }>
                 <Text fontSize="lg" color="rgba(39, 44, 70, 0.5)" ml="4">
                   {dayjs(date).format('DD-MM-YYYY')}
+                  {/* {userInfo.fechaNacimiento} */}
                 </Text>
               </Button>
 

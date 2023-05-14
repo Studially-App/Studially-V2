@@ -81,7 +81,7 @@ const ModalCrearFinanzas = ({
           montoActual: 0,
           montoFinal: 0,
           nombre: '',
-          semanas: 0,
+          semanas: 1,
         }}
         onSubmit={async (values, actions) => {
           console.log(values);
@@ -223,8 +223,7 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              if (parseInt(values.semanas, 10) > 0) {
-                                console.log('no es menor a 0');
+                              if (parseInt(values.semanas, 10) > 1) {
                                 values.semanas =
                                   parseInt(values.semanas, 10) - 1;
                                 setFieldValue('semanas', values.semanas);
@@ -243,9 +242,9 @@ const ModalCrearFinanzas = ({
                           name="semanas"
                           keyboardType="numeric"
                           onChangeText={
-                            parseInt(values.semanas, 10) >= 0
+                            parseInt(values.semanas, 10) >= 1
                               ? handleChange('semanas')
-                              : (values.semanas = 0)
+                              : (values.semanas = 1)
                           }
                           h="40px"
                         />
@@ -263,7 +262,7 @@ const ModalCrearFinanzas = ({
                             size={18}
                             color="#061678"
                             onPress={() => {
-                              if (parseInt(values.semanas, 10) >= 0) {
+                              if (parseInt(values.semanas, 10) >= 1) {
                                 values.semanas =
                                   parseInt(values.semanas, 10) + 1;
                                 setFieldValue('semanas', values.semanas);

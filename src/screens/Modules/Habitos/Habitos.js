@@ -29,6 +29,8 @@ import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 import ModalAgregarAmigo from '../../../components/Habitos/ModalAgregarAmigo';
 import StudiallyProModal from '../../../components/StudiallyProModal';
 import {useUser} from '../../../context/User';
+let weekOfYear = require('dayjs/plugin/weekOfYear');
+dayjs.extend(weekOfYear);
 
 const Habitos = () => {
   const navigation = useNavigation();
@@ -152,6 +154,7 @@ const Habitos = () => {
         .update({
           habitos: data,
           estadisticasMesHabitos: dayjs().month(),
+          semanaHabitos: dayjs(new Date()).week(),
         })
         .then(() => {
           console.log('User habits marked updated!');
@@ -299,7 +302,9 @@ const Habitos = () => {
       item.veces = veces;
     });
     selectedHabits.map(item => {
-      if (dayjs().day() === 1) {
+      // *********** Cambiar a checar la semana en donde estamos **********
+      // dayjs(new Date()).week() === userInfo.semanaHabitos
+      if (dayjs(new Date()).week() !== userInfo.semanaHabitos) {
         item.marcadoSemana = [];
       }
       var dias = item.marcadoSemana.reduce(function (a, b) {

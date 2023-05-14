@@ -242,6 +242,8 @@ const SignUp = ({navigation}) => {
         minutosMes: dayjs().month(),
         minutosSemana: dayjs(new Date()).week(),
         since: dayjs().format('YYYY-MM-DD'),
+        semanaHabitos: dayjs(new Date()).week(),
+        estadisticasMesHabitos: dayjs().month(),
         profilePic: user.photoURL,
       })
       .then(() => {
@@ -371,6 +373,8 @@ const SignUp = ({navigation}) => {
               minutosMes: dayjs().month(),
               minutosSemana: dayjs(new Date()).week(),
               since: dayjs().format('YYYY-MM-DD'),
+              semanaHabitos: dayjs(new Date()).week(),
+              estadisticasMesHabitos: dayjs().month(),
               profilePic:
                 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370',
             })
