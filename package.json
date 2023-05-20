@@ -9,7 +9,8 @@
     "start": "react-native start",
     "test": "jest",
     "apk": "cd android && ./gradlew assembleRelease",
-    "bundle": "cd android && ./gradlew bundleRelease"
+    "bundle": "cd android && ./gradlew bundleRelease",
+    "postinstall": "react-native setup-ios-permissions && pod-install"
   },
   "dependencies": {
     "@notifee/react-native": "^7.5.0",
@@ -35,7 +36,7 @@
     "react-native-fbsdk-next": "^11.2.0",
     "react-native-image-picker": "^5.3.1",
     "react-native-modal": "^13.0.1",
-    "react-native-permissions": "^3.6.1",
+    "react-native-permissions": "^3.8.0",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.20.0",
     "react-native-svg": "^13.8.0",
@@ -44,6 +45,9 @@
     "victory-native": "^36.6.8",
     "yup": "^1.0.0"
   },
+  "reactNativePermissionsIOS": [
+    "Notifications"
+  ],
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
@@ -59,6 +63,7 @@
     "eslint-config-prettier": "^8.6.0",
     "jest": "^29.2.1",
     "metro-react-native-babel-preset": "0.73.7",
+    "pod-install": "0.1.38",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
     "typescript": "4.8.4"
