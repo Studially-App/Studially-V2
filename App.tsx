@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, {useState, useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer, RouteProp, useNavigation } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   NativeBaseProvider,
   Box,
@@ -16,6 +16,11 @@ import StudiallyLogo from './src/assets/images/Studially-logo.png';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+
+import { useWindowDimensions, Modal, View, StyleSheet, TouchableOpacity } from 'react-native';
+import WebView from 'react-native-webview';
+
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import Onboarding from './src/screens/Onboarding/Onboarding';
 import Welcome from './src/screens/Register/Welcome';
@@ -48,7 +53,8 @@ import {
   subscribeToTopic,
   unsubscribeFromTopic,
 } from './src/utils/notifications';
-import {UserProvider, useUser} from './src/context/User';
+import { UserProvider, useUser } from './src/context/User';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -56,6 +62,25 @@ const HabitosStack = createNativeStackNavigator();
 const RecursosStack = createNativeStackNavigator();
 const PerfilStack = createNativeStackNavigator();
 const EnfoqueStack = createNativeStackNavigator();
+
+type AuthStackParamList = {
+  SignUp: undefined; // asume que 'SignUp' no tiene parámetros, cambia esto si es necesario
+  // define otros nombres de pantalla aquí si los tienes
+};
+
+type SignUpScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'SignUp'
+>;
+
+type SignUpScreenRouteProp = RouteProp<AuthStackParamList, 'SignUp'>;
+
+type Props = {
+  navigation: SignUpScreenNavigationProp;
+  route: SignUpScreenRouteProp;
+  onUserCreated: (user: any) => void; // cambia 'any' a tu tipo de usuario si tienes uno
+};
+
 
 const HabitosStackScreen = () => (
   <HabitosStack.Navigator>
@@ -156,9 +181,28 @@ const EnfoqueStackScreen = () => (
   </EnfoqueStack.Navigator>
 );
 
+const withUserCreated = (Component: React.ComponentType<any>, onUserCreated: (user: any) => void) => {
+  return (props: any) => <Component {...props} onUserCreated={onUserCreated} />;
+};
+
 const App = () => {
   const [profile, setProfile] = useState(false);
-  const {user, initialized, userTier} = useUser();
+  const { user, initialized, userTier } = useUser();
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const onUserCreated = () => {
+    setModalVisible(true);
+    setIsNewUser(true); // Cambia la variable de estado a verdadero cuando un nuevo usuario se registra
+  };
   //console.log(user.providerData);
 
   useEffect(() => {
@@ -181,14 +225,15 @@ const App = () => {
 
   return (
     <NativeBaseProvider>
+      <SafeAreaView style={{ flex: 1, }} >
       <NavigationContainer>
         {user && !profile ? (
           <>
+          
             <Center>
-              <Box safeAreaTop bg="white" width={'100px'} shadow="2" />
+              {/*<Box safeAreaTop bg="white" width={'100px'} shadow="2" />*/}
               <HStack
                 bg="white"
-                shadow="2"
                 px="1"
                 py="3"
                 justifyContent="flex-start"
@@ -204,7 +249,7 @@ const App = () => {
                       console.log('Abrir mas');
                       setProfile(true);
                     }}
-                    icon={<MatComIcon name="menu" color="blue" size={18} />}
+                    icon={<MatComIcon name="menu" color="blue" size={28} />}
                   />
                 </HStack>
                 <HStack
@@ -216,8 +261,9 @@ const App = () => {
                     source={StudiallyLogo}
                     alt="StudiallyLogo"
                     // h="%"
-                    size="xs"
-                    w={150}
+                    size="9"
+                    w="100%"
+                    resizeMode='contain'
                   />
                 </HStack>
               </HStack>
@@ -249,11 +295,8 @@ const App = () => {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color}) => (
-                    <Box
-                      _pressed={{
-                        backgroundColor: 'rgba(71, 91, 216, 1)',
-                      }}>
+                  tabBarIcon: ({ color }) => (
+                    <Box>
                       <IonIcon name="timer-outline" color={color} size={24} />
                     </Box>
                   ),
@@ -268,7 +311,7 @@ const App = () => {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color}) => (
+                  tabBarIcon: ({ color }) => (
                     <Icon name="heart-outline" color={color} size={24} />
                   ),
                 }}
@@ -282,7 +325,7 @@ const App = () => {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color}) => (
+                  tabBarIcon: ({ color }) => (
                     <Icon name="piggy-bank-outline" color={color} size={24} />
                   ),
                 }}
@@ -296,7 +339,7 @@ const App = () => {
                     fontSize: 12,
                     marginBottom: 4,
                   },
-                  tabBarIcon: ({color}) => (
+                  tabBarIcon: ({ color }) => (
                     <Icon name="star-outline" color={color} size={24} />
                   ),
                 }}
@@ -306,10 +349,9 @@ const App = () => {
         ) : user && profile ? (
           <>
             <Center>
-              <Box safeAreaTop bg="white" width={'100px'} shadow="2" />
+              {/*<Box safeAreaTop bg="white" width={'100px'} shadow="2" />*/}
               <HStack
                 bg="white"
-                shadow="2"
                 px="1"
                 py="3"
                 justifyContent="flex-start"
@@ -325,7 +367,7 @@ const App = () => {
                       console.log('Ir a home');
                       setProfile(false);
                     }}
-                    icon={<MatComIcon name="home" color="blue" size={18} />}
+                    icon={<MatComIcon name="home" color="blue" size={28} />}
                   />
                 </HStack>
                 <HStack
@@ -337,8 +379,9 @@ const App = () => {
                     source={StudiallyLogo}
                     alt="StudiallyLogo"
                     // h="%"
-                    size="xs"
-                    w={150}
+                    size="9"
+                    w="100%"
+                    resizeMode='contain'
                   />
                 </HStack>
               </HStack>
@@ -368,35 +411,50 @@ const App = () => {
             </PerfilStack.Navigator>
           </>
         ) : (
-          <AuthStack.Navigator screenOptions={{headerShown: false}}>
+          <AuthStack.Navigator screenOptions={{ headerShown: false }}>
             <AuthStack.Screen
               name="Onboarding"
               component={Onboarding}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <AuthStack.Screen
               name="Welcome"
               component={Welcome}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <AuthStack.Screen
               name="SignIn"
               component={SignIn}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <AuthStack.Screen
               name="SignUp"
-              component={SignUp}
-              options={{headerShown: false}}
+              component={withUserCreated(SignUp, onUserCreated)}
+              options={{ headerShown: false }}
             />
             <AuthStack.Screen
               name="ResetPassword"
               component={ResetPassword}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
           </AuthStack.Navigator>
         )}
+
+        {isNewUser && (
+          <Modal animationType="slide" visible={modalVisible} >
+            <View style={styles.modalContainer}>
+              <TouchableOpacity style={styles.closeButton} onPress={closeModal} >
+                <MaterialIcon name="close" size={24} color="white" />
+              </TouchableOpacity>
+              <View style={styles.videoContainer}>
+                <WebView source={{ uri: 'https://www.youtube.com/embed/K1FC-5K-Yz0?autoplay=1' }} style={styles.webView} />
+              </View>
+            </View>
+          </Modal>
+        )}
       </NavigationContainer>
+
+      </SafeAreaView>
     </NativeBaseProvider>
   );
 };
@@ -406,5 +464,32 @@ const AppWrapper = () => (
     <App />
   </UserProvider>
 );
+
+const styles = StyleSheet.create({
+  closeButton: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+    zIndex: 1,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  videoContainer: {
+    width: '100%',
+    height: 400,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  webView: {
+    flex: 1,
+    alignSelf: 'stretch',
+    aspectRatio: 9 / 16,
+  },
+});
+
 
 export default AppWrapper;

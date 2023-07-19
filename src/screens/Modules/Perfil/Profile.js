@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Native Base Components
 import {
@@ -15,7 +15,7 @@ import {
   useToast,
   Modal,
 } from 'native-base';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -33,13 +33,14 @@ import {
 import DatePicker from 'react-native-date-picker';
 
 import StudiallyProModal from '../../../components/StudiallyProModal';
-
+import moment from 'moment-timezone';
 import dayjs from 'dayjs';
-import {useUser} from '../../../context/User';
+import { useUser } from '../../../context/User';
 import functions from '@react-native-firebase/functions';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
+import { enableFreeze } from 'react-native-screens';
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -52,22 +53,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const Profile = ({navigation}) => {
-  const {user, userInfo, userTier} = useUser();
+const Profile = ({ navigation }) => {
+  const { user, userInfo, userTier } = useUser();
   const toast = useToast();
 
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
 
   //Screen dimensionts
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const [tab, setTab] = React.useState('Personal');
+
+  console.log(userInfo.fechaNacimiento);
   // Date states
-  const [date, setDate] = useState(
-    userInfo
-      ? new Date(userInfo.fechaNacimiento.split('-').reverse().join('-'))
-      : new Date(),
-  );
+  let userDate;
+
+  if (userInfo && userInfo.fechaNacimiento) {
+    userDate = moment(userInfo.fechaNacimiento, 'DD-MM-YYYY').tz("America/Mexico_City");
+  } else {
+    userDate = moment().tz("America/Mexico_City");
+  }  
+
+  // Al inicializar el estado
+  const [date, setDate] = useState(userDate);
   const [openDate, setOpenDate] = useState(false);
 
   // State edit Info
@@ -96,18 +104,18 @@ const Profile = ({navigation}) => {
   const [currentPass, setCurrentPass] = useState('');
   const [newPass, setNewPass] = useState('');
 
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [openPassword, setOpenPassword] = useState(false);
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
 
+  console.log(userInfo.fechaNacimiento);
+
   const saveInfo = () => {
-    console.log(
-      'Name & lastName & date & school',
-      name,
-      lastName,
-      dayjs(date).format('DD-MM-YYYY'),
-      school,
-    );
+    
+    
     try {
       firestore()
         .collection('usuarios')
@@ -116,7 +124,7 @@ const Profile = ({navigation}) => {
           nombres: name,
           apellidos: lastName,
           institucion: school,
-          fechaNacimiento: dayjs(date).format('DD-MM-YYYY'),
+          fechaNacimiento: moment.tz(date, 'America/Mexico_City').format('DD-MM-YYYY'),
         })
         .then(() => {
           console.log('User Information updated!');
@@ -213,6 +221,68 @@ const Profile = ({navigation}) => {
     });
   };
 
+  const redeemCode = async () => {
+    const user = auth().currentUser;
+    if (user) {
+      const uid = user.uid;
+      const email = user.email || '';
+      try {
+        const customerDocRef = firestore().collection('customers').doc(uid);
+        const customerDoc = await customerDocRef.get();
+  
+        if (customerDoc.exists && customerDoc.data()?.redeemedCodes?.length > 0) {
+          toast.show({
+            description: 'Ya has canjeado un código anteriormente.',
+            duration: 1500,
+            placement: 'top',
+          });
+        } else {
+          const redeemedCodesRef = firestore().collection('redeemedCodes').doc(code);
+          const redeemedCodeDoc = await redeemedCodesRef.get();
+  
+          if (redeemedCodeDoc.exists) {
+            toast.show({
+              description: 'Este código ya ha sido canjeado por otro usuario.',
+              duration: 1500,
+              placement: 'top',
+            });
+          } else {
+            await redeemedCodesRef.set({
+              redeemedBy: uid,
+            });
+  
+            if (!customerDoc.exists) {
+              await customerDocRef.set({
+                stripeId: code,
+                email,
+                redeemedCodes: [code],
+              });
+            } else {
+              await customerDocRef.update({
+                stripeId: code,
+                redeemedCodes: firestore.FieldValue.arrayUnion(code),
+              });
+            }
+            
+            toast.show({
+              description: '¡Código canjeado exitosamente!',
+              duration: 1500,
+              placement: 'top',
+            });
+          }
+        }
+      } catch (error) {
+        console.log('Error al canjear el código:', error);
+        toast.show({
+          description: 'Error al canjear el código.',
+          duration: 1500,
+          placement: 'top',
+        });
+      }
+    }
+  };  
+
+
   const uploadImage = async uri => {
     const response = await fetch(uri);
     const blob = await response.blob();
@@ -308,7 +378,7 @@ const Profile = ({navigation}) => {
             <VStack space={3} alignItems="flex-start" mt={6} ml={10}>
               <HStack
                 alignItems="center"
-                style={{alignSelf: 'flex-end', marginRight: '10%'}}>
+                style={{ alignSelf: 'flex-end', marginRight: '10%' }}>
                 <Text
                   color="rgba(5, 24, 139, 0.5)"
                   onPress={() => setEdit(false)}>
@@ -372,12 +442,12 @@ const Profile = ({navigation}) => {
               <DatePicker
                 modal
                 open={openDate}
-                date={date}
+                date={date.toDate()}
                 mode="date"
                 locale="es"
                 onConfirm={dateSelected => {
                   setOpenDate(false);
-                  setDate(dateSelected);
+                  setDate(moment(dateSelected));
                 }}
                 onCancel={() => {
                   setOpenDate(false);
@@ -402,8 +472,7 @@ const Profile = ({navigation}) => {
                   />
                 }>
                 <Text fontSize="lg" color="rgba(39, 44, 70, 0.5)" ml="4">
-                  {dayjs(date).format('DD-MM-YYYY')}
-                  {/* {userInfo.fechaNacimiento} */}
+                  {date.format('DD/MM/YYYY')}
                 </Text>
               </Button>
 

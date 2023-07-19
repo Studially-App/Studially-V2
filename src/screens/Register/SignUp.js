@@ -19,6 +19,9 @@ GoogleSignin.configure({
   webClientId:
     '498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com',
 });
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import WebView from 'react-native-webview';
 
 //Native Base
 import {
@@ -46,7 +49,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 //React Native
-import {StyleSheet} from 'react-native';
+import {useWindowDimensions, View, StyleSheet, TouchableOpacity, Modal as ModalReactNative,} from 'react-native';
 
 // DateTime Picker
 import DatePicker from 'react-native-date-picker';
@@ -67,17 +70,30 @@ const styles = StyleSheet.create({
   },
 });
 
-const SignUp = ({navigation}) => {
+const SignUp = ({navigation, onUserCreated}) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
   const [typePassword, setTypePassword] = useState(true);
   const [typeConfirmPassword, setTypeConfirmPassword] = useState(true);
   const [TerAndCondState, setTerAndCondState] = useState(false);
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\-_\[\]{}\¡\/´,;.])[A-Za-z\d!@#$%^&*\-_\[\]{}\¡\/´,;.]{8,}$/;
   const toast = useToast();
   Settings.initializeSDK();
+
+
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+  };
+
 
   const sendEmail = async () => {
     await auth().currentUser.sendEmailVerification({
@@ -247,6 +263,7 @@ const SignUp = ({navigation}) => {
         profilePic: user.photoURL,
       })
       .then(() => {
+        onUserCreated();
         console.log('Google User added!');
       });
     sendEmail();
@@ -380,6 +397,7 @@ const SignUp = ({navigation}) => {
             })
             .then(() => {
               console.log('User added!');
+              onUserCreated();
             });
           sendEmail();
         })
@@ -437,9 +455,11 @@ const SignUp = ({navigation}) => {
           <ScrollView bg="#FAFAFA">
             <Box h="100%">
               <Center>
+              <SafeAreaView style={{ backgroundColor: '#FAFAFA' }} >
                 <Heading size="2xl" mt={5}>
                   Registro
                 </Heading>
+                </SafeAreaView>
               </Center>
               <Flex direction="row" justify="flex-start" mt={2} mb={2} ml={6}>
                 <Heading size="md">Información personal</Heading>
@@ -893,6 +913,16 @@ const SignUp = ({navigation}) => {
           </Modal.Body>
         </Modal.Content>
       </Modal>
+      <ModalReactNative visible={isModalVisible} onRequestClose={hideModal} animationType="slide">
+        <View style={styles.modalContainer}>
+          <TouchableOpacity onPress={hideModal} style={styles.closeButton}>
+            <MaterialIcon name="close" size={24} color="white" />
+          </TouchableOpacity>
+          <View style={styles.videoContainer}>
+            <WebView source={{ uri: 'https://www.youtube.com/embed/K1FC-5K-Yz0?autoplay=1' }} style={styles.webView} />
+          </View>
+        </View>
+      </ModalReactNative>
     </NativeBaseProvider>
   );
 };

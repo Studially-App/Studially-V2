@@ -17,12 +17,12 @@ import {
 import StudiallyLogo from '../../assets/images/Studially-logo.png';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 // Formik
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import auth from '@react-native-firebase/auth';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 const styles = StyleSheet.create({
   email_input: {
     marginLeft: 8,
@@ -33,7 +33,7 @@ const ResetPasswordSchema = Yup.object({
   correo: Yup.string().email('Correo invalido').required('Requerido'),
 });
 
-const ResetPassword = ({navigation}) => {
+const ResetPassword = ({ navigation }) => {
   const [modal, setModal] = React.useState(false);
   const toast = useToast();
 
@@ -69,16 +69,21 @@ const ResetPassword = ({navigation}) => {
           console.log(values);
           handlePasswordReset(values.correo);
         }}>
-        {({handleChange, handleBlur, handleSubmit, values}) => (
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
+            <SafeAreaView style={{ backgroundColor: '#FAFAFA' }} >
             <Box h="100%">
               <Box>
-                <HStack alignItems="center">
-                  <Box p={2}>
+                <HStack justifyContent="flex-start" alignItems="center" w="100%">
+                  <HStack
+                    alignItems="flex-start"
+                    space={1}
+                    justifyContent="flex-start"
+                    w={'10%'}>
                     <Button
                       onPress={() => navigation.navigate('SignIn')}
                       bg="transparent"
-                      _pressed={{bg: 'transparent'}}
+                      _pressed={{ bg: 'transparent' }}
                       rounded="4"
                       leftIcon={
                         <MaterialIcon
@@ -88,19 +93,21 @@ const ResetPassword = ({navigation}) => {
                         />
                       }
                     />
-                  </Box>
+                  </HStack>
+                  <HStack
+                    alignItems="flex-start"
+                    space={6}
+                    justifyContent="center"
+                    w={'90%'}>
+                    <Image
+                      source={StudiallyLogo}
+                      alt="StudiallyLogo"
+                      // h="%"
+                      size="xs"
+                      w={150}
+                    />
+                  </HStack>
 
-                  <Image
-                    source={StudiallyLogo}
-                    alt="StudiallyLogo"
-                    // my={4}
-                    mt={8}
-                    mb={4}
-                    ml={4}
-                    // h="%"
-                    size="sm"
-                    w="70%"
-                  />
                 </HStack>
               </Box>
               <Flex
@@ -152,7 +159,7 @@ const ResetPassword = ({navigation}) => {
                   // onPress={handleSubmit}
                   color="#FFF"
                   bg="#475BD8"
-                  _pressed={{bg: '#475BD8'}}
+                  _pressed={{ bg: '#475BD8' }}
                   borderRadius={4}
                   _text={{
                     fontSize: 'lg',
@@ -189,7 +196,7 @@ const ResetPassword = ({navigation}) => {
                         <Button
                           bg="#475BD8"
                           rounded="4"
-                          _pressed={{bg: '#475BD8'}}
+                          _pressed={{ bg: '#475BD8' }}
                           onPress={() => setModal(false)}>
                           Entendido
                         </Button>
@@ -199,6 +206,7 @@ const ResetPassword = ({navigation}) => {
                 </Modal>
               </Flex>
             </Box>
+            </SafeAreaView>
           </View>
         )}
       </Formik>

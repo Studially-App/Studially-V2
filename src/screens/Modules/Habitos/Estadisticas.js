@@ -14,6 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import dayjs from 'dayjs';
 import {useUser} from '../../../context/User';
+import moment from 'moment-timezone';
 
 const Estadisticas = () => {
   const [selectedData, setSelectedData] = React.useState([]);
@@ -33,8 +34,8 @@ const Estadisticas = () => {
       selectedHabits.map(item => {
         //dayjs().month()
         //if (dayjs().month() === 1) {
-        if (dayjs().month() !== userInfo.estadisticasMesHabitos) {
-          item.marcadoMes = [];
+        if ((moment.tz("America/Mexico_City").month() + 1) !== userInfo.estadisticasMesHabitos) {
+            item.marcadoMes = [];
         }
         var dias = item.marcadoMes.reduce(function (a, b) {
           return a + b;

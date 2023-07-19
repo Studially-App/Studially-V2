@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import * as React from 'react';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {
   Text,
@@ -19,14 +19,16 @@ import {
   ScrollView,
   Badge,
 } from 'native-base';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 // React Native
-import {useWindowDimensions} from 'react-native';
+import { useWindowDimensions } from 'react-native';
 
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import notifee from '@notifee/react-native';
 
 // Modal
 import BreakTimeModal from '../../../components/Enfoque/BreakTimeModal';
@@ -34,10 +36,13 @@ import FocusFinishedModal from '../../../components/Enfoque/FocusFinishedModal';
 import StopModal from '../../../components/Enfoque/StopModal';
 import StudiallyProModal from '../../../components/StudiallyProModal';
 
-import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
+
+import BackgroundTimer from 'react-native-background-timer';
+
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import uuid from 'react-native-uuid';
 import dayjs from 'dayjs';
-import {useUser} from '../../../context/User';
+import { useUser } from '../../../context/User';
 let weekOfYear = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear);
 
@@ -46,12 +51,12 @@ const Enfoque = () => {
 
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
-  const {userInfo, userTier, user} = useUser();
+  const { userInfo, userTier, user } = useUser();
 
   // Toast
   const toast = useToast();
   // Screen Dimentions
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   // Timer ON State
   const [timerOn, setTimerOn] = useState(false);
   // Timer Start State
@@ -93,6 +98,9 @@ const Enfoque = () => {
   // Máximo 6 horas al día
   const [minutesLimit, setMinutesLimit] = useState(0);
 
+  const [remainingTime, setRemainingTime] = useState(0);
+
+
   // Reiniciar timer
   const restartTimer = () => {
     const key = uuid.v4().slice(0, 13);
@@ -106,14 +114,55 @@ const Enfoque = () => {
     setBreakOutActive(false);
   };
 
+  const displayNotifications = async () => {
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Enfoque completo',
+      lights: false,
+      vibration: true,
+    });
+    await notifee.displayNotification({
+      title: 'Importante',
+      body: 'Tiempo completado: “Studialler, has completado tu tiempo de organización',
+      android: {
+        channelId,
+        pressAction: {
+          id: 'default',
+        },
+      },
+      ios: {
+        critical: true,
+        sound: 'local.wav',
+      },
+    });
+  }
+
   // Set time
   const setTimer = async () => {
-    const totalTime = parseInt(inputMin, 10) * 60 + parseInt(inputSec, 10);
+    let totalTime = parseInt(inputMin, 10) * 60 + parseInt(inputSec, 10);
+    setRemainingTime(totalTime); // Set remainingTime with totalTime
     if (dayjs().day() === userInfo.minutosHoyDia) {
       if (userInfo.minutosHoy + totalTime / 60 < 360) {
         setTimerInput(totalTime);
         setTimerOn(true);
         setTimerStart(true);
+        // Start the background timer
+        BackgroundTimer.runBackgroundTimer(() => {
+          // this will be executed every 1000 ms
+          // decrement the time remaining by one second
+          if (totalTime > 0) {
+            setRemainingTime(time => {
+              totalTime = time - 1;
+              return totalTime;
+            });
+          } 
+        }, 1000);
+        // if remaining time is zero, stop the timer
+        if (totalTime <= 0) {
+          BackgroundTimer.stopBackgroundTimer();
+          displayNotifications();
+          setRemainingTime(0); // Reset remainingTime
+        }
       } else {
         toast.show({
           description: 'No puedes tener más de 6 horas de enfoque al día',
@@ -134,8 +183,26 @@ const Enfoque = () => {
       setTimerOn(true);
       setTimerStart(true);
       setMinutesLimit(0);
+      // Start the background timer
+      BackgroundTimer.runBackgroundTimer(() => {
+        // this will be executed every 1000 ms
+        // decrement the time remaining by one second
+        if (totalTime > 0) {
+          setRemainingTime(time => {
+            totalTime = time - 1;
+            return totalTime;
+          });
+        } 
+      }, 1000);
+      // if remaining time is zero, stop the timer
+      if (totalTime <= 0) {
+        BackgroundTimer.stopBackgroundTimer();
+        displayNotifications();
+        setRemainingTime(0); // Reset remainingTime
+      }
     }
   };
+
 
   const countStars = async minutosTotal => {
     const stars = Math.floor(minutosTotal / 6);
@@ -284,6 +351,7 @@ const Enfoque = () => {
                 } else {
                   navigation.navigate('Estadisticas', {
                     minutes: minutesStats,
+                    userInfo: userInfo
                   });
                 }
               }}
@@ -343,8 +411,9 @@ const Enfoque = () => {
                   restartTimer();
                   setFocusFinishedModalVisibility(true);
                   countMinutes();
+                  displayNotifications();
                 }}
-                children={({remainingTime}) => {
+                children={({ remainingTime }) => {
                   if (remainingTime === 0) {
                     return (
                       <HStack alignItems="center">
@@ -434,7 +503,7 @@ const Enfoque = () => {
                 onComplete={() => {
                   setBreakOutActive(false);
                 }}
-                children={({remainingTime}) => {
+                children={({ remainingTime }) => {
                   if (breakOutOn === true) {
                     const minutes = Math.floor(remainingTime / 60);
                     const seconds = remainingTime % 60;
@@ -463,8 +532,8 @@ const Enfoque = () => {
           <HStack justifyContent="center" space="2">
             <Center>
               {breakOutActive === false &&
-              timerOn === false &&
-              timerStart === false ? (
+                timerOn === false &&
+                timerStart === false ? (
                 <Center>
                   <Pressable
                     onPress={() => {

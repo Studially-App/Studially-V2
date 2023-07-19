@@ -14,9 +14,29 @@ AppRegistry.registerComponent(appName, () => App);
 // is required for both subscribers.
 async function onMessageReceived(message) {
   console.log(message);
-  notifee.displayNotification(JSON.parse(message.data.notifee));
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+  notifee.displayNotification({
+    id: message.messageId,
+    title: message.notification.title,
+    body: message.notification.body,
+    data: message.data,
+    android: {
+      channelId: channelId,
+      pressAction: {
+        id: 'default',
+      },
+    },
+    ios: {
+      critical: true,
+      sound: 'local.wav',
+    },
+  });
 }
 
 messaging().onMessage(onMessageReceived);
 messaging().setBackgroundMessageHandler(onMessageReceived);
+messaging().onNotificationOpenedApp(onMessageReceived);
 notifee.onBackgroundEvent(async _ => {});

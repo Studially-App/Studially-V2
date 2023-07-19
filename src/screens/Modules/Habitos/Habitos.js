@@ -29,6 +29,8 @@ import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 import ModalAgregarAmigo from '../../../components/Habitos/ModalAgregarAmigo';
 import StudiallyProModal from '../../../components/StudiallyProModal';
 import {useUser} from '../../../context/User';
+import moment from 'moment-timezone';
+
 let weekOfYear = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear);
 
@@ -153,13 +155,16 @@ const Habitos = () => {
         .doc(user.uid)
         .update({
           habitos: data,
-          estadisticasMesHabitos: dayjs().month(),
-          semanaHabitos: dayjs(new Date()).week(),
+          estadisticasMesHabitos: moment.tz("America/Mexico_City").month() + 1,
+          //estadisticasMesHabitos: dayjs().month(),
+          ///semanaHabitos: dayjs(new Date()).week(),
+          diaHabitos: moment.tz("America/Mexico_City").day(),
+          semanaHabitos: moment.tz("America/Mexico_City").week(),
         })
-        .then(() => {
+        .then( async () => {
           console.log('User habits marked updated!');
           setTodayData(popHabits);
-          getHabits(userInfo);
+          await getHabits(userInfo);
         });
     } catch (error) {
       console.log('cae en error en marcar hábitos');
@@ -304,7 +309,9 @@ const Habitos = () => {
     selectedHabits.map(item => {
       // *********** Cambiar a checar la semana en donde estamos **********
       // dayjs(new Date()).week() === userInfo.semanaHabitos
-      if (dayjs(new Date()).week() !== userInfo.semanaHabitos) {
+      console.log(userInfo);
+      ///if (dayjs(new Date()).week() !== userInfo.semanaHabitos) {
+      if (moment.tz("America/Mexico_City").week() !== userInfo.semanaHabitos) {
         item.marcadoSemana = [];
       }
       var dias = item.marcadoSemana.reduce(function (a, b) {
@@ -635,7 +642,8 @@ const Habitos = () => {
                       <Icon size={33} color="#061678" name={item.icono} />
                       <Spacer />
                       <Text fontSize="xl" color="#061678" textAlign="center">
-                        {item.name}
+                        {item.name} 
+                        {/*NAVARROW*/}
                       </Text>
                       <Spacer />
                       <MCIcon

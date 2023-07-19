@@ -8,6 +8,9 @@ import React, {
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import axios from 'axios'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 type UserTier = 'premium' | undefined;
 type UserInfo = Record<string, any>;
 type Action =
@@ -73,10 +76,48 @@ function useUser() {
     return undefined;
   }, [user]);
 
-  const refreshTier = () =>
-    getCustomClaimRole().then(role =>
-      dispatch({type: 'setUserTier', payload: role}),
-    );
+  const refreshTier = useCallback(async () => {
+    if (user) {
+      try {
+        const customerDocRef = firestore().collection('customers').doc(user.uid);
+        const customerDoc = await customerDocRef.get();
+    
+        if (customerDoc.exists) {
+          const customerData = customerDoc.data();
+          if (customerData && customerData.customerId) {
+            await AsyncStorage.setItem('userTier', 'premium');
+            dispatch({type: 'setUserTier', payload: 'premium'});
+          } else {
+            // No active subscription found, clear tier data
+            await AsyncStorage.removeItem('userTier');
+            dispatch({type: 'setUserTier', payload: undefined});
+          }
+        } else {
+          const response = await axios.get(`https://api.stripe.com/v1/customers/search?query=email:"${user.email}"`, {
+            headers: {
+              Authorization: `Bearer sk_test_51Me4GBAX9PxeRGsUcXVYs9jj1HwRDFG1SQsPlI4ZTkfytB3jXlJWtPty8MOQ8log9AXbpBwGaZ3CoaMNhewJu20l008rwHc7yW`
+            }
+          });
+    
+          if (response.status === 200 && response.data && response.data.data.length > 0) {
+            const customerId = response.data.data[0].id;
+            await customerDocRef.set({
+              customerId,
+            }, { merge: true });
+    
+            await AsyncStorage.setItem('userTier', 'premium');
+            dispatch({type: 'setUserTier', payload: 'premium'});
+          } else {
+            // No active subscription found, clear tier data
+            await AsyncStorage.removeItem('userTier');
+            dispatch({type: 'setUserTier', payload: undefined});
+          }
+        }
+      } catch (error) {
+        console.log('Error al verificar el código referido:', error);
+      }
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(authUser =>
@@ -105,6 +146,10 @@ function useUser() {
       dispatch({type: 'setUserTier', payload: role}),
     );
   }, [dispatch, getCustomClaimRole]);
+
+  useEffect(() => {
+    refreshTier();
+  }, [refreshTier]);
 
   return {
     user,

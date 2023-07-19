@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import {ScrollView} from 'react-native';
+import { ScrollView } from 'react-native';
 import {
   Text,
   HStack,
@@ -17,10 +17,11 @@ import {
 } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ModalDetalleHabito from '../../../components/Habitos/ModalDetalleHabito';
 import StudiallyProModal from '../../../components/StudiallyProModal';
-import {useUser} from '../../../context/User';
+import { useUser } from '../../../context/User';
+import moment from 'moment-timezone';
 import notifee, {
   TriggerType,
   RepeatFrequency,
@@ -31,7 +32,7 @@ import notifee, {
 
 const AgregarHabitos = () => {
   const navigation = useNavigation();
-  const {userTier} = useUser();
+  const { userTier } = useUser();
 
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
@@ -52,7 +53,7 @@ const AgregarHabitos = () => {
   const [habitCount, setHabitCount] = useState(0);
 
   // Set an initializing state whilst Firebase connects
-  const {userInfo, user} = useUser();
+  const { userInfo, user } = useUser();
 
   const getHabitsStats = async () => {
     const habitsStats = await firestore()
@@ -72,7 +73,7 @@ const AgregarHabitos = () => {
     let habitsStats = await getHabitsStats();
 
     const previewNames: any[] = [];
-    previewHabits.map((habit: {selected: any; name: any}) => {
+    previewHabits.map((habit: { selected: any; name: any }) => {
       if (habit.selected) {
         previewNames.push(habit.name);
       }
@@ -94,7 +95,7 @@ const AgregarHabitos = () => {
 
     if (restaPersonas.length > 0) {
       restaPersonas.map(habito => {
-        const index = habitsStats.findIndex((stat: {name: any}) => {
+        const index = habitsStats.findIndex((stat: { name: any }) => {
           return stat.name === habito;
         });
         habitsStats[index].persons = habitsStats[index].persons - 1;
@@ -103,7 +104,7 @@ const AgregarHabitos = () => {
 
     if (sumaPersonas.length > 0) {
       sumaPersonas.map(habito => {
-        const index = habitsStats.findIndex((stat: {name: any}) => {
+        const index = habitsStats.findIndex((stat: { name: any }) => {
           return stat.name === habito;
         });
         habitsStats[index].persons = habitsStats[index].persons + 1;
@@ -119,7 +120,7 @@ const AgregarHabitos = () => {
     }
   };
 
-  const getHabits = async (userInfo: {[x: string]: any}) => {
+  const getHabits = async (userInfo: { [x: string]: any }) => {
     if (Object.keys(userInfo.habitos).length > 0) {
       const userHabits = userInfo.habitos;
       setData(userHabits);
@@ -185,19 +186,28 @@ const AgregarHabitos = () => {
 
     const promises: Promise<void>[] = [];
     frequencyMap.forEach((habits: string[], day: number) => {
-      const date = new Date();
+      /*const date = new Date();
       date.setHours(
         date.getHours(),
         date.getMinutes(),
         date.getSeconds() + 10,
         0,
       );
-      date.setDate(date.getDate() + ((day + 8 - date.getDay()) % 7));
-      const body = `Hoy es un gran día para realizar tus hábitos: ${habits.join(
+      date.setDate(date.getDate() + ((day + 8 - date.getDay()) % 7));*/
+      let date = moment.tz("America/Mexico_City");
+      date.set({
+        hour: date.hours(),
+        minute: date.minutes(),
+        second: date.seconds() + 10,
+        millisecond: 0,
+      });
+
+      date.add((day + 8 - date.day()) % 7, 'days');  // Establecer la fecha al próximo día específico de la semana
+      const body = `Studialler, recuerda realizar tus hábitos de hoy: ${habits.join(
         ', ',
       )}`;
       console.log(`scheduled notification for ${date} with body ${body}`);
-      promises.push(createTriggerNotification({date, body}));
+      promises.push(createTriggerNotification({ date: date.toDate(), body}));
     });
 
     await Promise.all(promises);

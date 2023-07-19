@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import auth from '@react-native-firebase/auth';
+import {YOUTUBE_KEY} from '@env';
 import {
   ScrollView,
   VStack,
@@ -20,18 +21,30 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import FoundationIcon from 'react-native-vector-icons/Foundation';
 // React Native
-import {useWindowDimensions} from 'react-native';
+import { useWindowDimensions, Modal, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 // Formik
-import {Formik} from 'formik';
-import {useUser} from '../../../context/User';
+import { Formik } from 'formik';
+import { useUser } from '../../../context/User';
+import WebView from 'react-native-webview';
 
-const Mas = ({navigation}) => {
-  const {height} = useWindowDimensions();
+const Mas = ({ navigation }) => {
+  const { height } = useWindowDimensions();
 
-  const {user, userInfo} = useUser();
+  const { user, userInfo } = useUser();
 
   const profilePictureUrl = userInfo ? userInfo.profilePic : 'https://firebasestorage.googleapis.com/v0/b/studially-2790e.appspot.com/o/logos%2Fprofile.jpeg?alt=media&token=665d38db-7c24-447d-9dae-a04c0b514370';
+
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const signOut = () => {
     auth()
@@ -39,8 +52,10 @@ const Mas = ({navigation}) => {
       .then(() => console.log('User signed out!'));
   };
 
+
   return (
     <NativeBaseProvider>
+
       <Formik>
         {({
           handleChange,
@@ -97,7 +112,7 @@ const Mas = ({navigation}) => {
                         name="keyboard-arrow-right"
                         size={40}
                         color="rgba(6, 22, 120, 1)"
-                        // margin="0 0 0 1rem"
+                      // margin="0 0 0 1rem"
                       />
                     </Flex>
                   </Pressable>
@@ -126,7 +141,7 @@ const Mas = ({navigation}) => {
                         name="keyboard-arrow-right"
                         size={40}
                         color="rgba(6, 22, 120, 1)"
-                        // margin="0 0 0 1rem"
+                      // margin="0 0 0 1rem"
                       />
                     </Flex>
                   </Pressable>
@@ -155,7 +170,7 @@ const Mas = ({navigation}) => {
                         name="keyboard-arrow-right"
                         size={40}
                         color="rgba(6, 22, 120, 1)"
-                        // margin="0 0 0 1rem"
+                      // margin="0 0 0 1rem"
                       />
                     </Flex>
                   </Pressable>
@@ -175,16 +190,43 @@ const Mas = ({navigation}) => {
                           />
                         </Box>
                         <Link href="https://www.studially.com/">
-                        <Text fontSize={18} ml={4}>
-                          Califícanos
-                        </Text>
+                          <Text fontSize={18} ml={4}>
+                            Califícanos
+                          </Text>
                         </Link>
                       </Flex>
                       <MaterialIcon
                         name="keyboard-arrow-right"
                         size={40}
                         color="rgba(6, 22, 120, 1)"
-                        // margin="0 0 0 1rem"
+                      // margin="0 0 0 1rem"
+                      />
+                    </Flex>
+                  </Pressable>
+                </>
+                <>
+                  <Pressable w="90%" key="4" onPress={openModal}>
+                    <Flex
+                      direction="row"
+                      align="center"
+                      justify="space-between">
+                      <Flex direction="row" align="center">
+                        <Box ml={1}>
+                          <MaterialIcon
+                            name="videocam"
+                            size={40}
+                            color="rgba(6, 22, 120, 1)"
+                          />
+                        </Box>
+                        <Text fontSize={18} ml={4}>
+                          Video de introducción
+                        </Text>
+                      </Flex>
+                      <MaterialIcon
+                        name="keyboard-arrow-right"
+                        size={40}
+                        color="rgba(6, 22, 120, 1)"
+                      // margin="0 0 0 1rem"
                       />
                     </Flex>
                   </Pressable>
@@ -211,7 +253,7 @@ const Mas = ({navigation}) => {
                         name="keyboard-arrow-right"
                         size={40}
                         color="rgba(6, 22, 120, 1)"
-                        // margin="0 0 0 1rem"
+                      // margin="0 0 0 1rem"
                       />
                     </Flex>
                   </Pressable>
@@ -261,8 +303,48 @@ const Mas = ({navigation}) => {
           </ScrollView>
         )}
       </Formik>
+
+      <Modal visible={modalVisible} onRequestClose={closeModal} animationType="slide">
+        <View style={styles.modalContainer}>
+          <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+            <MaterialIcon name="close" size={24} color="white" />
+          </TouchableOpacity>
+          <View style={styles.videoContainer}>
+            <WebView source={{ uri: 'https://www.youtube.com/embed/'+YOUTUBE_KEY+'?autoplay=1' }} style={styles.webView} />
+          </View>
+        </View>
+      </Modal>
     </NativeBaseProvider>
+
+
   );
 };
+
+
+const styles = StyleSheet.create({
+  closeButton: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+    zIndex: 1,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  videoContainer: {
+    width: '100%', // Ajusta el ancho según tus necesidades
+    height: 400, // Ajusta la altura según tus necesidades
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  webView: {
+    flex: 1,
+    alignSelf: 'stretch',
+    aspectRatio: 9 / 16, // Ajusta el aspect ratio según tus necesidades
+  },
+});
 
 export default Mas;

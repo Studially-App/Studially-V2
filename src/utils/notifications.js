@@ -6,6 +6,7 @@ import {Platform} from 'react-native';
 import notifee, {AndroidImportance} from '@notifee/react-native';
 
 export const requestNotificationPermission = async () => {
+  await notifee.requestPermission({ criticalAlert: true});
   if (Platform.constants.Release >= 13) {
     const result = await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
     if (result === 'granted') {

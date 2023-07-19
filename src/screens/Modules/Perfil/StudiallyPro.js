@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+
+import {STRIPE_KEY} from '@env';
 //Native Base
 import {
   NativeBaseProvider,
@@ -88,7 +90,7 @@ const StudiallyPRO = () => {
 
   return (
     <NativeBaseProvider>
-      <StripeProvider publishableKey="pk_test_51Me4GBAX9PxeRGsU1wcpPqZdRg8tQHB2BjLECNbAT9jF0XRrZX96Q6fdXhUmdvmtsODc7BTC6VhNyHjvSuzODahs00JoJE7BwH">
+      <StripeProvider publishableKey={STRIPE_KEY}>
         <View h="100%">
           <Center flex={1} my="4">
             <Center w="100%">

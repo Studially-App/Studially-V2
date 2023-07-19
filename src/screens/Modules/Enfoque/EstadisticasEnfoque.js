@@ -12,6 +12,7 @@ import {
 } from 'native-base';
 
 import {useRoute} from '@react-navigation/native';
+import moment from 'moment-timezone';
 
 // stats Graph
 import {VictoryPie} from 'victory-native';
@@ -52,9 +53,19 @@ const EstadisticasEnfoque = () => {
 
   const setMinutes = () => {
     const stats = route.params.minutes;
+    const user = route.params.userInfo;
     let minTotalSem = 0;
     let minTotalMes = 0;
     stats.map(stat => {
+
+      if (moment.tz("America/Mexico_City").week() !== user.semanaHabitos) {
+        stat.minutosSemana = 0;
+      }
+
+      if ((moment.tz("America/Mexico_City").month() + 1) !== user.estadisticasMesHabitos) {
+        stat.minutos = 0;
+      }
+
       minTotalSem = minTotalSem + stat.minutosSemana;
       minTotalMes = minTotalMes + stat.minutos;
       if (stat.categoria === 'Académico') {

@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
+import {STRIPE_KEY} from '@env';
 import {
   VStack,
   Flex,
@@ -32,6 +33,8 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           priceId: 'price_1N4nnLAX9PxeRGsU7wc6aLCl',
         });
         const {clientSecret, ephemeralKey, customer} = response.data;
+
+        console.log(response.data);
 
         return {
           clientSecret,
@@ -77,7 +80,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
         setProModalVisibility(false);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Hubo un error' + error);
     } finally {
       setLoading(false);
     }
@@ -229,7 +232,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
 };
 
 export default ({proModalVisibility, setProModalVisibility}) => (
-  <StripeProvider publishableKey="pk_test_51Me4GBAX9PxeRGsU1wcpPqZdRg8tQHB2BjLECNbAT9jF0XRrZX96Q6fdXhUmdvmtsODc7BTC6VhNyHjvSuzODahs00JoJE7BwH">
+  <StripeProvider publishableKey={STRIPE_KEY}>
     <StudiallyProModal
       proModalVisibility={proModalVisibility}
       setProModalVisibility={setProModalVisibility}
