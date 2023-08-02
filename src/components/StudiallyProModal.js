@@ -18,6 +18,7 @@ import StudiallyPROIcon from '../screens/Modules/Perfil/StudiallyPRO.png';
 import {StripeProvider, useStripe} from '@stripe/stripe-react-native';
 import {useUser} from '../context/User';
 import functions from '@react-native-firebase/functions';
+import Communications from 'react-native-communications';
 
 // Modal Stop
 const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
@@ -25,12 +26,20 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
   const [loading, setLoading] = useState(false);
   const {userInfo, user, refreshTier} = useUser();
 
+  const handleEmail = () => {
+    // El primer argumento es la dirección de correo electrónico del destinatario
+    // El segundo argumento es el asunto del correo electrónico
+    // El tercer argumento es el cuerpo del correo electrónico
+    Communications.email(['developer@devri.com.mx'], null, null, 'Suscripción Pro', 'Hola, quisiera ser Studialler PRO');
+  };
+
+
   const openPaymentSheet = async () => {
     try {
       setLoading(true);
       const fetchPaymentSheetParams = async () => {
         const response = await functions().httpsCallable('createSubscription')({
-          priceId: 'price_1N4nnLAX9PxeRGsU7wc6aLCl',
+          priceId: 'price_1NXUONAX9PxeRGsUebhC6eSp',
         });
         const {clientSecret, ephemeralKey, customer} = response.data;
 
@@ -44,8 +53,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
       };
 
       const initializePaymentSheet = async () => {
-        const {customer, ephemeralKey, clientSecret} =
-          await fetchPaymentSheetParams();
+        const {customer, ephemeralKey, clientSecret} = await fetchPaymentSheetParams();
         const {error} = await initPaymentSheet({
           merchantDisplayName: 'Studially',
           customerId: customer,
@@ -61,7 +69,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           },
           googlePay: {
             merchantCountryCode: 'MX',
-            testEnv: true, // use test environment
+            testEnv: false, // use test environment
           },
         });
         if (!error) {
@@ -96,9 +104,9 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
       <Center w="100%">
         <Box
           w="90%"
-          h="80%"
           bg="rgba(255, 255, 255, 1)"
           mb={5}
+          pb={5}
           shadow="9"
           rounded="12">
           <Center>
@@ -118,7 +126,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
               </Flex>
             </Box>
           </Center>
-          <Center>
+          {/*<Center>
             <VStack>
               <Text fontSize="30" bold>
                 90<Text fontSize="16">MXN</Text> / mes
@@ -127,7 +135,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 <Text fontSize="18">Primer mes gratis</Text>
               </Flex>
             </VStack>
-          </Center>
+          </Center>*/}
           <Divider my="3" />
           <Center my={2}>
             <VStack space={1}>
@@ -138,7 +146,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Gana premios por tu tiempo de enfoque
+                  Estadísticas de organización
                 </Text>
               </Flex>
               <Flex direction="row" alignItems="center">
@@ -148,7 +156,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Sigue más de 2 hábitos
+                  Ganar premios con retos
                 </Text>
               </Flex>
               <Flex direction="row" alignItems="center">
@@ -158,7 +166,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Agrega a tus amigos y ve su avance
+                  Seguir más de 2 hábitos
                 </Text>
               </Flex>
               <Flex direction="row" alignItems="center">
@@ -168,7 +176,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Logra múltiples metas financieras
+                  Estadísticas de hábitos
                 </Text>
               </Flex>
               <Flex direction="row" alignItems="center">
@@ -178,7 +186,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Accede a oportunidades increíbles
+                  Agregar amigos y ver su avance
                 </Text>
               </Flex>
               <Flex direction="row" alignItems="center">
@@ -188,7 +196,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Aprende de diversos temas
+                  Más de 1 meta financiera
                 </Text>
               </Flex>
               <Flex direction="row" alignItems="center">
@@ -198,7 +206,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Cuida tu salud mental
+                  Acceso ilimitado a recursos
                 </Text>
               </Flex>
               <Flex direction="row" alignItems="center">
@@ -208,7 +216,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                   size={13}
                 />
                 <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Obtén beneficios con nuestros partners
+                  Beneficios y oportunidades
                 </Text>
               </Flex>
             </VStack>
@@ -221,8 +229,8 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
               bg="rgba(71, 91, 216, 1)"
               disabled={loading}
               isLoading={loading}
-              onPress={openPaymentSheet}>
-              Adquirir premium
+              onPress={handleEmail}>
+              Contacto
             </Button>
           </Center>
         </Box>

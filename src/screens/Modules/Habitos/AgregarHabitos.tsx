@@ -186,32 +186,30 @@ const AgregarHabitos = () => {
 
     const promises: Promise<void>[] = [];
     frequencyMap.forEach((habits: string[], day: number) => {
-      /*const date = new Date();
-      date.setHours(
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds() + 10,
-        0,
-      );
-      date.setDate(date.getDate() + ((day + 8 - date.getDay()) % 7));*/
       let date = moment.tz("America/Mexico_City");
-      date.set({
-        hour: date.hours(),
-        minute: date.minutes(),
-        second: date.seconds() + 10,
-        millisecond: 0,
-      });
+  date.set({
+    hour: 9,  // Establecer la hora a las 9 AM
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
 
-      date.add((day + 8 - date.day()) % 7, 'days');  // Establecer la fecha al próximo día específico de la semana
-      const body = `Studialler, recuerda realizar tus hábitos de hoy: ${habits.join(
-        ', ',
-      )}`;
-      console.log(`scheduled notification for ${date} with body ${body}`);
-      promises.push(createTriggerNotification({ date: date.toDate(), body}));
+  // Si ya pasó la hora de la notificación para hoy, avanza un día
+  if (date.isBefore(moment())) {
+    date.add(1, 'days');
+  }
+
+  // Ajusta al próximo día correspondiente de la semana
+  date.day(day <= date.day() ? day + 7 : day);
+
+  const body = `Studialler, recuerda realizar tus hábitos de hoy: ${habits.join(', ')}`;
+  console.log(`scheduled notification for ${date} with body ${body}`);
+  promises.push(createTriggerNotification({ date: date.toDate(), body }));
     });
 
     await Promise.all(promises);
   };
+
 
   const updateHabits = async () => {
     try {
@@ -241,7 +239,7 @@ const AgregarHabitos = () => {
       setSpinnerModalGuardar(false);
       navigation.goBack();
     } catch (error) {
-      console.log(error);
+      console.log('updateHabits' + error);
     }
   };
 

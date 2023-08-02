@@ -23,6 +23,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import auth from '@react-native-firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 const styles = StyleSheet.create({
   email_input: {
     marginLeft: 8,
@@ -151,10 +152,10 @@ const ResetPassword = ({ navigation }) => {
                   }
                 />
                 <Button
-                  w="75%"
+                  w="90%"
                   mt={6}
                   mb={4}
-                  h={12}
+                  h={hp('6.5%')}
                   onPress={() => handleSubmit()}
                   // onPress={handleSubmit}
                   color="#FFF"
@@ -162,7 +163,7 @@ const ResetPassword = ({ navigation }) => {
                   _pressed={{ bg: '#475BD8' }}
                   borderRadius={4}
                   _text={{
-                    fontSize: 'lg',
+                    fontSize: wp('4%'),
                   }}>
                   Enviar correo
                 </Button>

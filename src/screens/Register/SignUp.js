@@ -22,6 +22,8 @@ GoogleSignin.configure({
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import WebView from 'react-native-webview';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Native Base
 import {
@@ -103,6 +105,7 @@ const SignUp = ({navigation, onUserCreated}) => {
   };
 
   const onGoogleButtonPress = async () => {
+    await AsyncStorage.removeItem('userTier');
     try {
       // Get the users ID token
       const {idToken} = await GoogleSignin.signIn();
@@ -439,8 +442,8 @@ const SignUp = ({navigation, onUserCreated}) => {
           termsAndConditions: '',
         }}
         //validationSchema={SignUpSchema}
-        onSubmit={values => {
-          console.log(values);
+        onSubmit={ async (values) => {
+          await AsyncStorage.removeItem('userTier');
           createUser(values);
         }}>
         {({
@@ -778,17 +781,17 @@ const SignUp = ({navigation, onUserCreated}) => {
                   w="90%"
                   mt={4}
                   mb={4}
-                  h={12}
+                  h={hp('6.5%')}
                   color="#FFF"
                   bg="#475BD8"
                   borderRadius={4}
                   onPress={handleSubmit}
                   _text={{
-                    fontSize: 'lg',
+                    fontSize: wp('4%'),
                   }}>
                   Crear cuenta
                 </Button>
-                <Text fontSize={14}>También puedes usar:</Text>
+                {/*<Text fontSize={14}>También puedes usar:</Text>
                 <Stack direction="row" space={6} mt={2} mb={2}>
                   <Button
                     bg="#FFF"
@@ -878,8 +881,8 @@ const SignUp = ({navigation, onUserCreated}) => {
                         }
                       }
                     }
-                    onLogoutFinished={() => alert("logout.")}/> */}
-                </Stack>
+                    onLogoutFinished={() => alert("logout.")}/> 
+                </Stack>*/}
                 <Flex direction="column" align="center">
                   <Text fontSize={18}>¿Ya tienes una cuenta?</Text>
                   <Link

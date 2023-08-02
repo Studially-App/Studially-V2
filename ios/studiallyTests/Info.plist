@@ -60,6 +60,8 @@
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+    <string>Light</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

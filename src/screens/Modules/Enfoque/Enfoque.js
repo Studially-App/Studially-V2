@@ -36,8 +36,8 @@ import FocusFinishedModal from '../../../components/Enfoque/FocusFinishedModal';
 import StopModal from '../../../components/Enfoque/StopModal';
 import StudiallyProModal from '../../../components/StudiallyProModal';
 
+import moment from 'moment-timezone';
 
-import BackgroundTimer from 'react-native-background-timer';
 
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import uuid from 'react-native-uuid';
@@ -123,7 +123,7 @@ const Enfoque = () => {
     });
     await notifee.displayNotification({
       title: 'Importante',
-      body: 'Tiempo completado: “Studialler, has completado tu tiempo de organización',
+      body: 'Tiempo completado: Studialler, has completado tu tiempo de organización',
       android: {
         channelId,
         pressAction: {
@@ -146,7 +146,7 @@ const Enfoque = () => {
         setTimerInput(totalTime);
         setTimerOn(true);
         setTimerStart(true);
-        // Start the background timer
+        /* Start the background timer
         BackgroundTimer.runBackgroundTimer(() => {
           // this will be executed every 1000 ms
           // decrement the time remaining by one second
@@ -162,7 +162,7 @@ const Enfoque = () => {
           BackgroundTimer.stopBackgroundTimer();
           displayNotifications();
           setRemainingTime(0); // Reset remainingTime
-        }
+        }*/
       } else {
         toast.show({
           description: 'No puedes tener más de 6 horas de enfoque al día',
@@ -173,7 +173,7 @@ const Enfoque = () => {
     } else {
       try {
         await firestore().collection('usuarios').doc(user.uid).update({
-          minutosHoyDia: dayjs().day(),
+          minutosHoyDia: moment().tz("America/Mexico_City").day(),
           minutosHoy: 0,
         });
       } catch (error) {
@@ -183,23 +183,6 @@ const Enfoque = () => {
       setTimerOn(true);
       setTimerStart(true);
       setMinutesLimit(0);
-      // Start the background timer
-      BackgroundTimer.runBackgroundTimer(() => {
-        // this will be executed every 1000 ms
-        // decrement the time remaining by one second
-        if (totalTime > 0) {
-          setRemainingTime(time => {
-            totalTime = time - 1;
-            return totalTime;
-          });
-        } 
-      }, 1000);
-      // if remaining time is zero, stop the timer
-      if (totalTime <= 0) {
-        BackgroundTimer.stopBackgroundTimer();
-        displayNotifications();
-        setRemainingTime(0); // Reset remainingTime
-      }
     }
   };
 
@@ -229,7 +212,12 @@ const Enfoque = () => {
 
     console.log('Index', index);
 
-    if (dayjs().month() === userInfo.minutosMes) {
+    console.log('MINUTOS MES' + userInfo.minutosMes);
+    console.log('MINUTOS SEMANA' + userInfo.minutosSemana);
+
+    console.log(dayjs().month());
+
+    if (moment().tz("America/Mexico_City").month() + 1 === userInfo.minutosMes) {
       minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
       console.log('Minutes DB Meses', minutesDB);
     } else {
@@ -239,7 +227,7 @@ const Enfoque = () => {
       minutesDB[index].minutos = minutesDB[index].minutos + calculatedMinutes;
     }
 
-    if (dayjs(new Date()).week() === userInfo.minutosSemana) {
+    if (moment().tz("America/Mexico_City").isoWeek() === userInfo.minutosSemana) {
       minutesDB[index].minutosSemana =
         minutesDB[index].minutosSemana + calculatedMinutes;
       console.log('Minutes DB semanas', minutesDB);
@@ -247,8 +235,7 @@ const Enfoque = () => {
       minutesDB.map(cat => {
         cat.minutosSemana = 0;
       });
-      minutesDB[index].minutosSemana =
-        minutesDB[index].minutosSemana + calculatedMinutes;
+      minutesDB[index].minutosSemana = minutesDB[index].minutosSemana + calculatedMinutes;
     }
 
     const newData = await firestore()
@@ -264,6 +251,9 @@ const Enfoque = () => {
     setMinutesStats(minutesDB);
     setMinutesLimit(limite);
 
+    console.log('MINUTES DB' + minutesDB[index]);
+
+
     try {
       firestore()
         .collection('usuarios')
@@ -272,15 +262,15 @@ const Enfoque = () => {
           minutos: minutesDB,
           minutosTotales: minutosTotal,
           minutosHoy: limite,
-          minutosMes: dayjs().month(),
-          minutosSemana: dayjs(new Date()).week(),
-          minutosHoyDia: dayjs().day(),
+          minutosMes: moment().tz("America/Mexico_City").month() + 1, // Sumamos 1 al mes
+          minutosSemana: moment().tz("America/Mexico_City").week(),
+          minutosHoyDia: moment().tz("America/Mexico_City").day(),
         })
         .then(() => {
           console.log('User minutes updated!');
         });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -346,6 +336,7 @@ const Enfoque = () => {
             ) : null}
             <Button
               onPress={() => {
+                console.log(userTier);
                 if (userTier !== 'premium') {
                   setProModalVisibility(true);
                 } else {

@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 GoogleSignin.configure({
   webClientId:
     '498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com',
@@ -31,10 +32,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   email_input: {
@@ -86,153 +84,153 @@ const SignIn = ({ navigation }) => {
 
   return (
     <NativeBaseProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <Formik
-        initialValues={{
-          email: '',
-          password: '',
-        }}
-        validationSchema={SignInSchema}
-        onSubmit={values => {
-          loginUser(values);
-        }}>
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
-          <SafeAreaView style={{ backgroundColor: '#FAFAFA' }} >
-            <ScrollView h="100%" bg="#FAFAFA">
-              <VStack h="100%" space={4} justifyContent="flex-start">
-                <Center>
-                  <Image
-                    source={StudiallyLogo}
-                    alt="StudiallyLogo"
-                    style={{
-                      marginTop: 8,
-                      marginBottom: 4,
-                      width: windowWidth, // Utiliza el ancho de la ventana
-                      height: windowHeight * 0.2, // Puedes ajustar este valor según tus necesidades
-                    }}
-                    resizeMode='center' // Elige el modo que mejor se adapte a tus necesidades
-                  />
-                </Center>
-                <Flex direction="row" justify="center" bg="#FAFAFA" pb={6}>
-                  <Heading size="xl" color="#272C46">
-                    ¡Bienvenido de nuevo!
-                  </Heading>
-                </Flex>
-                <VStack space={2} alignItems="center">
-                  <Input
-                    placeholder="Correo electrónico"
-                    placeholderTextColor="rgba(39, 44, 70, 0.8)"
-                    onChangeText={handleChange('email')}
-                    value={values.email}
-                    onBlur={handleBlur('email')}
-                    w="90%"
-                    borderColor="rgba(71, 91, 216, 1)"
-                    _focus={{
-                      borderColor: '#475BD8',
-                    }}
-                    type="email"
-                    size="2xl"
-                    InputLeftElement={
-                      <MaterialCommunityIcon
-                        name="email-outline"
-                        style={styles.email_input}
-                        size={28}
-                        color="rgba(5, 24, 139, 0.8)"
-                      />
-                    }
-                  />
-                  {touched.email && errors.email ? (
-                    <Text color="error.700" fontSize="16" lineHeight="16">
-                      {touched.email && errors.email}
-                    </Text>
-                  ) : null}
-                  <Input
-                    placeholder="Contraseña"
-                    placeholderTextColor="rgba(39, 44, 70, 0.8)"
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                    w="90%"
-                    _focus={{
-                      borderColor: '#475BD8',
-                    }}
-                    type="password"
-                    borderColor="rgba(71, 91, 216, 1)"
-                    size="2xl"
-                    InputLeftElement={
-                      <MaterialIcon
-                        name="lock-outline"
-                        style={styles.email_input}
-                        size={28}
-                        color="rgba(5, 24, 139, 0.8)"
-                      />
-                    }
-                  />
-                  {touched.password && errors.password ? (
-                    <Text color="error.700" fontSize="16" lineHeight="16">
-                      {touched.password && errors.password}
-                    </Text>
-                  ) : null}
-                </VStack>
-                <Center>
-                  <Button
-                    h={12}
-                    color="#FFF"
-                    bg="#475BD8"
-                    borderRadius={4}
-                    _pressed={{ bg: '#475BD8' }}
-                    type="submit"
-                    _text={{
-                      fontSize: 'xl',
-                    }}
-                    onPress={handleSubmit}
-                    w="90%">
-                    Iniciar sesión
-                  </Button>
-                </Center>
-                <Center>
-                  <Text fontSize={18}>O inicia con:</Text>
-                  <Stack direction="row" space={6} mt={2} mb={4}>
-                    <Button
-                      bg="#FFF"
-                      _pressed={{
-                        backgroundColor: '#c2c2c2',
+        <Formik
+          safeAreaTop
+          initialValues={{
+            email: '',
+            password: '',
+          }}
+          validationSchema={SignInSchema}
+          onSubmit={ async (values) => {
+            await AsyncStorage.removeItem('userTier');
+            loginUser(values);
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+              <ScrollView h="100%" bg="#FAFAFA">
+                <VStack h="100%" space={4} justifyContent="flex-start">
+                  <Center>
+                    <Image
+                      source={StudiallyLogo}
+                      alt="StudiallyLogo"
+                      style={{
+                        marginTop: 8,
+                        marginBottom: 4,
+                        width: wp('70%'), // 100% of the screen's width
+                        height: hp('20%'), // 20% of the screen's height
                       }}
-                      h={'60px'}
-                      rounded="4"
-                      w={'60px'}
-                      borderWidth="2"
-                      borderColor="#475BD8"
-                      onPress={() => {
-                        try {
-                          console.log('Registro con google');
-                          onGoogleButtonPress().then(() => {
-                            console.log('Signed in with Google!');
-                          });
-                        } catch (error) {
-                          toast.show({
-                            description: 'Se ha producido un error',
-                            placement: 'top',
-                            duration: 1000,
-                          });
-                        }
+                      resizeMode='contain'
+                    />
+                  </Center>
+                  <Flex direction="row" justify="center" bg="#FAFAFA" pb={6}>
+                    <Heading size="xl" color="#272C46">
+                      ¡Bienvenido de nuevo!
+                    </Heading>
+                  </Flex>
+                  <VStack space={2} alignItems="center">
+                    <Input
+                      placeholder="Correo electrónico"
+                      placeholderTextColor="rgba(39, 44, 70, 0.8)"
+                      onChangeText={handleChange('email')}
+                      value={values.email}
+                      onBlur={handleBlur('email')}
+                      w="90%"
+                      borderColor="rgba(71, 91, 216, 1)"
+                      _focus={{
+                        borderColor: '#475BD8',
                       }}
-                      leftIcon={
+                      type="email"
+                      size="2xl"
+                      InputLeftElement={
                         <MaterialCommunityIcon
-                          name="google"
-                          color="#05188B"
-                          size={30}
+                          name="email-outline"
+                          style={styles.email_input}
+                          size={28}
+                          color="rgba(5, 24, 139, 0.8)"
                         />
                       }
                     />
-                    {/* <Button
+                    {touched.email && errors.email ? (
+                      <Text color="error.700" fontSize="16" lineHeight="16">
+                        {touched.email && errors.email}
+                      </Text>
+                    ) : null}
+                    <Input
+                      placeholder="Contraseña"
+                      placeholderTextColor="rgba(39, 44, 70, 0.8)"
+                      onChangeText={handleChange('password')}
+                      onBlur={handleBlur('password')}
+                      value={values.password}
+                      w="90%"
+                      _focus={{
+                        borderColor: '#475BD8',
+                      }}
+                      type="password"
+                      borderColor="rgba(71, 91, 216, 1)"
+                      size="2xl"
+                      InputLeftElement={
+                        <MaterialIcon
+                          name="lock-outline"
+                          style={styles.email_input}
+                          size={28}
+                          color="rgba(5, 24, 139, 0.8)"
+                        />
+                      }
+                    />
+                    {touched.password && errors.password ? (
+                      <Text color="error.700" fontSize="16" lineHeight="16">
+                        {touched.password && errors.password}
+                      </Text>
+                    ) : null}
+                  </VStack>
+                  <Center>
+                    <Button
+                      h={hp('6.5%')}
+                      color="#FFF"
+                      bg="#475BD8"
+                      borderRadius={4}
+                      _pressed={{ bg: '#475BD8' }}
+                      type="submit"
+                      _text={{
+                        fontSize: wp('4%'),
+                      }}
+                      onPress={handleSubmit}
+                      w="90%">
+                      Iniciar sesión
+                    </Button>
+                  </Center>
+                  <Center>
+                    {/*<Text fontSize={18}>O inicia con:</Text>*/}
+                    {/*<Stack direction="row" space={6} mt={2} mb={4}>
+                      <Button
+                        bg="#FFF"
+                        _pressed={{
+                          backgroundColor: '#c2c2c2',
+                        }}
+                        h={'60px'}
+                        rounded="4"
+                        w={'60px'}
+                        borderWidth="2"
+                        borderColor="#475BD8"
+                        onPress={() => {
+                          try {
+                            console.log('Registro con google');
+                            onGoogleButtonPress().then(() => {
+                              console.log('Signed in with Google!');
+                            });
+                          } catch (error) {
+                            toast.show({
+                              description: 'Se ha producido un error',
+                              placement: 'top',
+                              duration: 1000,
+                            });
+                          }
+                        }}
+                        leftIcon={
+                          <MaterialCommunityIcon
+                            name="google"
+                            color="#05188B"
+                            size={30}
+                          />
+                        }
+                      />
+                      {/* <Button
                     bg="#4267B2"
                     h={'60px'}
                     w={'60px'}
@@ -240,37 +238,35 @@ const SignIn = ({ navigation }) => {
                     leftIcon={
                       <FontistoIcon name="facebook" color="#FFFF" size={30} />
                     }
-                  /> */}
-                  </Stack>
-                  <Flex direction="column" align="center">
-                    <Link
-                      mb={2}
-                      onPress={() => {
-                        console.log('Reset');
-                        navigation.navigate('ResetPassword');
-                      }}
-                      _text={{
-                        fontSize: 22,
-                        color: '#272C46',
-                      }}>
-                      Olvidé mi contraseña
-                    </Link>
-                    <Link
-                      onPress={() => navigation.navigate('SignUp')}
-                      _text={{
-                        fontSize: 22,
-                        color: '#272C46',
-                      }}>
-                      Crear cuenta
-                    </Link>
-                  </Flex>
-                </Center>
-              </VStack>
-            </ScrollView>
-          </SafeAreaView>
-        )}
-      </Formik>
-      </SafeAreaView>
+                  />
+                    </Stack>*/}
+                    <Flex direction="column" align="center">
+                      <Link
+                        mb={2}
+                        onPress={() => {
+                          console.log('Reset');
+                          navigation.navigate('ResetPassword');
+                        }}
+                        _text={{
+                          fontSize: wp('4.5%'), 
+                          color: '#272C46',
+                        }}>
+                        Olvidé mi contraseña
+                      </Link>
+                      <Link
+                        onPress={() => navigation.navigate('SignUp')}
+                        _text={{
+                          fontSize: wp('4.5%'), 
+                          color: '#272C46',
+                        }}>
+                        Crear cuenta
+                      </Link>
+                    </Flex>
+                  </Center>
+                </VStack>
+              </ScrollView>
+          )}
+        </Formik>
     </NativeBaseProvider>
   );
 };

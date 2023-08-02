@@ -56,11 +56,16 @@ const EstadisticasEnfoque = () => {
     const user = route.params.userInfo;
     let minTotalSem = 0;
     let minTotalMes = 0;
+
+    console.log(route.params.minutes);
     stats.map(stat => {
 
       if (moment.tz("America/Mexico_City").week() !== user.semanaHabitos) {
         stat.minutosSemana = 0;
       }
+
+      console.log("MES" + user.estadisticasMesHabitos);
+      console.log(moment.tz("America/Mexico_City").month() + 1);
 
       if ((moment.tz("America/Mexico_City").month() + 1) !== user.estadisticasMesHabitos) {
         stat.minutos = 0;
@@ -68,6 +73,7 @@ const EstadisticasEnfoque = () => {
 
       minTotalSem = minTotalSem + stat.minutosSemana;
       minTotalMes = minTotalMes + stat.minutos;
+      console.log(stat);
       if (stat.categoria === 'Académico') {
         setAcademicoMensualStats(stat.minutos);
         setAcademicoSemanalStats(stat.minutosSemana);
