@@ -78,46 +78,51 @@ function useUser() {
 
   const refreshTier = useCallback(async () => {
     if (user) {
+      const storedUserTier = await AsyncStorage.getItem('userTier');
+      
+      if (storedUserTier === 'premium') {
+        dispatch({type: 'setUserTier', payload: storedUserTier});
+        return;
+      }
+  
       try {
         const customerDocRef = firestore().collection('customers').doc(user.uid);
         const customerDoc = await customerDocRef.get();
-    
+  
+  
         if (customerDoc.exists) {
           const customerData = customerDoc.data();
           if (customerData && customerData.customerId) {
             await AsyncStorage.setItem('userTier', 'premium');
+            console.log(await AsyncStorage.getItem('userTier')); // Asegurarse que 'premium' se guarda correctamente
             dispatch({type: 'setUserTier', payload: 'premium'});
-          } else {
-            // No active subscription found, clear tier data
-            await AsyncStorage.removeItem('userTier');
-            dispatch({type: 'setUserTier', payload: undefined});
           }
         } else {
           const response = await axios.get(`https://api.stripe.com/v1/customers/search?query=email:"${user.email}"`, {
             headers: {
-              Authorization: `Bearer sk_test_51Me4GBAX9PxeRGsUcXVYs9jj1HwRDFG1SQsPlI4ZTkfytB3jXlJWtPty8MOQ8log9AXbpBwGaZ3CoaMNhewJu20l008rwHc7yW`
+              Authorization: `Bearer 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`
             }
           });
-    
+  
           if (response.status === 200 && response.data && response.data.data.length > 0) {
             const customerId = response.data.data[0].id;
             await customerDocRef.set({
               customerId,
             }, { merge: true });
-    
+  
             await AsyncStorage.setItem('userTier', 'premium');
+            console.log(await AsyncStorage.getItem('userTier')); // Asegurarse que 'premium' se guarda correctamente
             dispatch({type: 'setUserTier', payload: 'premium'});
-          } else {
-            // No active subscription found, clear tier data
-            await AsyncStorage.removeItem('userTier');
-            dispatch({type: 'setUserTier', payload: undefined});
           }
         }
       } catch (error) {
         console.log('Error al verificar el código referido:', error);
       }
     }
-  }, [user, dispatch]);
+
+    const role = await getCustomClaimRole();
+    dispatch({type: 'setUserTier', payload: role});
+  }, [user, dispatch, getCustomClaimRole]);
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(authUser =>
@@ -142,14 +147,10 @@ function useUser() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    getCustomClaimRole().then(role =>
-      dispatch({type: 'setUserTier', payload: role}),
-    );
-  }, [dispatch, getCustomClaimRole]);
-
-  useEffect(() => {
-    refreshTier();
-  }, [refreshTier]);
+    if(user){
+      refreshTier();
+    }
+  }, [user, refreshTier]);
 
   return {
     user,
@@ -161,3 +162,4 @@ function useUser() {
 }
 
 export {UserProvider, useUser};
+

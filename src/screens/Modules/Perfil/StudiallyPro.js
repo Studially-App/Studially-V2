@@ -35,7 +35,7 @@ const StudiallyPRO = () => {
       setLoading(true);
       const fetchPaymentSheetParams = async () => {
         const response = await functions().httpsCallable('createSubscription')({
-          priceId: 'price_1Mh2lnAX9PxeRGsUGz8oQQjs',
+          priceId: 'price_1NXUONAX9PxeRGsUebhC6eSp',
         });
         const {clientSecret, ephemeralKey, customer} = response.data;
 
@@ -64,7 +64,7 @@ const StudiallyPRO = () => {
           },
           googlePay: {
             merchantCountryCode: 'MX',
-            testEnv: true, // use test environment
+            testEnv: false, // use test environment
           },
         });
         if (!error) {
@@ -96,10 +96,10 @@ const StudiallyPRO = () => {
             <Center w="100%">
               <Box
                 w="80%"
-                h="80%"
                 bg="rgba(255, 255, 255, 1)"
                 mb={16}
                 shadow="9"
+                pb={5}
                 rounded="12">
                 <Center>
                   <Box justifyContent="center" w="90%">

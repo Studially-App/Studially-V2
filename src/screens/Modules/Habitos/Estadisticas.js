@@ -16,6 +16,8 @@ import dayjs from 'dayjs';
 import {useUser} from '../../../context/User';
 import moment from 'moment-timezone';
 
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 const Estadisticas = () => {
   const [selectedData, setSelectedData] = React.useState([]);
 
@@ -64,14 +66,14 @@ const Estadisticas = () => {
       <VStack alignItems="center" mt={3} mb={20} w="100%">
         <ScrollView w="100%" h="200px">
           <VStack>
-            <Text fontSize="xl" color="#272C46" textAlign="justify" mb={3}>
+            <Text fontSize={hp('2')} color="#272C46" textAlign="justify" mb={3} ml={5} mr={5}>
               Aquí podrás ver el cumplimiento de tus hábitos programados en lo
               que va del mes
             </Text>
 
-            <HStack space={2} alignItems="center" justifyContent="flex-start">
+            <HStack space={2} alignItems="center" justifyContent="flex-start" ml={5}>
               <Text
-                fontSize={25}
+                fontSize={hp('2')}
                 color="#272C46"
                 textAlign="left"
                 justifyContent="flex-start">

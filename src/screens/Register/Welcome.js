@@ -13,14 +13,13 @@ import {
 // Material-UI Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunitiIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 const Welcome = ({ navigation }) => (
   <NativeBaseProvider>
-
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <ScrollView h="100%" bg="#FAFAFA">
-        <VStack space={2} justifyContent="center" mt={4} bg="#FAFAFA">
+      <ScrollView h="100%" bg="#FAFAFA" >
+        <VStack safeAreaTop space={2} justifyContent="center" mt={4} bg="#FAFAFA">
           <Flex direction="column" align="center">
             <Stack direction="column" space={2}>
               <Stack space={4} direction="row" alignItems="center" bg="#FAFAFA">
@@ -116,29 +115,27 @@ const Welcome = ({ navigation }) => (
             </Text>
             <Stack direction="column" space={3} mt={6} w="90%">
               <Button
-                h={12}
-                // color="#FFFFF"
+                h={hp('6.5%')}
                 bg="#475BD8"
                 _pressed={{
                   backgroundColor: '#04178a',
                 }}
                 borderRadius={4}
                 _text={{
-                  fontSize: 'xl',
+                  fontSize: wp('4%'),
                 }}
                 onPress={() => navigation.navigate('SignIn')}>
                 Iniciar sesión
               </Button>
               <Button
-                h={12}
+                h={hp('6.5%')}
                 bg="#FFF"
-                // color="#475BD8"
                 borderWidth="2"
                 borderColor="#475BD8"
                 _pressed={{ bg: '#FFF' }}
                 _text={{
                   color: '#475BD8',
-                  fontSize: 'xl',
+                  fontSize: wp('4%'),
                 }}
                 onPress={() => navigation.navigate('SignUp')}
                 borderRadius={4}>
@@ -148,8 +145,6 @@ const Welcome = ({ navigation }) => (
           </Flex>
         </VStack>
       </ScrollView>
-
-    </SafeAreaView>
   </NativeBaseProvider>
 );
 

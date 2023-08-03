@@ -55,6 +55,8 @@ import {
 } from './src/utils/notifications';
 import { UserProvider, useUser } from './src/context/User';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 const Tabs = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -225,12 +227,11 @@ const App = () => {
 
   return (
     <NativeBaseProvider>
-      <SafeAreaView style={{ flex: 1, }} >
       <NavigationContainer>
         {user && !profile ? (
           <>
           
-            <Center>
+            <Center safeAreaTop bg="white">
               {/*<Box safeAreaTop bg="white" width={'100px'} shadow="2" />*/}
               <HStack
                 bg="white"
@@ -274,14 +275,13 @@ const App = () => {
                 tabBarStyle: {
                   position: 'absolute',
                   backgroundColor: 'rgba(249, 249, 249, 1)',
-                  marginLeft: '2.5%',
                   borderBottomLeftRadius: 16,
                   borderBottomRightRadius: 16,
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
-                  marginBottom: '1%',
-                  height: '9%',
-                  width: '95%',
+                  marginBottom: hp('1%'),
+                  height: hp('9%'),
+                  width: wp('100%'),
                 },
                 tabBarInactiveTintColor: 'rgba(39, 44, 70, 1)',
                 tabBarHideOnKeyboard: true,
@@ -292,7 +292,7 @@ const App = () => {
                 options={{
                   title: 'Organización',
                   tabBarLabelStyle: {
-                    fontSize: 12,
+                    fontSize: wp('2.7%'),
                     marginBottom: 4,
                   },
                   tabBarIcon: ({ color }) => (
@@ -308,7 +308,7 @@ const App = () => {
                 options={{
                   title: 'Hábitos',
                   tabBarLabelStyle: {
-                    fontSize: 12,
+                    fontSize: wp('2.7%'),
                     marginBottom: 4,
                   },
                   tabBarIcon: ({ color }) => (
@@ -322,7 +322,7 @@ const App = () => {
                 options={{
                   title: 'Finanzas',
                   tabBarLabelStyle: {
-                    fontSize: 12,
+                    fontSize: wp('2.7%'),
                     marginBottom: 4,
                   },
                   tabBarIcon: ({ color }) => (
@@ -336,7 +336,7 @@ const App = () => {
                 options={{
                   title: 'Recursos',
                   tabBarLabelStyle: {
-                    fontSize: 12,
+                    fontSize: wp('2.7%'),
                     marginBottom: 4,
                   },
                   tabBarIcon: ({ color }) => (
@@ -348,7 +348,7 @@ const App = () => {
           </>
         ) : user && profile ? (
           <>
-            <Center>
+            <Center safeAreaTop bg="white">
               {/*<Box safeAreaTop bg="white" width={'100px'} shadow="2" />*/}
               <HStack
                 bg="white"
@@ -453,8 +453,6 @@ const App = () => {
           </Modal>
         )}
       </NavigationContainer>
-
-      </SafeAreaView>
     </NativeBaseProvider>
   );
 };

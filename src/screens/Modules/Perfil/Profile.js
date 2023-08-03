@@ -41,6 +41,8 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import { enableFreeze } from 'react-native-screens';
+import {SECRET_KEY} from '@env';
+import axios from 'axios'; 
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -221,68 +223,6 @@ const Profile = ({ navigation }) => {
     });
   };
 
-  const redeemCode = async () => {
-    const user = auth().currentUser;
-    if (user) {
-      const uid = user.uid;
-      const email = user.email || '';
-      try {
-        const customerDocRef = firestore().collection('customers').doc(uid);
-        const customerDoc = await customerDocRef.get();
-  
-        if (customerDoc.exists && customerDoc.data()?.redeemedCodes?.length > 0) {
-          toast.show({
-            description: 'Ya has canjeado un código anteriormente.',
-            duration: 1500,
-            placement: 'top',
-          });
-        } else {
-          const redeemedCodesRef = firestore().collection('redeemedCodes').doc(code);
-          const redeemedCodeDoc = await redeemedCodesRef.get();
-  
-          if (redeemedCodeDoc.exists) {
-            toast.show({
-              description: 'Este código ya ha sido canjeado por otro usuario.',
-              duration: 1500,
-              placement: 'top',
-            });
-          } else {
-            await redeemedCodesRef.set({
-              redeemedBy: uid,
-            });
-  
-            if (!customerDoc.exists) {
-              await customerDocRef.set({
-                stripeId: code,
-                email,
-                redeemedCodes: [code],
-              });
-            } else {
-              await customerDocRef.update({
-                stripeId: code,
-                redeemedCodes: firestore.FieldValue.arrayUnion(code),
-              });
-            }
-            
-            toast.show({
-              description: '¡Código canjeado exitosamente!',
-              duration: 1500,
-              placement: 'top',
-            });
-          }
-        }
-      } catch (error) {
-        console.log('Error al canjear el código:', error);
-        toast.show({
-          description: 'Error al canjear el código.',
-          duration: 1500,
-          placement: 'top',
-        });
-      }
-    }
-  };  
-
-
   const uploadImage = async uri => {
     const response = await fetch(uri);
     const blob = await response.blob();
@@ -313,12 +253,44 @@ const Profile = ({ navigation }) => {
     }
   };
 
-  const openSubscriptionPage = async () => {
+  /*const openSubscriptionPage = async () => {
     const result = await functions().httpsCallable('customerPortal')({
       returnUrl: 'https://studially.com',
     });
     result.data.url && Linking.openURL(result.data.url);
+  };*/
+
+  const openSubscriptionPage = async (userEmail) => {
+    try {
+      const response = await axios.get(`https://api.stripe.com/v1/customers/search?query=email:"${user.email}"`, {
+        headers: {
+          Authorization: `Bearer ${SECRET_KEY}`
+        }
+      });
+  
+      if (response.status === 200 && response.data && response.data.data.length > 0) {
+        const customerId = response.data.data[0].id;
+  
+        const responseSession = await axios.post(`https://api.stripe.com/v1/billing_portal/sessions`, 
+          { customer: customerId }, 
+          {
+            headers: {
+              Authorization: `Bearer ${SECRET_KEY}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            }
+          }
+        );
+  
+        if (responseSession.status === 200 && responseSession.data) {
+          Linking.openURL(responseSession.data.url);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
+  
 
   return (
     <NativeBaseProvider>
@@ -546,7 +518,7 @@ const Profile = ({ navigation }) => {
                 }}>
                 {userTier !== 'premium'
                   ? 'Cámbiate a Studially PRO'
-                  : 'Administrar subscripción'}
+                  : 'Administrar'}
               </Button>
             </VStack>
           ) : (
@@ -674,7 +646,7 @@ const Profile = ({ navigation }) => {
                 }}>
                 {userTier !== 'premium'
                   ? 'Cámbiate a Studially PRO'
-                  : 'Administrar subscripción'}
+                  : 'Administrar'}
               </Button>
             </VStack>
           )}

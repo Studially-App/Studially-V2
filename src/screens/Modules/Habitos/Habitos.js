@@ -150,6 +150,7 @@ const Habitos = () => {
       await updateFire();
     }
     try {
+      console.log('MES MARKED HABITS' + moment.tz("America/Mexico_City").month() + 1);
       firestore()
         .collection('usuarios')
         .doc(user.uid)

@@ -91,7 +91,7 @@ const ModalDetalleBeneficios = ({
                   h="48"
                 />
 
-                <Text w="95%">{data.texto}</Text>
+                <Text style={{ textAlign: 'justify' }} w="95%" >{data.texto}</Text>
               </ScrollView>
 
               <Button
