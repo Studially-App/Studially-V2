@@ -50,7 +50,7 @@ const Recursos = () => {
               }}>
               <Box bg="white" borderRadius="lg" shadow={2} w="155px" h="140px">
                 <Center>
-                  {userTier !== 'premium' ? (
+                  {/*userTier !== 'premium' ? (
                     <Badge
                       colorScheme="danger"
                       rounded="full"
@@ -64,7 +64,7 @@ const Recursos = () => {
                       }}>
                       Pro
                     </Badge>
-                  ) : null}
+                    ) : null*/}
                   <VStack justifyContent="center" alignItems="center">
                     <Center h="100%">
                       <OctIcon name="verified" color="#475BD8" size={60} />

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {useState} from 'react';
+import { useState } from 'react';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import {firebase} from '@react-native-firebase/app';
+import { firebase } from '@react-native-firebase/app';
 
 import {
   LoginButton,
@@ -13,7 +13,7 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk-next';
 
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 GoogleSignin.configure({
   webClientId:
@@ -51,13 +51,13 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 //React Native
-import {useWindowDimensions, View, StyleSheet, TouchableOpacity, Modal as ModalReactNative,} from 'react-native';
+import { useWindowDimensions, View, StyleSheet, TouchableOpacity, Modal as ModalReactNative, } from 'react-native';
 
 // DateTime Picker
 import DatePicker from 'react-native-date-picker';
 
 // Formik
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 
 import dayjs from 'dayjs';
 let weekOfYear = require('dayjs/plugin/weekOfYear');
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SignUp = ({navigation, onUserCreated}) => {
+const SignUp = ({ navigation, onUserCreated }) => {
   const [date, setDate] = useState(new Date());
   const [openDate, setOpenDate] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
@@ -108,7 +108,7 @@ const SignUp = ({navigation, onUserCreated}) => {
     await AsyncStorage.removeItem('userTier');
     try {
       // Get the users ID token
-      const {idToken} = await GoogleSignin.signIn();
+      const { idToken } = await GoogleSignin.signIn();
 
       // Authenticate with Firebase using the Google ID token
       const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
@@ -303,7 +303,7 @@ const SignUp = ({navigation, onUserCreated}) => {
     } else {
       auth()
         .createUserWithEmailAndPassword(values.email, values.password)
-        .then(({user}) => {
+        .then(({ user }) => {
           console.log('User account created & signed in!');
           //Se agrega a la tabla de usuarios una vez registrado
 
@@ -442,7 +442,7 @@ const SignUp = ({navigation, onUserCreated}) => {
           termsAndConditions: '',
         }}
         //validationSchema={SignUpSchema}
-        onSubmit={ async (values) => {
+        onSubmit={async (values) => {
           await AsyncStorage.removeItem('userTier');
           createUser(values);
         }}>
@@ -458,10 +458,10 @@ const SignUp = ({navigation, onUserCreated}) => {
           <ScrollView bg="#FAFAFA">
             <Box h="100%">
               <Center>
-              <SafeAreaView style={{ backgroundColor: '#FAFAFA' }} >
-                <Heading size="2xl" mt={5}>
-                  Registro
-                </Heading>
+                <SafeAreaView style={{ backgroundColor: '#FAFAFA' }} >
+                  <Heading size="2xl" mt={5}>
+                    Registro
+                  </Heading>
                 </SafeAreaView>
               </Center>
               <Flex direction="row" justify="flex-start" mt={2} mb={2} ml={6}>
@@ -548,7 +548,7 @@ const SignUp = ({navigation, onUserCreated}) => {
                       setOpenDate(true);
                     }}
                     borderColor="#475BD8"
-                    _text={{color: 'rgba(39, 44, 70, 0.8)', fontSize: 'lg'}}
+                    _text={{ color: 'rgba(39, 44, 70, 0.8)', fontSize: 'lg' }}
                     leftIcon={
                       <MaterialIcon
                         name="date-range"
@@ -575,22 +575,29 @@ const SignUp = ({navigation, onUserCreated}) => {
                         style={styles.email_input}
                       />
                     }>
-                    <Select.Item label="Anáhuac" value="Anáhuac" />
-                    <Select.Item label="EBC" value="EBC" />
-                    <Select.Item label="Ibero" value="Ibero" />
-                    <Select.Item label="IPN" value="IPN" />
-                    <Select.Item label="ITAM" value="ITAM" />
-                    <Select.Item label="ITESM" value="ITESM" />
-                    <Select.Item label="Justo Sierra" value="Justo Sierra" />
-                    <Select.Item label="Panamericana" value="Panamericana" />
-                    <Select.Item label="Tec Milenio" value="Tec Milenio" />
-                    <Select.Item label="ULA" value="ULA" />
+                    <Select.Item label="La Salle México" value="La Salle México" />
+                    <Select.Item label="La Salle Pachuca" value="La Salle Pachuca" />
+                    <Select.Item label="La Salle Baiío León" value="La Salle Baiío León" />
+                    <Select.Item label="La Salle Benavente Puebla" value="La Salle Benavente Puebla" />
+                    <Select.Item label="La Salle Cuernavaca" value="La Salle Cuernavaca" />
+                    <Select.Item label="La Salle Cancún" value="La Salle Cancún" />
+                    <Select.Item label="La Salle Chihuahua" value="La Salle Chihuahua" />
+                    <Select.Item label="La Salle Laguna" value="La Salle Laguna" />
+                    <Select.Item label="La Salle Victoria" value="La Salle Victoria" />
+                    <Select.Item label="La Salle Morelia" value="La Salle Morelia" />
+                    <Select.Item label="La Salle Nezahualcóyotl" value="La Salle Nezahualcóyotl" />
+                    <Select.Item label="La Salle Noroeste" value="La Salle Noroeste" />
+                    <Select.Item label="La Salle Oaxaca" value="La Salle Oaxaca" />
+                    <Select.Item label="La Salle Saltillo" value="La Salle Saltillo" />
+                    <Select.Item label="UVM CDMX" value="UVM CDMX" />
+                    <Select.Item label="UNITEC CDMX" value="UNITEC CDMX" />
+                    <Select.Item label="Justo Sierra CDMX" value="Justo Sierra CDMX" />
+                    <Select.Item label="ITESM CDMX" value="ITESM CDMX" />
+                    <Select.Item label="ITESM EDOMEX" value="ITESM EDOMEX" />
                     <Select.Item label="UNAM" value="UNAM" />
-                    <Select.Item
-                      label="Universidad La Salle"
-                      value="Universidad La Salle"
-                    />
-                    <Select.Item label="UVM" value="UVM" />
+                    <Select.Item label="IPN" value="IPN" />
+                    <Select.Item label="Otra" value="Otra" />
+
                   </Select>
                   {touched.institucion && errors.institucion ? (
                     <Text color="error.700" fontSize="16" lineHeight="16">
@@ -752,7 +759,7 @@ const SignUp = ({navigation, onUserCreated}) => {
                         fontSize: 18,
                         color: '#272C46',
                       }}
-                      // w="50%"
+                    // w="50%"
                     >
                       Acepto términos & condiciones
                     </Link>
@@ -771,8 +778,8 @@ const SignUp = ({navigation, onUserCreated}) => {
                   </VStack>
                 </Stack>
                 {touched.termsAndConditions &&
-                errors.termsAndConditions &&
-                TerAndCondState === false ? (
+                  errors.termsAndConditions &&
+                  TerAndCondState === false ? (
                   <Text color="error.700" fontSize="16" lineHeight="16">
                     {touched.termsAndConditions && errors.termsAndConditions}
                   </Text>
@@ -840,7 +847,7 @@ const SignUp = ({navigation, onUserCreated}) => {
                       console.log('Signed in with Facebook!')
                     }
                   /> */}
-                  {/* <LoginButton
+                {/* <LoginButton
                     onLoginFinished={
                       (error, result) => {
                         if (error) {

@@ -298,7 +298,7 @@ const AgregarHabitos = () => {
                 justifyContent="center"
                 rounded="lg"
                 key={i}>
-                {habitCount >= 2 && !item.selected && userTier !== 'premium' ? (
+                {/*habitCount >= 2 && !item.selected && userTier !== 'premium' ? (
                   <Badge
                     colorScheme="danger"
                     rounded="full"
@@ -312,7 +312,7 @@ const AgregarHabitos = () => {
                     }}>
                     Pro
                   </Badge>
-                ) : null}
+                  ) : null*/}
                 <HStack space={2} justifyContent="space-around">
                   <Icon size={30} color="#061678" name={item.icono} />
                   <Spacer />

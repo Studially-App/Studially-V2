@@ -711,7 +711,7 @@ const Habitos = () => {
                     ? setProModalVisibility(true)
                     : setAmigoModalVisibility(true);
                 }}>
-                {userTier !== 'premium' ? (
+                {/*userTier !== 'premium' ? (
                   <Badge
                     colorScheme="danger"
                     rounded="full"
@@ -725,7 +725,7 @@ const Habitos = () => {
                     }}>
                     Pro
                   </Badge>
-                ) : null}
+                  ) : null*/}
                 <IonIcon size={30} color="#061678" name="people-circle-sharp" />
               </Text>
             </HStack>

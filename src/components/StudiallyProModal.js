@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {STRIPE_KEY} from '@env';
+import React, { useState } from 'react';
+import { STRIPE_KEY } from '@env';
 import {
   VStack,
   Flex,
@@ -15,16 +15,18 @@ import {
 import Modal from 'react-native-modal';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import StudiallyPROIcon from '../screens/Modules/Perfil/StudiallyPRO.png';
-import {StripeProvider, useStripe} from '@stripe/stripe-react-native';
-import {useUser} from '../context/User';
+import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+import { useUser } from '../context/User';
 import functions from '@react-native-firebase/functions';
 import Communications from 'react-native-communications';
+import StudiallyLogo from '../screens/Modules/Perfil/Studially-logo.png';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 // Modal Stop
-const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
-  const {initPaymentSheet, presentPaymentSheet} = useStripe();
+const StudiallyProModal = ({ proModalVisibility, setProModalVisibility }) => {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
-  const {userInfo, user, refreshTier} = useUser();
+  const { userInfo, user, refreshTier } = useUser();
 
   const handleEmail = () => {
     // El primer argumento es la dirección de correo electrónico del destinatario
@@ -41,7 +43,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
         const response = await functions().httpsCallable('createSubscription')({
           priceId: 'price_1NXUONAX9PxeRGsUebhC6eSp',
         });
-        const {clientSecret, ephemeralKey, customer} = response.data;
+        const { clientSecret, ephemeralKey, customer } = response.data;
 
         console.log(response.data);
 
@@ -53,8 +55,8 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
       };
 
       const initializePaymentSheet = async () => {
-        const {customer, ephemeralKey, clientSecret} = await fetchPaymentSheetParams();
-        const {error} = await initPaymentSheet({
+        const { customer, ephemeralKey, clientSecret } = await fetchPaymentSheetParams();
+        const { error } = await initPaymentSheet({
           merchantDisplayName: 'Studially',
           customerId: customer,
           customerEphemeralKeySecret: ephemeralKey,
@@ -65,7 +67,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           defaultBillingDetails: {
             name: `${userInfo.nombres} ${userInfo.apellidos}`,
             email: user.email,
-            address: {country: 'MX'},
+            address: { country: 'MX' },
           },
           googlePay: {
             merchantCountryCode: 'MX',
@@ -78,7 +80,7 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
       };
 
       await initializePaymentSheet();
-      const {error} = await presentPaymentSheet();
+      const { error } = await presentPaymentSheet();
 
       if (error) {
         console.error(`Error code: ${error.code}`, error.message);
@@ -116,7 +118,12 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
                 alignItems="center"
                 justifyContent="space-around"
                 mt={5}>
-                <Image source={StudiallyPROIcon} alt="StudiallyPROIcon" />
+                <Image source={StudiallyLogo} alt="StudiallyLogo" style={{
+                        marginTop: 8,
+                        marginBottom: 4,
+                        width: wp('60%'),
+                        
+                      }} resizeMode="contain" />
                 <MaterialIcon
                   name="close"
                   color="rgba(39, 44, 70, 1)"
@@ -139,89 +146,14 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
           <Divider my="3" />
           <Center my={2}>
             <VStack space={1}>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Estadísticas de organización
-                </Text>
-              </Flex>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Ganar premios con retos
-                </Text>
-              </Flex>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Seguir más de 2 hábitos
-                </Text>
-              </Flex>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Estadísticas de hábitos
-                </Text>
-              </Flex>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Agregar amigos y ver su avance
-                </Text>
-              </Flex>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Más de 1 meta financiera
-                </Text>
-              </Flex>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Acceso ilimitado a recursos
-                </Text>
-              </Flex>
-              <Flex direction="row" alignItems="center">
-                <MaterialIcon
-                  name="check"
-                  color="rgba(39, 44, 70, 1)"
-                  size={13}
-                />
-                <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
-                  Beneficios y oportunidades
-                </Text>
-              </Flex>
+              <Text fontSize="13" color="rgba(71, 91, 216, 1)" ml="3%">
+              Únicamente usuarios que forman parte de una institución con convenio vigente tienen
+              acceso al contenido digital exclusivo (funciones avanzadas) y a los productos, dinámicas y servicios físicos o presenciales.
+              No disponible para usuarios únicos.
+              </Text>
             </VStack>
           </Center>
-          <Divider my="3" />
+          {/*<Divider my="3" />
           <Center>
             <Button
               w="90%"
@@ -232,14 +164,14 @@ const StudiallyProModal = ({proModalVisibility, setProModalVisibility}) => {
               onPress={handleEmail}>
               Contacto
             </Button>
-          </Center>
+        </Center>*/}
         </Box>
       </Center>
     </Modal>
   );
 };
 
-export default ({proModalVisibility, setProModalVisibility}) => (
+export default ({ proModalVisibility, setProModalVisibility }) => (
   <StripeProvider publishableKey={STRIPE_KEY}>
     <StudiallyProModal
       proModalVisibility={proModalVisibility}

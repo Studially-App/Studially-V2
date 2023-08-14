@@ -138,7 +138,7 @@ const Finanzas = () => {
         <>
           {finantialGoals.length < 3 ? (
             <>
-              {userTier !== 'premium' ? (
+              {/*userTier !== 'premium' ? (
                 <Badge
                   colorScheme="danger"
                   rounded="full"
@@ -153,7 +153,7 @@ const Finanzas = () => {
                   }}>
                   Pro
                 </Badge>
-              ) : null}
+                ) : null*/}
               <Fab
                 position="absolute"
                 size="sm"

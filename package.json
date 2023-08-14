@@ -1,6 +1,6 @@
 {
   "name": "studially",
-  "version": "0.0.92",
+  "version": "0.0.97",
   "private": true,
   "scripts": {
     "android": "npx react-native run-android",

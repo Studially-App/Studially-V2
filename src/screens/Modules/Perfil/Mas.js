@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import auth from '@react-native-firebase/auth';
-import {YOUTUBE_KEY} from '@env';
+import { YOUTUBE_KEY } from '@env';
 import {
   ScrollView,
   VStack,
@@ -20,6 +20,8 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import FoundationIcon from 'react-native-vector-icons/Foundation';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 // React Native
 import { useWindowDimensions, Modal, View, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -131,7 +133,7 @@ const Mas = ({ navigation }) => {
                             color="rgba(6, 22, 120, 1)"
                           />
                         </Box>
-                        <Link href="https://www.studially.com/pol%C3%ADtica-de-privacidad">
+                        <Link href="https://www.studially.com/privacidad">
                           <Text fontSize={18} ml={6}>
                             Aviso de privacidad
                           </Text>
@@ -160,7 +162,7 @@ const Mas = ({ navigation }) => {
                             color="rgba(6, 22, 120, 1)"
                           />
                         </Box>
-                        <Link href="https://www.studially.com/t%C3%A9rminos-y-condiciones">
+                        <Link href="https://www.studially.com/tyc">
                           <Text fontSize={18} ml={4}>
                             Términos y condiciones
                           </Text>
@@ -189,9 +191,9 @@ const Mas = ({ navigation }) => {
                             color="rgba(6, 22, 120, 1)"
                           />
                         </Box>
-                        <Link href="https://www.studially.com/">
+                        <Link href="https://www.studially.com/ayuda">
                           <Text fontSize={18} ml={4}>
-                            Califícanos
+                          Ayuda
                           </Text>
                         </Link>
                       </Flex>
@@ -274,7 +276,7 @@ const Mas = ({ navigation }) => {
                   borderRadius="full"
                   h={12}
                   w={12}>
-                  <Link href="https://www.instagram.com/studially_/">
+                  <Link href="https://www.instagram.com/studiallyapp/">
                     <FontistoIcon name="instagram" color="white" size={32} />
                   </Link>
                 </Center>
@@ -288,15 +290,32 @@ const Mas = ({ navigation }) => {
                   </Link>
                 </Center>
                 <Center
-                  bg="rgba(29, 121, 242, 1)"
+                  bg="rgba(0, 0, 0, 1)"
                   borderRadius="full"
                   h={12}
                   w={12}>
-                  <MaterialCommunityIcon
-                    name="twitter"
-                    color="white"
-                    size={32}
-                  />
+                  <Link href="https://www.tiktok.com/@studially">
+                    <FontAwesome5
+                      name="tiktok"
+                      size={32}
+                      color="white"
+                    />
+                  </Link>
+
+                </Center>
+                <Center
+                  bg="rgba(29,185,84, 1)"
+                  borderRadius="full"
+                  h={12}
+                  w={12}>
+                  <Link href="https://open.spotify.com/user/31jhiobbkwifno42em76lwsff7hi?si=036d230e4172420b">
+                    <FontAwesome5
+                      name="spotify"
+                      size={32}
+                      color="white"
+                    />
+                  </Link>
+
                 </Center>
               </HStack>
             </VStack>
@@ -310,7 +329,7 @@ const Mas = ({ navigation }) => {
             <MaterialIcon name="close" size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.videoContainer}>
-            <WebView source={{ uri: 'https://www.youtube.com/embed/'+YOUTUBE_KEY+'?autoplay=1' }} style={styles.webView} />
+            <WebView source={{ uri: 'https://www.youtube.com/embed/' + YOUTUBE_KEY + '?autoplay=1' }} style={styles.webView} />
           </View>
         </View>
       </Modal>

@@ -114,7 +114,7 @@ const ModalDetalleHabito = ({
                 <Heading>{data.name}</Heading>
               </Center>
               <ScrollView w="95%" maxH={'30%'} mb={0} pb={0}>
-                <Text>{data.texto}</Text>
+                <Text style={{ textAlign: 'justify' }}>{data.texto}</Text>
               </ScrollView>
               <Center pt={0}>
                 <Heading>Programar frecuencia</Heading>

@@ -319,7 +319,7 @@ const Enfoque = () => {
       <ScrollView w={width} h={'80%'} mb={20} position="absolute">
         <VStack space={4} justifyContent="center">
           <Center mt="6">
-            {userTier !== 'premium' ? (
+            {/*userTier !== 'premium' ? (
               <Badge
                 colorScheme="danger"
                 rounded="full"
@@ -333,7 +333,7 @@ const Enfoque = () => {
                 }}>
                 Pro
               </Badge>
-            ) : null}
+              ) : null*/}
             <Button
               onPress={() => {
                 console.log(userTier);

@@ -14,6 +14,7 @@ import {
   HStack,
   useToast,
   Modal,
+  View
 } from 'native-base';
 import { launchImageLibrary } from 'react-native-image-picker';
 // Icons
@@ -41,8 +42,8 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import { enableFreeze } from 'react-native-screens';
-import {SECRET_KEY} from '@env';
-import axios from 'axios'; 
+import { SECRET_KEY } from '@env';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   iconInput: {
@@ -74,7 +75,7 @@ const Profile = ({ navigation }) => {
     userDate = moment(userInfo.fechaNacimiento, 'DD-MM-YYYY').tz("America/Mexico_City");
   } else {
     userDate = moment().tz("America/Mexico_City");
-  }  
+  }
 
   // Al inicializar el estado
   const [date, setDate] = useState(userDate);
@@ -113,11 +114,41 @@ const Profile = ({ navigation }) => {
   // Estado Pro modal
   const [proModalVisibility, setProModalVisibility] = useState(false);
 
+  const [DeleteModalVisibility, setDeleteModalVisibility] = useState(false);
+
   console.log(userInfo.fechaNacimiento);
 
+  const handleDeleteAccount = async () => {
+    try {
+      const user = auth().currentUser;
+      const userEmail = user.email;
+
+      // Primero, busca en la colección "usuarios" con el email del usuario
+      const querySnapshot = await firestore().collection('usuarios').where('email', '==', userEmail).get();
+
+      // Eliminar todas las entradas que coinciden
+      const promises = querySnapshot.docs.map(doc => doc.ref.delete());
+      await Promise.all(promises);
+
+      // Eliminar la cuenta del usuario
+      await user.delete();
+
+      console.log("Cuenta y entrada en Firestore eliminadas exitosamente");
+
+      navigation.navigate('SignIn')
+
+      console.log("Se cerró la sesión exitosamente");
+      // Aquí puedes agregar código adicional, como redirigir al usuario a la pantalla de inicio de sesión
+
+    } catch (error) {
+      console.error("Error en el proceso:", error);
+    }
+  };
+
+
   const saveInfo = () => {
-    
-    
+
+
     try {
       firestore()
         .collection('usuarios')
@@ -267,12 +298,12 @@ const Profile = ({ navigation }) => {
           Authorization: `Bearer ${SECRET_KEY}`
         }
       });
-  
+
       if (response.status === 200 && response.data && response.data.data.length > 0) {
         const customerId = response.data.data[0].id;
-  
-        const responseSession = await axios.post(`https://api.stripe.com/v1/billing_portal/sessions`, 
-          { customer: customerId }, 
+
+        const responseSession = await axios.post(`https://api.stripe.com/v1/billing_portal/sessions`,
+          { customer: customerId },
           {
             headers: {
               Authorization: `Bearer ${SECRET_KEY}`,
@@ -280,7 +311,7 @@ const Profile = ({ navigation }) => {
             }
           }
         );
-  
+
         if (responseSession.status === 200 && responseSession.data) {
           Linking.openURL(responseSession.data.url);
         }
@@ -289,8 +320,8 @@ const Profile = ({ navigation }) => {
       console.error(error);
     }
   };
-  
-  
+
+
 
   return (
     <NativeBaseProvider>
@@ -466,22 +497,28 @@ const Profile = ({ navigation }) => {
                     style={styles.iconInput}
                   />
                 }>
-                <Select.Item label="Anáhuac" value="Anáhuac" />
-                <Select.Item label="EBC" value="EBC" />
-                <Select.Item label="Ibero" value="Ibero" />
-                <Select.Item label="IPN" value="IPN" />
-                <Select.Item label="ITAM" value="ITAM" />
-                <Select.Item label="ITESM" value="ITESM" />
-                <Select.Item label="Justo Sierra" value="Justo Sierra" />
-                <Select.Item label="Panamericana" value="Panamericana" />
-                <Select.Item label="Tec Milenio" value="Tec Milenio" />
-                <Select.Item label="ULA" value="ULA" />
+                <Select.Item label="La Salle México" value="La Salle México" />
+                <Select.Item label="La Salle Pachuca" value="La Salle Pachuca" />
+                <Select.Item label="La Salle Baiío León" value="La Salle Baiío León" />
+                <Select.Item label="La Salle Benavente Puebla" value="La Salle Benavente Puebla" />
+                <Select.Item label="La Salle Cuernavaca" value="La Salle Cuernavaca" />
+                <Select.Item label="La Salle Cancún" value="La Salle Cancún" />
+                <Select.Item label="La Salle Chihuahua" value="La Salle Chihuahua" />
+                <Select.Item label="La Salle Laguna" value="La Salle Laguna" />
+                <Select.Item label="La Salle Victoria" value="La Salle Victoria" />
+                <Select.Item label="La Salle Morelia" value="La Salle Morelia" />
+                <Select.Item label="La Salle Nezahualcóyotl" value="La Salle Nezahualcóyotl" />
+                <Select.Item label="La Salle Noroeste" value="La Salle Noroeste" />
+                <Select.Item label="La Salle Oaxaca" value="La Salle Oaxaca" />
+                <Select.Item label="La Salle Saltillo" value="La Salle Saltillo" />
+                <Select.Item label="UVM CDMX" value="UVM CDMX" />
+                <Select.Item label="UNITEC CDMX" value="UNITEC CDMX" />
+                <Select.Item label="Justo Sierra CDMX" value="Justo Sierra CDMX" />
+                <Select.Item label="ITESM CDMX" value="ITESM CDMX" />
+                <Select.Item label="ITESM EDOMEX" value="ITESM EDOMEX" />
                 <Select.Item label="UNAM" value="UNAM" />
-                <Select.Item
-                  label="Universidad La Salle"
-                  value="Universidad La Salle"
-                />
-                <Select.Item label="UVM" value="UVM" />
+                <Select.Item label="IPN" value="IPN" />
+                <Select.Item label="Otra" value="Otra" />
               </Select>
               {edit === false ? (
                 <Button
@@ -517,7 +554,7 @@ const Profile = ({ navigation }) => {
                   fontWeight: 'bold',
                 }}>
                 {userTier !== 'premium'
-                  ? 'Cámbiate a Studially PRO'
+                  ? 'Administrar'
                   : 'Administrar'}
               </Button>
             </VStack>
@@ -645,8 +682,24 @@ const Profile = ({ navigation }) => {
                   fontWeight: 'bold',
                 }}>
                 {userTier !== 'premium'
-                  ? 'Cámbiate a Studially PRO'
+                  ? 'Administrar'
                   : 'Administrar'}
+              </Button>
+
+              <Button
+                bg="rgba(216, 71, 71, 1)"
+                w="90%"
+                onPress={() =>
+                  setDeleteModalVisibility(true)
+                }
+                _pressed={{
+                  backgroundColor: 'rgba(197, 90, 90, 0.9)',
+                }}
+                _text={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}>
+                {'Eliminar cuenta'}
               </Button>
             </VStack>
           )}
@@ -669,6 +722,47 @@ const Profile = ({ navigation }) => {
               <Text>- Al menos 1 Caracter Especial</Text>
               <Text>!@#$%^&*-_().:;/</Text>
             </ScrollView>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+      <Modal isOpen={DeleteModalVisibility} onClose={() => setDeleteModalVisibility(false)}>
+        <Modal.Content maxH="212">
+          <Modal.CloseButton />
+          <Modal.Header>¿Seguro que quieres eliminar la cuenta?</Modal.Header>
+          <Modal.Body>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Button
+                bg="rgba(216, 71, 71, 1)"
+                w="45%"   // Cambiamos a 45% para dejar espacio entre los botones
+                onPress={() => {
+                  // Aquí iría tu código para eliminar la cuenta
+                  handleDeleteAccount();
+                }}
+                _pressed={{
+                  backgroundColor: 'rgba(197, 90, 90, 0.9)',
+                }}
+                _text={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}>
+                {'Si'}
+              </Button>
+              <Button
+                bg="rgba(71, 91, 216, 1)"
+                w="45%"  // Cambiamos a 45% para dejar espacio entre los botones
+                onPress={() => {
+                  setDeleteModalVisibility(false);  // Cerrar el modal
+                }}
+                _pressed={{
+                  backgroundColor: 'rgba(5, 24, 139, 0.7)',
+                }}
+                _text={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}>
+                {'No'}
+              </Button>
+            </View>
           </Modal.Body>
         </Modal.Content>
       </Modal>

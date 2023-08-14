@@ -114,7 +114,7 @@ const StudiallyRewards = () => {
                     </Text>
                   </VStack>
                 </HStack>
-                <Badge
+                {/*<Badge
                   colorScheme="danger"
                   rounded="full"
                   mb={-4}
@@ -126,7 +126,7 @@ const StudiallyRewards = () => {
                     fontSize: 15,
                   }}>
                   Pro
-                </Badge>
+                </Badge>*/}
                 <Button
                   onPress={() => {
                     if (route.params.userTier !== 'premium') {
