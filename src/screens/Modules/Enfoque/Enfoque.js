@@ -373,7 +373,7 @@ const Enfoque = () => {
                 bg={'white'}
                 borderWidth={1}>
                 <Text fontSize={16} color="rgba(71, 91, 216, 1)">
-                  Redimir puntos
+                  Rewards
                 </Text>
               </Button>
               <Text fontSize={20} fontWeight="bold">

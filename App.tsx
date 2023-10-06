@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer, RouteProp, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, RouteProp, useNavigation, NavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
@@ -56,6 +56,8 @@ import {
 import { UserProvider, useUser } from './src/context/User';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import analytics from '@react-native-firebase/analytics';
+
 
 
 const Tabs = createBottomTabNavigator();
@@ -193,6 +195,10 @@ const App = () => {
   const [isNewUser, setIsNewUser] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const routeNameRef = React.useRef<string | null>(null);
+  const navigationRef = React.useRef<NavigationContainerRef<any> | null>(null);
+
+
   const openModal = () => {
     setModalVisible(true);
   };
@@ -227,7 +233,28 @@ const App = () => {
 
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
+      <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name || null;
+
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current?.getCurrentRoute()?.name;
+
+        if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+        routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name || null;
+
+        console.log(currentRouteName);
+      }}
+      
+      >
         {user && !profile ? (
           <>
           
@@ -447,7 +474,7 @@ const App = () => {
                 <MaterialIcon name="close" size={24} color="white" />
               </TouchableOpacity>
               <View style={styles.videoContainer}>
-                <WebView source={{ uri: 'https://www.youtube.com/embed/K1FC-5K-Yz0?autoplay=1' }} style={styles.webView} />
+                <WebView source={{ uri: 'https://www.youtube.com/embed/51MHvaOiBJc?autoplay=1' }} style={styles.webView} />
               </View>
             </View>
           </Modal>

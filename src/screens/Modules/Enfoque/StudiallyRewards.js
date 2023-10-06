@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 // Native Base
 import {
   VStack,
@@ -13,14 +13,19 @@ import {
   Badge,
 } from 'native-base';
 import firestore from '@react-native-firebase/firestore';
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import RedimirRewards from '../../../components/Enfoque/RedimirRewards';
 import StudiallyProModal from '../../../components/StudiallyProModal';
-
+import { useUser } from '../../../context/User';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Card from './Card';
+import CardSkeleton from './CardSkeleton';
 
 const StudiallyRewards = () => {
+
+  const [isLoading, setIsLoading] = useState(true);
+
   // Estado redimir modal
   const [redimirModalVisibility, setRedimirModalVisibility] = useState(false);
 
@@ -33,26 +38,52 @@ const StudiallyRewards = () => {
 
   const [idProducto, setIdProducto] = useState(0);
 
-  const getProductsRewards = async () => {
-    try {
-      const snapshot = await firestore()
-        .collection('productosRewards')
-        .orderBy('puntos', 'asc')
-        .get();
-      const prod = snapshot.docs.map(doc => doc.data());
-
-      setProducts(prod);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { user, userInfo, userTier } = useUser();
 
   useEffect(() => {
-    getProductsRewards();
-  }, []);
+    let results = {};  // Inicializa results aquí para empezar de cero cada vez
+    const queryKeys = {};
+    setIsLoading(true);
+    const handleSnapshot = (snapshot, queryKey) => {
+       
+      // Limpia los documentos que pertenecen a esta query
+      if (queryKeys[queryKey]) {
+        queryKeys[queryKey].forEach(id => delete results[id]);
+      }
+      queryKeys[queryKey] = [];
+  
+      snapshot.docs.forEach(doc => {
+        const data = doc.data();
+        results[doc.id] = data;
+        queryKeys[queryKey].push(doc.id);
+      });
+  
+      setProducts(Object.values(results));
+      setIsLoading(false);
+    };
+  
+    const query1 = firestore()
+      .collection('productosRewards')
+      .where('universidad', '==', userInfo.institucion);
+  
+    const query2 = firestore()
+      .collection('productosRewards')
+      .where('universidad', '==', 'Studially');
+  
+    const unsubscribe1 = query1.onSnapshot(snapshot => handleSnapshot(snapshot, 'query1'));
+    const unsubscribe2 = query2.onSnapshot(snapshot => handleSnapshot(snapshot, 'query2'));
+  
+    return () => {
+      unsubscribe1();
+      unsubscribe2();
+    };
+  }, [userInfo.institucion]);  // Escucha los cambios en userInfo.institucion
+  
+  
+  
 
   return (
-    <VStack space={2} alignItems="center">
+    <VStack space={2} alignItems="center" style={{ padding: 0, paddingLeft: 15, paddingRight: 15, marginBottom: 120 }}>
       <RedimirRewards
         modalVisibility={redimirModalVisibility}
         setModalVisibility={setRedimirModalVisibility}
@@ -62,102 +93,31 @@ const StudiallyRewards = () => {
         proModalVisibility={proModalVisibility}
         setProModalVisibility={setProModalVisibility}
       />
-      <ScrollView w="100%" h="88%">
+      <ScrollView w="100%" h="100%">
         <VStack space="15px" alignItems="center">
-          <HStack
-            justifyContent="space-around"
-            w="100%"
-            alignItems="center"
-            mb={2}>
-            <Text fontSize={20} fontWeight="bold">
-              Tus estrellas
-            </Text>
-            <Text fontSize={20} fontWeight="bold">
-              {route.params.stars}
-              <MaterialIcon
-                name="star-outline"
-                size={20}
-                color="rgba(71, 91, 216, 1)"
+          <Text fontSize={24} fontWeight="bold">
+            Rewards
+          </Text>
+          <Text fontSize={18} mb="20px">
+            Aquí encontrarás grandes premios que podrás obtener por tu desempeño.
+          </Text>
+          {isLoading ? (
+            // Muestra esqueletos si los datos están cargando
+            Array.from({ length: 5 }).map((_, i) => <CardSkeleton key={i} />)
+          ) : (
+            // Muestra tarjetas si los datos ya están cargados
+            products.map((item, i) => (
+              <Card
+                key={i}
+                title={item.titulo}
+                subtitle={item.descripcion}
+                imageUrl={item.imagenURL}
+                onPress={() => console.log('Tarjeta presionada!')}
+                link={item.linkNoticia}
+                idProducto={item.idProducto}
               />
-            </Text>
-          </HStack>
-          {products.map((item, i) => (
-            <Pressable w="100%" alignItems="center" key={i}>
-              <Box
-                w="90%"
-                bg="white"
-                shadow={2}
-                rounded={4}
-                alignItems="center">
-                <HStack w={'100%'}>
-                  <Image
-                    source={{
-                      uri: item.imagenURL,
-                    }}
-                    alt="imagen del producto"
-                    size="sm"
-                    w={'30%'}
-                    ml="5%"
-                    mt={'2'}
-                  />
-                  <VStack m="15px" w={'70%'}>
-                    <Text fontSize="xl" bold>
-                      {item.nombre}
-                    </Text>
-                    <Text fontSize="md">
-                      {item.puntos}{' '}
-                      <MaterialIcon
-                        name="star-outline"
-                        size={20}
-                        color="rgba(71, 91, 216, 1)"
-                      />
-                    </Text>
-                  </VStack>
-                </HStack>
-                {/*<Badge
-                  colorScheme="danger"
-                  rounded="full"
-                  mb={-4}
-                  mr={4}
-                  zIndex={1}
-                  variant="solid"
-                  alignSelf="flex-end"
-                  _text={{
-                    fontSize: 15,
-                  }}>
-                  Pro
-                </Badge>*/}
-                <Button
-                  onPress={() => {
-                    if (route.params.userTier !== 'premium') {
-                      setProModalVisibility(true);
-                    } else {
-                      setIdProducto(item.idProducto);
-                      setRedimirModalVisibility(true);
-                    }
-                  }}
-                  disabled={route.params.stars <= item.puntos}
-                  bg="white"
-                  borderWidth={1}
-                  borderColor={
-                    route.params.stars <= item.puntos ? 'gray.400' : '#475BD8'
-                  }
-                  alignContent="center"
-                  justifyContent="center"
-                  alignItems="center"
-                  w={'90%'}
-                  mb="2">
-                  <Text
-                    fontSize="18"
-                    color={
-                      route.params.stars <= item.puntos ? 'gray.400' : '#475BD8'
-                    }>
-                    Redimir producto
-                  </Text>
-                </Button>
-              </Box>
-            </Pressable>
-          ))}
+            ))
+          )}
         </VStack>
       </ScrollView>
     </VStack>

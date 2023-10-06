@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 // Native Base
 import {
   VStack,
@@ -12,160 +12,71 @@ import {
   Button,
 } from 'native-base';
 
-import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
-import ModalFiltroCategoriaComunidad from '../../../components/Recursos/ModalFiltroCategoriaComunidad';
-import ModalFiltroUniversidad from '../../../components/Recursos/ModalFiltroUniversidad';
 import { useUser } from '../../../context/User';
 import firestore from '@react-native-firebase/firestore';
-import Ficon from 'react-native-vector-icons/Fontisto';
+import ModalDetalleBeneficios from '../../../components/Recursos/ModalDetalleBeneficios';
 
 const ComunidadLista = () => {
   // get user data
-  const {userInfo, user} = useUser();
-
-  // Estado modal detalle
-  const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
-  // Data detalle
-  const [dataDetalle, setDataDetalle] = useState({});
-
-  // categoría modal detalle
-  const [categoriaModalVisibility, setCategoriaModalVisibility] =
-    useState(false);
-
-  // categoría modal detalle
-  const [universidadModalVisibility, setUniversidadModalVisibility] =
-    useState(false);
-
-  const [comunidad, setComunidad] = useState([]);
-
+  const { userInfo, user } = useUser();
   const [comunidadFiltrado, setComunidadFiltrado] = useState([]);
-
-  const [categories, setCategories] = useState([
-    'Salud y Bienestar',
-    'Alimenticio',
-    'Educación y Pedagogía',
-    'Diseño y Construcción',
-    'Digital y Tecnológico',
-    'Consultoría',
-    'Belleza y Moda',
-    'Sustentabilidad',
-    'Desarrollo e Investigación',
-    'Accesorios',
-    'Electrónicos',
-    'Entretenimiento',
-    'Otros',
-  ]);
-
-  const [universities, setUniversities] = useState([
-    'Anahuac',
-    'EBC',
-    'Ibero',
-    'IPN',
-    'ITAM',
-    'ITESM',
-    'Justo Sierra',
-    'Panamericana',
-    'Tec Milenio',
-    'ULA',
-    'UNAM',
-    'ULSA',
-    'UVM',
-    'Tepeyac',
-  ]);
-
-  const getComunidad = async () => {
-    const snapshot = await firestore().collection('comunidad').get();
-    const com = snapshot.docs.map(doc => doc.data());
-    setComunidad(com);
-    setCategories(userInfo.comunidadCategoriaFiltro);
-    setUniversities(userInfo.comunidadUniversidadFiltro);
-  };
-
-  const getComunidadFilter = async () => {
-    let filtro = [];
-    comunidad.map(com => {
-      categories.map(cat => {
-        for(uni of universities){
-          if (com.categoria === cat && com.universidad === uni) {
-            filtro.push(com);
-          }
-        }
-      });
-    });
-    setComunidadFiltrado(filtro);
-    try {
-      await firestore()
-        .collection('usuarios')
-        .doc(user.uid)
-        .update({
-          comunidadCategoriaFiltro: categories,
-        })
-        .then(() => {
-          console.log('Community category filter updated!');
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getUniversidadFilter = async () => {
-    let filtro = [];
-    comunidad.map(com => {
-      universities.map(uni => {
-        for(cat of categories){
-          if (com.universidad === uni && com.categoria === cat) {
-            filtro.push(com);
-          }
-        }
-      });
-    });
-    setComunidadFiltrado(filtro);
-    try {
-      await firestore()
-        .collection('usuarios')
-        .doc(user.uid)
-        .update({
-          comunidadUniversidadFiltro: universities,
-        })
-        .then(() => {
-          console.log('Community university filter updated!');
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [dataDetalle, setDataDetalle] = useState([]);
+  const [detalleModalVisibility, setDetalleModalVisibility] = useState(false);
 
   useEffect(() => {
-    getComunidad();
-  }, []);
+    let results = {};
+    const queryKeys = {};
 
-  useEffect(() => {
-    if(comunidad.length > 0 && categories.length > 0 && universities.length > 0){
-      getComunidadFilter();
-    }
-  },[comunidad, categories, universities]);
+    const handleSnapshot = (snapshot, queryKey) => {
+      if (queryKeys[queryKey]) {
+        queryKeys[queryKey].forEach((id) => delete results[id]);
+      }
+      queryKeys[queryKey] = [];
+
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        results[doc.id] = data;
+        queryKeys[queryKey].push(doc.id);
+      });
+
+      const sortedResults = Object.values(results).sort((a, b) => {
+        return new Date(b.fecha) - new Date(a.fecha); // Ordena en orden descendente por 'fecha'
+      });
+
+      setComunidadFiltrado(Object.values(sortedResults));
+    };
+
+    const query1 = firestore()
+      .collection('comunidad')
+      .where('universidad', '==', userInfo.institucion);
+
+    const query2 = firestore()
+      .collection('comunidad')
+      .where('universidad', '==', 'Studially');
+
+    const unsubscribe1 = query1.onSnapshot((snapshot) => handleSnapshot(snapshot, 'query1'));
+    const unsubscribe2 = query2.onSnapshot((snapshot) => handleSnapshot(snapshot, 'query2'));
+
+    return () => {
+      unsubscribe1();
+      unsubscribe2();
+    };
+  }, [userInfo.comunidadUniversidadFiltro, userInfo.comunidadCategoriaFiltro]);
+
 
   return (
     <VStack space={2} alignItems="center">
-      <ModalDetalleBeneficios
-        modalVisibility={detalleModalVisibility}
-        setModalVisibility={setDetalleModalVisibility}
-        data={dataDetalle}
-        setData={setDataDetalle}
-      />
-      <Text fontSize="lg" bold>
-        Comunidad
-      </Text>
-      <ModalFiltroCategoriaComunidad
-        modalVisibility={categoriaModalVisibility}
-        setModalVisibility={setCategoriaModalVisibility}
-        categories={categories}
-        setCategories={setCategories}
-        getComunidadFilter={getComunidadFilter}
-      />
-      <ScrollView w="100%" h="75%">
+
+      <ScrollView w="100%" h="100%" mt={4}>
         <VStack space="15px" alignItems="center">
-          <HStack justifyContent="space-around" w="80%">
+
+          <ModalDetalleBeneficios
+            modalVisibility={detalleModalVisibility}
+            setModalVisibility={setDetalleModalVisibility}
+            data={dataDetalle}
+            setData={setDataDetalle}
+          />
+          {/*<HStack justifyContent="space-around" w="80%">
             <Button
               bg="white"
               borderColor="black"
@@ -186,7 +97,11 @@ const ComunidadLista = () => {
                 Universidad <Ficon name="equalizer" color="black" size={16} />
               </Text>
             </Button>
-          </HStack>
+  </HStack>*/}
+
+          <Text textAlign="center" color="#061678" fontSize="30px">
+            Comunidad
+          </Text>
 
           {comunidadFiltrado.map((item, i) => (
             <Pressable
@@ -207,7 +122,7 @@ const ComunidadLista = () => {
                     <Spacer />
                   </HStack>
                   <Text fontSize="md" color="#475BD8" textAlign="right">
-                    {item.categoria}
+                    {item.etiqueta}
                   </Text>
                 </VStack>
               </Box>
@@ -215,13 +130,6 @@ const ComunidadLista = () => {
           ))}
         </VStack>
       </ScrollView>
-      <ModalFiltroUniversidad
-        modalVisibility={universidadModalVisibility}
-        setModalVisibility={setUniversidadModalVisibility}
-        universities={universities}
-        setUniversities={setUniversities}
-        getUniversidadFilter={getUniversidadFilter}
-      />
     </VStack>
   );
 };

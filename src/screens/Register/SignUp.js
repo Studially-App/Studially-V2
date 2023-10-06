@@ -4,6 +4,7 @@ import { useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { firebase } from '@react-native-firebase/app';
+import { YOUTUBE_KEY } from '@env';
 
 import {
   LoginButton,
@@ -929,7 +930,7 @@ const SignUp = ({ navigation, onUserCreated }) => {
             <MaterialIcon name="close" size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.videoContainer}>
-            <WebView source={{ uri: 'https://www.youtube.com/embed/K1FC-5K-Yz0?autoplay=1' }} style={styles.webView} />
+            <WebView source={{ uri: 'https://www.youtube.com/embed/' + YOUTUBE_KEY + '?autoplay=1' }} style={styles.webView} />
           </View>
         </View>
       </ModalReactNative>

@@ -45,6 +45,13 @@
             {
               "client_id": "498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "498493727897-10q1hm0uggvvbl3uitdqal2tb4695u75.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.studially"
+              }
             }
           ]
         }
@@ -59,7 +66,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "498493727897-m79djb9r4elvgf4nb7tbe65ld5hcfirg.apps.googleusercontent.com",
+          "client_id": "498493727897-489k4sd75qo6j7vfa1uvbvbke212ug6n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.studially",
@@ -82,6 +89,13 @@
             {
               "client_id": "498493727897-ogfnajq2bkm41ge5dfj76cam855p8hjo.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "498493727897-10q1hm0uggvvbl3uitdqal2tb4695u75.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.studially"
+              }
             }
           ]
         }

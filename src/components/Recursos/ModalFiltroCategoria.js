@@ -15,11 +15,11 @@ import {
 // Modal
 import Modal from 'react-native-modal';
 // React Native
-import {useWindowDimensions} from 'react-native';
+import { useWindowDimensions } from 'react-native';
 // Icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 
 const ModalFiltroCategoria = ({
   modalVisibility,
@@ -32,7 +32,7 @@ const ModalFiltroCategoria = ({
   const scrollViewReff = React.createRef();
 
   // Screen Dimentions
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const handleOnScroll = event => {
     setScrollOffset(event.nativeEvent.contentOffset.y);
@@ -53,7 +53,7 @@ const ModalFiltroCategoria = ({
           getAprendizajeFilter();
           setModalVisibility(false);
         }}>
-        {({handleSubmit}) => (
+        {({ handleSubmit }) => (
           <View w={width}>
             <Modal
               isVisible={modalVisibility}
@@ -115,10 +115,10 @@ const ModalFiltroCategoria = ({
                             justifyContent="space-between"
                             alignItems="center"
                             w="85%">
-                            <Text fontSize="18">Arte y Cultura</Text>
+                            <Text fontSize="18">Educación financiera</Text>
                             <Checkbox
-                              value="Arte y Cultura"
-                              accessibilityLabel="Artes checkbox"
+                              value="Educación financiera"
+                              accessibilityLabel="Educación financiera checkbox"
                               name="checked"
                             />
                           </HStack>
@@ -126,43 +126,10 @@ const ModalFiltroCategoria = ({
                             justifyContent="space-between"
                             alignItems="center"
                             w="85%">
-                            <Text fontSize="18">Ciencia y Tecnología</Text>
+                            <Text fontSize="18">Introducción laboral</Text>
                             <Checkbox
-                              value="Ciencia y Tecnología"
-                              accessibilityLabel="Ciencia checkbox"
-                              name="checked"
-                            />
-                          </HStack>
-                          <HStack
-                            justifyContent="space-between"
-                            alignItems="center"
-                            w="85%">
-                            <Text fontSize="18">Negocios y Economía</Text>
-                            <Checkbox
-                              value="Negocios y Economía"
-                              accessibilityLabel="Negocios checkbox"
-                              name="checked"
-                            />
-                          </HStack>
-                          <HStack
-                            justifyContent="space-between"
-                            alignItems="center"
-                            w="85%">
-                            <Text fontSize="18">Salud y Bienestar</Text>
-                            <Checkbox
-                              value="Salud y Bienestar"
-                              accessibilityLabel="Salud checkbox"
-                              name="checked"
-                            />
-                          </HStack>
-                          <HStack
-                            justifyContent="space-between"
-                            alignItems="center"
-                            w="85%">
-                            <Text fontSize="18">Tendencia</Text>
-                            <Checkbox
-                              value="Tendencia y Recomendaciones"
-                              accessibilityLabel="Tendencia checkbox"
+                              value="Introducción laboral"
+                              accessibilityLabel="Introducción laboral checkbox"
                               name="checked"
                             />
                           </HStack>
@@ -177,8 +144,43 @@ const ModalFiltroCategoria = ({
                               name="checked"
                             />
                           </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Bienestar</Text>
+                            <Checkbox
+                              value="Bienestar"
+                              accessibilityLabel="Bienestar checkbox"
+                              name="checked"
+                            />
+                          </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Adulting</Text>
+                            <Checkbox
+                              value="Adulting"
+                              accessibilityLabel="Adulting checkbox"
+                              name="checked"
+                            />
+                          </HStack>
+                          <HStack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            w="85%">
+                            <Text fontSize="18">Extra</Text>
+                            <Checkbox
+                              value="Extra"
+                              accessibilityLabel="Extra checkbox"
+                              name="checked"
+                            />
+                          </HStack>
                         </VStack>
                       </Checkbox.Group>
+
+
 
                       <Button
                         bg="#475BD8"
